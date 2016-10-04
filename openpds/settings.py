@@ -195,6 +195,9 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+if not IS_DEV_SERVER:
+    BROKER_URL = os.environ['RABBITMQ_BIGWIG_TX_URL']
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
