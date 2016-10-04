@@ -168,6 +168,7 @@ INSTALLED_APPS = (
     'djcelery',
     'openpds.core',
     'openpds.accesscontrol',
+    'openpds.questions',
     'kombu.transport.django',
     #'openpds.visualization',
     # Uncomment the next line to enable the admin:
