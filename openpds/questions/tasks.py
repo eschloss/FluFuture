@@ -26,6 +26,7 @@ def ensureFunfIndexes():
 
     for profile in profiles:
         dbName = profile.getDBName()
+        connection.admin.command('enablesharding', dbName)
         collection = connection[dbName]["funf"]
         collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
 
@@ -178,6 +179,7 @@ def dumpFunfData():
     startTime = getStartTime(3, False)#max(1378008000, startTimeRow[0]) if startTimeRow is not None else 1378008000
     for profile in profiles:
         dbName = profile.getDBName()
+        connection.admin.command('enablesharding', dbName)
         funf = connection[dbName]["funf"]
         user = int(profile.id)
         c.executemany("INSERT INTO funf VALUES (?,?,?,?)", [(user,d["key"][d["key"].rfind(".")+1:],d["time"],"%s"%d["value"]) for d in funf.find({"time": {"$gte": startTime}}) if d["key"] is not None])
@@ -195,6 +197,7 @@ def dumpSurveyData():
 
     for profile in profiles:
         dbName = profile.getDBName()
+        connection.admin.command('enablesharding', dbName)
         answerlist = connection[dbName]["answerlist"]
         user = int(profile.id)
         for datum in answerlist.find({ "key": { "$regex": "Past3Days$"}}):
