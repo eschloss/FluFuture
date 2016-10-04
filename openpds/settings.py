@@ -175,7 +175,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
-import celery_settings
+
+
+#import celery_settings
 
 """
 CELERY_IMPORTS = celery_settings.CELERY_IMPORTS
