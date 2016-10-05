@@ -169,7 +169,6 @@ INSTALLED_APPS = (
     'openpds.core',
     'openpds.accesscontrol',
     'openpds.questions',
-    'openpds.pds',
     'kombu.transport.django',
     #'openpds.visualization',
     # Uncomment the next line to enable the admin:
