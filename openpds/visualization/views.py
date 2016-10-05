@@ -35,10 +35,14 @@ def flumojiFacebook(request):
         graph = facebook.GraphAPI(access_token=token, version="2.2")
         
         me = graph.get_object(id='me')
+        pic = graph.get_object(id='me/picture')
         meid = me['id']
         profile.fbid = meid
         profile.fbname = me['name']
+        profile.fbpic = pic['url']
         profile.save()
+        
+        
         
         friends = graph.get_connections(id='me', connection_name='friends')
         data = friends['data']

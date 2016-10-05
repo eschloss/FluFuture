@@ -4,6 +4,7 @@ from django.db import models
 class Profile(models.Model):
     uuid = models.CharField(max_length=36, unique=True, blank = False, null = False, db_index = True)
     fbid = models.BigIntegerField(blank=True, null=True) #TODO. if a user changes his fbid, must delete all connected FB_Connections
+    fbpic = models.URLField(blank=True, null=True)
     fbname = models.CharField(max_length=50, blank=True, null=True) 
     created = models.DateTimeField(auto_now_add=True)
 
