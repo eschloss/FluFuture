@@ -23,4 +23,5 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^hotspots$', direct_to_template, { 'template' : 'visualization/hotspots.html' }),
     
     (r'^flumoji/splash', 'flumojiSplash'),
+    (r'^flumoji/friends', 'flumojiFriends'),
 )

@@ -10,6 +10,14 @@ import datetime
 import math
 
 class AccessControlledInternalDataStore(object):
+    def __oldinit__(self, profile, app_id, lab_id):
+        self.ids = None
+        self.profile = profile
+        self.datastore_owner_id = profile.id
+        self.app_id = app_id
+        self.lab_id = lab_id
+        self.mapping = {'ActivityProbe': 'activity_probe', 'SmsProbe': 'sms_probe', 'CallLogProbe': 'call_log_probe', 'BluetoothProbe':'bluetooth_probe', 'WifiProbe': 'wifi_probe', 'LocationProbe': 'simple_location_probe', 'ScreenProbe': 'screen_probe', 'RunningApplicationsProbe': 'running_applications_probe', 'HardwareInfoProbe': 'hardware_info_probe', 'AppUsageProbe': 'app_usage_probe'} 
+        
     def __init__(self, ids):
         self.ids = ids
         self.profile = ids.profile

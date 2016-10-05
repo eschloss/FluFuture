@@ -3,7 +3,6 @@ from django.db import models
 
 class Profile(models.Model):
     uuid = models.CharField(max_length=36, unique=True, blank = False, null = False, db_index = True)
-    created = models.DateTimeField(auto_now_add=True)
 
     def getDBName(self):
         return "User_" + str(self.uuid).replace("-", "_")
