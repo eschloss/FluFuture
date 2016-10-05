@@ -14,6 +14,7 @@
             // for FB.getLoginStatus().
             if (response.status === 'connected') {
               // Logged into your app and Facebook.
+                console.log(response.authResponse.accessToken);
                 $(document).ready(function() {
                   $.ajax({
                      url: '/visualization/flumoji/facebook',
