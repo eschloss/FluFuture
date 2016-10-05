@@ -8,6 +8,7 @@ import json
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 
 def flumojiSplash(request):
+    return flumojiFriends(request)
     return render_to_response("visualization/flumoji_splash.html", {
     }, context_instance=RequestContext(request))
 
