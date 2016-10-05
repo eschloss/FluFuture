@@ -2,9 +2,10 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile
+from openpds.core.models import Profile, FB_Connection
 import facebook
 import json
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 
 def flumojiSplash(request):
     return render_to_response("visualization/flumoji_splash.html", {
@@ -43,8 +44,11 @@ def flumojiFacebook(request):
         data = friends['data']
         for d in data:
             friendid = d['id']
-            id1 = min(friendid, meid)
-            id2 = max(friendid, meid)
-            FB_Connection.objects.get_or_create(profile1__fbid=id1, profile2__fbid=id2)
+            friend_profile = Profile.objects.filter(fbid=friendid)
+            if len(friend_profile) > 0:
+                profile1 = profile if friendid > meid else friend_profile[0]
+                profile2 = profile if friendid < meid else friend_profile[0]
+                FB_Connection.objects.get_or_create(profile1=profile1, profile2=profile2)
+                
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
         
