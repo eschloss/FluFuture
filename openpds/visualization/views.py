@@ -27,7 +27,7 @@ def flumojiFriends(request):
 
 def flumojiFacebook(request):
     if request.method == "POST" and 'access_token' in request.POST and 'ds' in request.POST:
-        datastore_owner_uui = request.POST['ds']
+        datastore_owner_uuid = request.POST['ds']
         profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
         
         token = request.POST['access_token']
