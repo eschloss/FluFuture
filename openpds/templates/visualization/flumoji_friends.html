@@ -77,6 +77,15 @@
               console.log('Successful login for: ' + response.name);
               document.getElementById('status').innerHTML =
                 'Thanks for logging in, ' + response.name + '!';
+                
+              FB.api('/me/friends?fields=installed', function(response) {
+                console.log("installed Friends");
+                console.log(JSON.stringify(response))
+              });
+              FB.api('/me/friends', function(response) {
+                console.log("all Friends");
+                console.log(JSON.stringify(response))
+              });
             });
           }
         </script>
