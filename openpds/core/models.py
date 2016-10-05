@@ -3,12 +3,19 @@ from django.db import models
 
 class Profile(models.Model):
     uuid = models.CharField(max_length=36, unique=True, blank = False, null = False, db_index = True)
+    fbid = models.BigIntegerField(blank=True, null=True) #TODO. if a user changes his fbid, must delete all connected FB_Connections
+    fbname = models.CharField(max_length=50, blank=True, null=True) 
+    created = models.DateTimeField(auto_now_add=True)
 
     def getDBName(self):
         return "User_" + str(self.uuid).replace("-", "_")
    
     def __unicode__(self):
         return self.uuid
+    
+class FB_Connection(models.Model):
+    profile1 = models.ForeignKey('Profile', related_name="profile1") #this must have the fbid lower than profile2
+    profile2 = models.ForeignKey('Profile', related_name="profile2")
 
 class AuditEntry(models.Model):
     '''

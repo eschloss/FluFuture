@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
     <body>
         <script>
           // This is called with the results from from FB.getLoginStatus().
@@ -11,7 +14,19 @@
             // for FB.getLoginStatus().
             if (response.status === 'connected') {
               // Logged into your app and Facebook.
-              console.log("accessToken: " + response.authResponse.accessToken);
+                $(document).load(function() {
+                  $.ajax({
+                     url: '/visualization/flumoji/facebook',
+                     type: "POST",
+                     data: { access_token: response.authResponse.accessToken,
+                                ds: "{{ uuid }}"
+                            },
+                     dataType: "json",
+                     success: function(returnData) {
+                        
+                     }
+                  });
+                });
               testAPI();
             } else if (response.status === 'not_authorized') {
               // The person is logged into Facebook, but not your app.
@@ -78,15 +93,6 @@
               console.log('Successful login for: ' + response.name);
               document.getElementById('status').innerHTML =
                 'Thanks for logging in, ' + response.name + '!';
-                
-              FB.api('/me/friends?fields=installed', function(response) {
-                console.log("installed Friends");
-                console.log(JSON.stringify(response))
-              });
-              FB.api('/me/friends', function(response) {
-                console.log("all Friends");
-                console.log(JSON.stringify(response))
-              });
             });
           }
         </script>
