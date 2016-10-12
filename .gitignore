@@ -3,4 +3,4 @@
 *.db
 .idea
 .DS_Store
-staticfiles*
+staticfiles/
