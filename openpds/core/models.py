@@ -1,5 +1,18 @@
 from django.conf import settings
 from django.db import models
+import datetime
+
+emoji_choices = (
+    ('h', 'healthy'),
+    ('s', 'sick'),
+    ('y', 'sleepy'),
+    ('c', 'cough'),
+    ('f', 'fever'),
+    ('u', 'flu'),
+    ('n', 'nauseous'),
+    ('l', 'chills'),
+    ('r', 'runnynose'),
+)
 
 class Profile(models.Model):
     uuid = models.CharField(max_length=36, unique=True, blank = False, null = False, db_index = True)
@@ -7,6 +20,8 @@ class Profile(models.Model):
     fbpic = models.URLField(blank=True, null=True)
     fbname = models.CharField(max_length=50, blank=True, null=True) 
     created = models.DateTimeField(auto_now_add=True)
+    agg_latest_emoji = models.CharField(choices=emoji_choices, max_length=1, default="h")
+    agg_latest_emoji_update = models.DateTimeField(default=datetime.datetime.now)
 
     def getDBName(self):
         return "User_" + str(self.uuid).replace("-", "_")
@@ -17,6 +32,11 @@ class Profile(models.Model):
 class FB_Connection(models.Model):
     profile1 = models.ForeignKey('Profile', related_name="profile1") #this must have the fbid lower than profile2
     profile2 = models.ForeignKey('Profile', related_name="profile2")
+    
+class Emoji(models.Model):
+    profile = models.ForeignKey('Profile')
+    emoji = models.CharField(choices=emoji_choices, max_length=1)
+    created = models.DateTimeField(auto_now_add=True)
 
 class AuditEntry(models.Model):
     '''

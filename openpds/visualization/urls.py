@@ -25,4 +25,5 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^flumoji/splash', 'flumojiSplash'),
     (r'^flumoji/friends', 'flumojiFriends'),
     (r'^flumoji/facebook', 'flumojiFacebook'),
+    (r'^flumoji/sendEmoji', 'flumojiSendEmoji'),
 )

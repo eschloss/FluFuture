@@ -1,5 +1,120 @@
-<html>
-    <body>
-        This is working
-    </body>
-</html>
+{% extends "template.html" %}
+
+{% block head-css %}
+    .splash-title {
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        margin: 100px auto 50px auto;
+    }
+    .status-face {
+        background-image: url("/static/img/blank-face.png");
+        background-repeat: no-repeat;
+        background-size: 135px 110px;
+        height: 200px;
+        width: 135px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+    }
+    .status-face.occupied {
+        background-size: 134px 116px;
+    }
+    .status-face.occupied-oversized {
+        background-size: 134px 200px;
+        margin-top: 0px;
+        margin-bottom: 50px;
+    }
+    .emoji-outer-selection-box {
+        width: 100%;
+        overflow-x: scroll;
+        height: 100px;
+        padding-top:30px;
+    }
+    .emoji-selection-box {
+        width: 700px;
+        height: 50px;
+    }
+    .emoji-choice img {
+        height: 50px;
+        width: 57.5px;
+    }
+    .emoji-choice {
+        float: left;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .emoji-choice.oversized img {
+        height: 92.65px;
+        width: 57.5px;
+        margin-top: -25px;
+    }
+{% endblock %}
+
+{% block head-js %}
+    $(document).ready( function () {
+        $(".emoji-choice").click(function() {
+            if ($(this).is(".oversized")) {
+                $(".status-face").css("background-image", 'url("' + $(this).find("img").attr("src") + '")')
+                    .addClass("occupied-oversized").removeClass("occupied");
+            } else {
+                $(".status-face").css("background-image", 'url("' + $(this).find("img").attr("src") + '")')
+                    .addClass("occupied").removeClass("occupied-oversized");
+            }
+            sendEmoji($(this).attr("id"));
+        });
+    });
+    
+    function sendEmoji(id) {
+        $.ajax({
+            url: '/visualization/flumoji/sendEmoji',
+            type: "POST",
+            data: { access_token: "{{ token }}",
+                       ds: "{{ uuid }}",
+                       emoji: id
+                   },
+            dataType: "json",
+            success: function(returnData) {
+               
+            }
+        });
+    }
+{% endblock %}
+
+{% block content %}
+    <div class="splash-title">How are you feeling today?</div>
+    
+    <div class="status-face"></div>
+    
+    <div class="emoji-outer-selection-box">
+        <div class="emoji-selection-box">
+            <div class="emoji-choice" id="h">
+                <img src="/static/img/emoji-happy.png" alt="">
+            </div>
+            <div class="emoji-choice oversized" id="u">
+                <img src="/static/img/emoji-flu.png" alt="">
+            </div>
+            <div class="emoji-choice" id="r">
+                <img src="/static/img/emoji-runnynose.png" alt="">
+            </div>
+            <div class="emoji-choice oversized" id="l">
+                <img src="/static/img/emoji-chills.png" alt="">
+            </div>
+            <div class="emoji-choice" id="s">
+                <img src="/static/img/emoji-sick.png" alt="">
+            </div>
+            <div class="emoji-choice oversized" id="f">
+                <img src="/static/img/emoji-fever.png" alt="">
+            </div>
+            <div class="emoji-choice" id="c">
+                <img src="/static/img/emoji-cough.png" alt="">
+            </div>
+            <div class="emoji-choice" id="y">
+                <img src="/static/img/emoji-sleepy.png" alt="">
+            </div>
+            <div class="emoji-choice oversized" id="n">
+                <img src="/static/img/emoji-nauseous.png" alt="">
+            </div>
+        </div>
+    </div>
+{% endblock %}
