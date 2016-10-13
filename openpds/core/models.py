@@ -95,7 +95,6 @@ class QuestionType(models.Model):
     followup_question = models.ForeignKey('QuestionType', related_name="parent_question", blank=True, null=True, help_text="If this question should result in a followup question, select the follow-up question. If not, leave blank") 
     expiry = models.IntegerField(default=1440, help_text="minutes until the question expires")
     sleep_offset = models.IntegerField(default=0, help_text="minutes after a user wakes up to send notification. if negative, it's minutes before a user goes to sleep to send a notification.")
-    intervention_only = models.BooleanField(default=True)
     
     
     def __unicode__(self):
