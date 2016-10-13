@@ -248,7 +248,12 @@ logger.addHandler(handler)
 
 #GCM_API_KEY = "AIzaSyBTGmBjzM9_CETLxU3YEbtWIS_OUGWHr0s"
 #GCM_API_KEY = "AIzaSyAWLJU1-g9hn2UWiFqLyS9U57BhOwOaVlY"
-GCM_API_KEY = "AIzaSyBK933WZvgHi3bYBbuLbVhhFWth-jFHfGI"
+#GCM_API_KEY = "AIzaSyBK933WZvgHi3bYBbuLbVhhFWth-jFHfGI"
+if IS_DEV_SERVER:
+    GCM_API_KEY = "AIzaSyDG4sVsp3iLlYoceleXz3jd5Z32O6DgFBk"
+else:
+    GCM_API_KEY = os.environ["GCM_API_KEY"]
+
 
 MONGODB_HOST = os.environ['MONGODB_HOST']
 MONGODB_PORT = int(os.environ['MONGODB_PORT'])
