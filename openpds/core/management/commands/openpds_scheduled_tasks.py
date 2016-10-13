@@ -5,6 +5,7 @@ from openpds.questions.tasks import ensureFunfIndexes, recentProbeCounts, dumpFu
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        flumojiNotifications.delay()
         recentProbeCounts.delay()
         recentSocialHealthScores.delay()
         ensureFunfIndexes.delay()

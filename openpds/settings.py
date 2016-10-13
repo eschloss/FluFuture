@@ -246,7 +246,9 @@ formatter = logging.Formatter('%(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-GCM_API_KEY = "AIzaSyBTGmBjzM9_CETLxU3YEbtWIS_OUGWHr0s"
+#GCM_API_KEY = "AIzaSyBTGmBjzM9_CETLxU3YEbtWIS_OUGWHr0s"
+#GCM_API_KEY = "AIzaSyAWLJU1-g9hn2UWiFqLyS9U57BhOwOaVlY"
+GCM_API_KEY = "AIzaSyBK933WZvgHi3bYBbuLbVhhFWth-jFHfGI"
 
 MONGODB_HOST = os.environ['MONGODB_HOST']
 MONGODB_PORT = int(os.environ['MONGODB_PORT'])
