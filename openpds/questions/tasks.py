@@ -1,5 +1,5 @@
 from celery import task
-from openpds.core.models import Profile, Notification, Device
+from openpds.core.models import Profile, Notification, Device, QuestionInstance, QuestionType
 from bson import ObjectId
 from pymongo import Connection
 from django.conf import settings
@@ -213,3 +213,48 @@ def dumpSurveyData():
     outputConnection.commit()
     outputConnection.close()
 
+def expireQuestions():
+    questions = QuestionInstance.objects.all().filter(expired=False)
+    for question in questions:
+        dt = timezone.now() - timedelta(minutes=question.question_type.expiry)
+        if ( dt > question.datetime ):
+            # This question is expired. Update it
+            question.expired = True
+            print "Expiring question %d" % question.id
+            question.save()
+
+@task()
+def flumojiNotifications():
+    print "Starting notifications task"
+    expireQuestions()
+
+    profiles = Profile.objects.all()
+    for profile in profiles:
+
+        if Device.objects.filter(datastore_owner = profile).count() > 0:
+            gcm = GCM(settings.GCM_API_KEY)
+            for device in Device.objects.filter(datastore_owner = profile):
+                try:
+                    # add the notification to the D
+                    q_params = fetchQuestion(profile, device)
+                except Exception as e:
+                    print "NotificationError1: Issue with sending notification to: %s, %s" % (profile.id, profile.uuid)
+                    print e
+                    
+                try:
+                    print 'q_params = %s' % q_params
+                    if q_params is not None:
+                        js = formatNotification(q_params['question'],
+                                                description=q_params['description'],
+                                                items=[q_params['action']])
+                        addNotification(profile, 2, 'SmartCATCH',
+                                        q_params['question'],
+                                        q_params['action'])
+                        # send an alert that a notification is ready (app will call back to fetch the notification data)
+                        print "id=%s, uuid=%s, device=%s" % (profile.id, profile.uuid,device.gcm_reg_id)
+                        gcm.plaintext_request(registration_id=device.gcm_reg_id,
+                                              data={"action":"notify"},
+                                              collapse_key=q_params['question'])
+                except Exception as e:
+                    print "NotificationError2: Issue with sending notification to: %s, %s" % (profile.id, profile.uuid)
+                    print e
