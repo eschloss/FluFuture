@@ -2,10 +2,11 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices
+from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType
 import facebook
-import json, datetime
+import json, datetime, time, re, math
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.core.urlresolvers import reverse
 
 def flumojiSplash(request):
     #return flumojiFriends(request)
@@ -89,3 +90,59 @@ def flumojiSendEmoji(request):
         profile.agg_latest_emoji_update = new_emoji.created
         profile.save()
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
+    
+def flumojiQuestions(request):
+    token = request.GET['bearer_token']
+    datastore_owner_uuid = request.GET["datastore_owner"]
+    datastore_owner, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    #TODO need to check that the token is in scope
+    
+    refresh = False
+    for key in request.GET:
+        if re.search('^q_', key) != None:
+            pk = int(re.sub(r'^q_', '', key))
+            value = request.GET[key]
+            q = QuestionInstance.objects.filter(pk=pk)
+            if value != "" and q.count() > 0 and q[0].expired == False:
+                q = q[0]
+                q.answer = int(float(value))
+                q.save()
+                refresh = True
+    if refresh:
+        return HttpResponseRedirect(reverse(flumojiQuestions) +"?bearer_token="+token+"&datastore_owner="+datastore_owner_uuid)
+        
+    questions = QuestionInstance.objects.filter(expired=False, answer__isnull=True, profile=datastore_owner).order_by("-datetime")
+    questionsRemainingList = []
+    for q in questions:
+        expiry = q.datetime + datetime.timedelta(minutes=q.question_type.expiry)
+        if expiry.replace(tzinfo=None) < datetime.datetime.now():
+            q.expired = True
+            q.save()
+        else:
+            questionsRemainingList.append((q, q.question_type.optionList()))
+
+    try:
+        #weeks = internalDataStore.getAnswerList("activityScoreHistory")[0]['value'][0]["time"]
+        weeks = time.mktime(datastore_owner.created.timetuple())
+        weeks = math.ceil((time.time() - weeks)/(60 * 60 * 24 * 7))
+    except:
+        weeks = 1
+        
+    #if len(questionsRemainingList) == 0:
+    #    return HttpResponseRedirect(reverse(flumojiSplash) +"?bearer_token="+token+"&datastore_owner="+datastore_owner_uuid)
+    template = "visualization/flumoji_questions.html"
+    
+    return render_to_response(template, {
+        "questions": questionsRemainingList,
+        "bearer_token": token,
+        "datastore_owner": datastore_owner_uuid,
+        'weeksSinceStart': weeks,
+    }, context_instance=RequestContext(request))
+
+def flumojiMedia(request):
+    return render_to_response("visualization/flumoji_media.html", {
+    }, context_instance=RequestContext(request))
+
+def flumojiConsent(request):
+    return render_to_response("visualization/flumoji_consent.html", {
+    }, context_instance=RequestContext(request))

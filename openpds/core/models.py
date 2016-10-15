@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 import datetime
+import json
 
 emoji_choices = (
     ('h', 'healthy'),
@@ -101,7 +102,7 @@ class QuestionType(models.Model):
         return unicode( str(self.pk) + ": " + self.text )
         
     def optionList(self):
-        return simplejson.loads(self.params)
+        return json.loads(self.params)
         
     def followup_question_parent(self):
         parents = self.parent_question.all()

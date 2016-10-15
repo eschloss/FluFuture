@@ -1,0 +1,249 @@
+{% extends "template.html" %}
+
+{% block head-js-files %}
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <link rel="import" href="/static/mgh/contents/graph.html">
+  <link rel="import" href="/static/mgh/contents/line_graph.html">
+  <link type="text/css" rel="stylesheet" href="/static/mgh/contents/stylesheet.css">
+  <link type="text/css" rel="stylesheet" href="/static/css/jquery.nouislider.min.css">
+  <link rel='import' href="/static/mgh/components/core-icon-button/core-icon-button.html">
+  <link rel="import" href="/static/mgh/components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="/static/mgh/components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="/static/mgh/components/paper-tabs/paper-tabs.html">
+  <script src="/static/js/jquery.nouislider.min.js"></script>
+{% endblock %}
+  
+{% block head-css %}
+      html{
+      }
+      html,body {
+	      background-color:#f6f6f6
+	      font-family: 'RobotoDraft', sans-serif;
+	}
+	core-header-panel {
+	      height: 100%;
+	}
+	core-toolbar {
+	      background: #03a9f4;
+	      color: white;
+	}
+	paper-tabs {
+	      width: 100%;
+	      -webkit-user-select: none;
+	      -moz-user-select: none;
+	      -ms-user-select: none;
+	      user-select: none;
+	}
+	.scontainer {
+	      width: 80%;
+	      margin: 50px auto;
+	}
+	@media (min-width: 481px) {
+	      paper-tabs {
+		width: 45em;
+	      }
+	      .scontainer {
+		width: 400px;
+	      }
+	}
+{% endblock %}
+
+{% block content %}
+<div id="mainPage">
+  <div id="subheader1">
+    <div class="date mainDate"></div>
+  </div>
+    
+		<div id="questionPage">
+			{% if questions|length > 0 %}
+			<form id="questions" action="" method="GET" data-ajax="false" >{% csrf_token %}
+        <input type="hidden" name="bearer_token" value="{{ bearer_token }}"/>
+        <input type="hidden" name="datastore_owner" value="{{ datastore_owner }}"/>
+        
+        {% for q in questions %}
+          {% with q.0 as qinstance and q.1 as options %}
+          {% with qinstance.question_type as type %}
+          <div class="question {% if type.followup_question_parent %} followup_question hide{% endif %}">
+          
+	    {% if type.followup_question %}
+		  <input class="qtype_id" type="hidden" value="{{ type.id }}"/>
+		  {% if type.followup_key %}
+			<input class="followup_key" type="hidden" value="{{ type.followup_key }}"/>
+		  {% endif %}
+	    {% endif %}
+	    {% if type.followup_question_parent %}
+	    	  <input class="followup_id" type="hidden" value="{{ type.followup_question_parent.id }}"/>
+	    {% endif %}
+		  
+            <div class="questionText"><span class="qNum">{{ forloop.counter }}.</span> {{ type.text }}</div>
+            {% if type.ui_type == 'b' %}
+              <input type="radio" name="q_{{ qinstance.pk }}" value="1" id="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}" />
+              <label for="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}">
+                <div class="bin_option">Yes</div>
+              </label>
+              <input type="radio" name="q_{{ qinstance.pk }}" value="0" id="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}"/>
+              <label for="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}">
+                <div class="bin_option">No</div>
+              </label>
+	      <br/>
+            {% else %}{% if type.ui_type == 's' %}
+	      {% with min=options.0.0 max=options.1.0 minlabel=options.0.1 maxlabel=options.1.1 %}
+              <!--<input style="display:none;" name="q_{{ qinstance.pk }}" type="range" data-show-value="true" min="{{ options.0 }}" max="{{ options.1 }}" />-->
+              <div class="range" data-min="{{ min }}" data-max="{{ max }}">
+              </div>
+              <input class="range-input" name="q_{{ qinstance.pk }}" type="hidden" />
+              <div class="range-labels">
+		  <div class="range-labels-max">{{ maxlabel }}</div>
+		  <div class="range-labels-min">{{ minlabel }}</div>
+		  <br/>
+	      </div>
+              
+	      {% endwith %}
+            {% else %}{% if type.ui_type == 'm' %}
+                {% for o in options %}
+                <input type="radio" name="q_{{ qinstance.pk }}" value="{{ o.0 }}" id="q_{{ qinstance.pk }}_bin{{o.0}}_{{ forloop.counter }}" />
+                <label for="q_{{ qinstance.pk }}_bin{{ o.0 }}_{{ forloop.counter }}">
+                  <div class="bin_option">{{o.1}}</div>
+                </label>
+              {% endfor %}
+	      <br/>
+            {% endif %}{% endif %}{% endif %}
+            
+          </div>
+          {% endwith %}
+          {% endwith %}
+        {% endfor %}
+
+      <div id="question-submit">
+        <input  type="submit" value="Send">
+      </div>
+        
+			</form>
+      {% endif %}
+      
+			{% if questions|length == 0 %}
+        <div id="questionsAnswered">
+          <img src="/static/mgh/SmartCatch_design_app/Img/other/goodjob_icon.png"/>
+	  <br/>
+	  <br/>
+          <div>Good Job,</div>
+          <div>you have already answered</div>
+          <div>your questions for today.</div>
+          <div>-</div>
+          <div>See you tomorrow!</div>
+        </div>
+      {% endif %}
+		</div>
+	<div id="footer"></div>
+</div>
+
+<script>
+function setupRanges(object) {
+      object.each(function() {
+	var min = Number($(this).attr("data-min"));
+	var max = Number($(this).attr("data-max"));
+	var start = (min + max)/2;
+	//var step = (max+min)/300.0;
+	
+	$(this).noUiSlider({
+	  start: [ start ],
+	  //step: step,
+	  connect: "lower",
+	  behaviour: "tap",
+	  range: {
+	    'min': [ min ],
+	    'max': [ max ]
+	  }
+	});
+      });
+      
+      object.each(function() {
+	    setSliderValue($(this));
+      });
+      
+      object.on('slide', function() {
+        var ri = $(this).closest(".question").find(".range-input");
+	var innerHandle = setSliderValue($(this));
+	
+        innerHandle.addClass("noUi-handle-offset");
+        clearTimeout(handleOffsetTimeout[ri.attr('name')]);
+	
+	handleOffsetTimeout[ri.attr('name')] = setTimeout("removeHandleOffsets();", 4000);
+	
+      });
+}
+
+function setSliderValue(object) {
+      var v = object.val();
+      var m = Math.floor(v);
+      var ri = object.closest(".question").find(".range-input");
+      
+      ri.val(v);
+      
+      var handle = object.find(".noUi-handle");
+      var innerHandle = handle.find('div');
+      if (innerHandle.size() == 0) {
+	    var innerHandle = $("<div></div>");
+	    handle.append(innerHandle);
+      }
+      
+      innerHandle.text(m);
+      
+      return innerHandle;
+}
+
+var handleOffsetTimeout = {};
+function removeHandleOffsets() {
+      $(".noUi-handle-offset").removeClass("noUi-handle-offset");
+}
+
+
+// date
+var d = new Date();
+var day = d.getDate();
+var month = d.getMonth();
+var dayOfWeek= d.getDay();
+var months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct"," Nov","Dec"];
+	
+$(".date").text(months[month]+" "+day + " / ").append($("<span></span>", { text: "week " + {{ weeksSinceStart }}  })).find("span").css("font-weight", "400");
+
+//Followupquestions
+$(".followup_question").each(function() {
+   var followup_id = $(this).find(".followup_id").val();
+   var question = $(this).closest(".question");
+   var parentQuestion = $(".qtype_id[value=" + followup_id + "]").closest(".question");
+   
+   var has_followup_key = parentQuestion.find(".followup_key").size() > 0;
+   var followup_key = "";
+   if (has_followup_key) {
+      followup_key = parentQuestion.find(".followup_key").val();
+   }
+   
+   parentQuestion.find("input[type=radio]").change(function() {
+      console.log("button clicked");
+      //Note: Only radio buttons work for followup questions
+      if ($(this).is(':checked')) {
+	    if (has_followup_key && $(this).val() == followup_key) {
+		  parentQuestion.hide().after(question);
+		  question.show();
+		  setupRanges(question.find(".range"));
+		  displayQuestionNumbers();
+	    }
+      }
+   });
+});
+
+//question number ordering
+function displayQuestionNumbers() {
+      $(".qNum:visible").each(function(index) {
+	    index++;
+	    $(this).text(index +".");
+      });
+}
+$(document).ready(function() {
+      setupRanges($('.range:visible'));
+      displayQuestionNumbers();
+});
+
+</script>
+{% endblock %}
