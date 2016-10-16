@@ -7,6 +7,8 @@ import facebook
 import json, datetime, time, re, math
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
+
 
 def flumojiSplash(request):
     #return flumojiFriends(request)
@@ -19,6 +21,7 @@ def flumojiSplash(request):
 
 def flumojiFriends(request):
     datastore_owner_uuid = request.GET["datastore_owner"]
+    bearer_token = request.GET["bearer_token"]
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
     internalDataStore = getInternalDataStore(profile, "MGH smartCATCH", "Social Health Tracker", "")
 
@@ -32,16 +35,21 @@ def flumojiFriends(request):
     if profile.fbid:
         for choice in emoji_choices:
             friends_by_emoji[choice[0]] = []
-        fb_friends = Profile.objects.filter(profile2__profile1=profile) | Profile.objects.filter(profile1__profile2=profile)
+        fb_friends = Profile.objects.filter(profile2__profile1=profile, profile2__profile2_sharing=True) | Profile.objects.filter(profile1__profile2=profile, profile1__profile1_sharing=True)
         fb_friends = fb_friends.exclude(pk=profile.pk).order_by('-agg_latest_emoji_update')
         
-        for friend in fb_friends:
-            friends_by_emoji[friend.agg_latest_emoji].append(friend)
+        if fb_friends.count() == 0:
+            friends_by_emoji = None
+        else:
+            for friend in fb_friends:
+                friends_by_emoji[friend.agg_latest_emoji].append(friend)
     
     return render_to_response("visualization/flumoji_friends.html", {
         'uuid': datastore_owner_uuid,
         'connected_to_fb': bool(profile.fbid),
         'friends_by_emoji': friends_by_emoji,
+        'ds': datastore_owner_uuid,
+        'token': bearer_token,
     }, context_instance=RequestContext(request))
 
 def flumojiFacebook(request):
@@ -146,3 +154,38 @@ def flumojiMedia(request):
 def flumojiConsent(request):
     return render_to_response("visualization/flumoji_consent.html", {
     }, context_instance=RequestContext(request))
+    
+def flumojiSharingPrefs(request):
+    datastore_owner_uuid = request.GET["datastore_owner"]
+    bearer_token = request.GET["bearer_token"]
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    internalDataStore = getInternalDataStore(profile, "MGH smartCATCH", "Social Health Tracker", "")
+
+    fb_conns1 = FB_Connection.objects.filter(profile2=profile).exclude(profile1=profile)
+    fb_conns2 = FB_Connection.objects.filter(profile1=profile).exclude(profile2=profile)
+        
+    return render_to_response("visualization/flumoji_sharing_prefs.html", {
+        'fb_conns1': fb_conns1,
+        'fb_conns2': fb_conns2,
+        'ds': datastore_owner_uuid,
+        'token': bearer_token,
+    }, context_instance=RequestContext(request))
+    
+def flumojiChangeSharingPref(request):
+    if request.method == "POST" and 'conn' in request.POST and 'ds' in request.POST and 'on' in request.POST:
+        datastore_owner_uuid = request.POST['ds']
+        profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+        
+        conn_pk = request.POST['conn']
+        on = (request.POST['on'] == "true")
+        print on
+        
+        fb_conn = get_object_or_404(FB_Connection, pk=conn_pk)
+        if fb_conn.profile1 == profile:
+            fb_conn.profile1_sharing = on
+        elif fb_conn.profile2 == profile:
+            fb_conn.profile2_sharing = on
+        fb_conn.save()
+        
+    return HttpResponse(json.dumps({"success": True }), content_type="application/json")
+    

@@ -1,38 +1,50 @@
 {% extends "template.html" %}
 
+{% load humanize %}
+
 {% block head-css %}
     body {
         background-color: #f8f8f8;
         background-image: none;
     }
+    .fb-text {
+        font-size: 12px;
+        text-align: center;
+        margin-bottom: 30px;
+        margin-top: 50px;
+    }
     .fb-button {
-        margin-top: 75%;
         margin-left: auto;
         margin-right: auto;
         width: 65px;
     }
     .friends {
-        margin-top:10px;
         width: 90%;
         margin-left: auto;
         margin-right: auto;
+    }
+    .clear {
+        clear: left;
     }
     .grey-line {
         width: 100%;
         background-image: url("/static/img/grey-line.png");
         background-repeat: repeat-x;
         background-position: 50%;
-        min-height: 16px;
+        min-height: 12px;
         margin-bottom: 5px;
-        clear: left;
+        margin-top: 10px;
+    }
+    .grey-line:nth-child(1) {
+        margin-top: 0px;
     }
     .grey-line>div {
         width: 20px;
-        height: 16px;
+        height: 12px;
         background-color: #f8f8f8;
         margin-left: auto;
         margin-right: auto;
-        background-size: 20px 16px;
+        background-size: 15px 12px;
         background-position: 50% 0;
         background-repeat: no-repeat;
         padding-left: 5px;
@@ -40,7 +52,7 @@
     }
     .grey-line .u, .grey-line .f, .grey-line .n, .grey-line .l  {
         height: 30px;
-        background-size: 20px 30px;
+        background-size: 15px 25px;
     }
     .grey-line .u {
         background-image: url("/static/img/emoji-flu.png");
@@ -85,6 +97,32 @@
     .friend img {
       width: 100%;
       margin-bottom: 3px;
+    }
+    .time-dialog {
+        display: none;
+        background-color: white;
+        padding: 2px;
+        border: solid 1px #218af5;
+        position: fixed;
+        top: 30px;
+        width: 90%;
+        left: 50%;
+        margin-left: -45%;
+        font-size: 6px;
+        color: #218af5;
+    }
+    .fb-prefs {
+        display: block;
+        color: #218af5;
+        border: solid 1px #218af5;
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 8px;
+        margin-top: 20px;
+        padding: 3px;
+        text-align: center;
+        text-decoration: none;
     }
 {% endblock %}
 
@@ -197,143 +235,196 @@
           the JavaScript SDK to present a graphical Login button that triggers
           the FB.login() function when clicked.
         -->
+        <div class="fb-text">
+            Sign into Facebook to start following the flumojis of your friends and family.
+        </div>        
+        
         <div class="fb-button">
             <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
             </fb:login-button>
         </div>
-        
-        <div id="status">
-        </div>
     {% else %}
-        <div class="friends">
-        {% if friends_by_emoji.u %}
-            <div class="grey-line">
-                <div class="u"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.u %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-
-        {% if friends_by_emoji.f %}
-            <div class="grey-line">
-                <div class="f"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.f %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.s %}
-            <div class="grey-line">
-                <div class="s"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.s %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
         
-        {% if friends_by_emoji.c %}
-            <div class="grey-line">
-                <div class="c"></div>
+        
+        {% if not friends_by_emoji %}
+            <div class="fb-text">
+                None of your Facebook friends are on Flumoji yet.
             </div>
-            <div>
-            {% for friend in friends_by_emoji.c %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+        {% else %}
+            <div class="time-dialog">
+            </div>
+            
+            <div class="friends">
+            {% if friends_by_emoji.u %}
+                <div class="grey-line">
+                    <div class="u"></div>
                 </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.l %}
-            <div class="grey-line">
-                <div class="l"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.l %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+                <div>
+                {% for friend in friends_by_emoji.u %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had a flu {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.n %}
-            <div class="grey-line">
-                <div class="n"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.n %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+            <div class="clear"></div>
+            {% endif %}
+            
+    
+            {% if friends_by_emoji.f %}
+                <div class="grey-line">
+                    <div class="f"></div>
                 </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.y %}
-            <div class="grey-line">
-                <div class="y"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.y %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+                <div>
+                {% for friend in friends_by_emoji.f %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had a fever {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.r %}
-            <div class="grey-line">
-                <div class="r"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.r %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.s %}
+                <div class="grey-line">
+                    <div class="s"></div>
                 </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% if friends_by_emoji.h %}
-            <div class="grey-line">
-                <div class="h"></div>
-            </div>
-            <div>
-            {% for friend in friends_by_emoji.h %}
-                <div class="friend">
-                    <img src="{{ friend.fbpic }}" />
-                    <br/>
-                    {{ friend.fbname }}
+                <div>
+                {% for friend in friends_by_emoji.s %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was sick {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            
+            {% if friends_by_emoji.c %}
+                <div class="grey-line">
+                    <div class="c"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.c %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had a cough {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.l %}
+                <div class="grey-line">
+                    <div class="l"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.l %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had the chills {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.n %}
+                <div class="grey-line">
+                    <div class="n"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.n %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was naseous {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.y %}
+                <div class="grey-line">
+                    <div class="y"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.y %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling weary {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.r %}
+                <div class="grey-line">
+                    <div class="r"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.r %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had a runny nose {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+    
+            {% if friends_by_emoji.h %}
+                <div class="grey-line">
+                    <div class="h"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.h %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} felt healthy {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+            <div class="clear"></div>
             </div>
+            
+            <div>
+                <a class="fb-prefs" href="/visualization/flumoji/sharingPreferences?bearer_token={{token}}&datastore_owner={{ ds }}">
+                    Sharing Preferences
+                </a>
+            </div>
+            
+            <script type="text/javascript">
+                $(document).ready(function() {
+                   $(".friend img").on('touchstart', function() {
+                        $(".time-dialog").show().text($(this).attr("data-time")).css("top", ($(this).offset().top - 20) + "px");
+                   }).on('touchend', function() {
+                        $(".time-dialog").hide();
+                   }); 
+                });
+            </script>
+            
         {% endif %}
-        </div>
     {% endif %}
 {% endblock %}

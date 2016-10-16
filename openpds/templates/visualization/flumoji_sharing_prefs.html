@@ -1,0 +1,117 @@
+{% extends "template.html" %}
+
+{% block head-css %}
+    body {
+        background-color: #f8f8f8;
+        background-image: none;
+    }
+    .title {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+    .friend img {
+        width: 50px;
+        height: 50px;
+        float: left;
+        display: block;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    .friend, .clear {
+        clear: both;
+    }
+    .setting {
+        float: right;
+        margin-right: 10px;
+        color: #218af5;
+    }
+    .name, .setting {
+        padding-top: 17px;
+    }
+    .fb-friends {
+        display: block;
+        color: #218af5;
+        border: solid 1px #218af5;
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+        margin-top: 40px;
+        padding: 8px;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+{% endblock %}
+
+{% block head-js %}
+    $("document").ready(function() {
+        $(".setting.ON").click(function() {
+            changePref($(this), false);
+        });
+        $(".setting.OFF").click(function() {
+            changePref($(this), true);
+        });
+    });
+    
+    function changePref($this, turnOn) {
+        var data = {
+                      ds: "{{ ds }}",
+                      on: turnOn,
+                  };
+        data["conn"] = $this.attr("data-conn");
+        $.ajax({
+           url: '/visualization/flumoji/changeSharingPreference',
+           type: "POST",
+           data: data,
+           dataType: "json",
+           success: function(returnData) {
+              if (turnOn) {
+                $this.text("ON");
+                $this.removeClass("OFF").addClass("ON");
+              } else {
+                $this.text("OFF");
+                $this.removeClass("ON").addClass("OFF");
+              }
+              $this.unbind('click').click(function() {
+                changePref($this, !turnOn);
+              });
+           }
+        });
+    
+    }
+{% endblock %}
+
+
+{% block content %}
+    
+    <div class="title">
+        Toggle ON/OFF <br/>who sees your Flumoji Statuses
+    </div>
+    
+    {% for conn in fb_conns1 %}
+        <div class="friend">
+            <div class="setting {% if conn.profile2_sharing %}ON{% else %}OFF{% endif %}" data-conn="{{ conn.pk }}">{% if conn.profile2_sharing %}ON{% else %}OFF{% endif %}</div>
+            <img src="{{ conn.profile1.fbpic }}" />
+            <div class="name">{{ conn.profile1.fbname }}</div>
+        </div>
+    {% endfor %}
+    {% for conn in fb_conns2 %}
+        <div class="friend">
+            <div class="setting {% if conn.profile1_sharing %}ON{% else %}OFF{% endif %}" data-conn="{{ conn.pk }}">{% if conn.profile1_sharing %}ON{% else %}OFF{% endif %}</div>
+            <img src="{{ conn.profile2.fbpic }}" />
+            <div class="name">{{ conn.profile2.fbname }}</div>
+        </div>
+    {% endfor %}
+    <div class="clear"></div>
+    
+    <div>
+        <a class="fb-friends" href="/visualization/flumoji/friends?bearer_token={{token}}&datastore_owner={{ ds }}">
+            Back to Friends
+        </a>
+    </div>
+    
+{% endblock %}

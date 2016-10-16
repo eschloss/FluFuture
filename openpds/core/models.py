@@ -32,7 +32,9 @@ class Profile(models.Model):
     
 class FB_Connection(models.Model):
     profile1 = models.ForeignKey('Profile', related_name="profile1") #this must have the fbid lower than profile2
+    profile1_sharing = models.BooleanField(default=True) #is profile 1 sharing with profile 2
     profile2 = models.ForeignKey('Profile', related_name="profile2")
+    profile2_sharing = models.BooleanField(default=True) # is profile 2 sharing with profile 1
     
 class Emoji(models.Model):
     profile = models.ForeignKey('Profile')

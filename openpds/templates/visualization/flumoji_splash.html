@@ -4,40 +4,42 @@
     .splash-title {
         color: white;
         text-align: center;
-        font-size: 16px;
-        margin: 100px auto 50px auto;
+        font-size: 20px;
+        margin: 50px auto 50px auto;
     }
     .status-face {
-        background-image: url("/static/img/blank-face.png");
+        background-image: url("/static/img/blank-face2.png");
         background-repeat: no-repeat;
-        background-size: 135px 110px;
-        height: 200px;
-        width: 135px;
+        background-size: 100%;
+        width: 200px;
+        height: 162px;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 100px;
+        margin-top: 120px;
+        padding-bottom: 100px;
     }
     .status-face.occupied {
-        background-size: 134px 116px;
+        background-size: 200px 162px;
     }
     .status-face.occupied-oversized {
-        background-size: 134px 200px;
+        background-size: 200px 300px;
         margin-top: 0px;
-        margin-bottom: 50px;
+        padding-bottom: 170px;
     }
     .emoji-outer-selection-box {
         width: 100%;
         overflow-x: scroll;
         height: 100px;
-        padding-top:30px;
+        position: fixed;
+        bottom: 0px;
     }
     .emoji-selection-box {
-        width: 700px;
+        width: 600px;
         height: 50px;
     }
     .emoji-choice img {
-        height: 50px;
-        width: 57.5px;
+        height: 40px;
+        width: 46px;
     }
     .emoji-choice {
         float: left;
@@ -45,9 +47,9 @@
         margin-right: 10px;
     }
     .emoji-choice.oversized img {
-        height: 92.65px;
-        width: 57.5px;
-        margin-top: -25px;
+        height: 74.12px;
+        width: 46px;
+        margin-top: -15px;
     }
 {% endblock %}
 
@@ -63,6 +65,17 @@
                     .addClass("occupied").removeClass("occupied-oversized");
             }
             sendEmoji($(this).attr("id"));
+        });
+        
+        $('.emoji-outer-selection-box').animate({
+            scrollLeft: $(".emoji-choice:last-child").offset().left
+         }, 10000, function() {
+            console.log("complete");
+            $(this).animate({
+                scrollLeft: $(".emoji-selection-box").offset().left
+            }, 10000);
+        }).on('touchstart', function() {
+            $(this).stop();
         });
     });
     
