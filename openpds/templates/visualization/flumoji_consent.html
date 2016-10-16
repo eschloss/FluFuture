@@ -5,14 +5,251 @@
         background-color: #f8f8f8;
         background-image: none;
     }
+    .question-container {
+        clear: left;
+        text-align: center;
+        background-color: white;
+        border: solid 1px #ddd;
+        margin-bottom: 10px;
+        padding-top: 10px;
+    }
+    .bool {
+        height: 90px;
+        margin-top: 5px;
+    }
+    .bool > div {
+        float: left;
+        width: 49%;
+        height: 60px;
+        color: grey;
+        text-align: center;
+        padding-top: 20px;
+        font-size: 30px;
+    }
+    .bool > div:nth-child(1) {
+        border-right: solid 1px grey;
+    }
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .next {
+        font-size: 30px;
+        text-align: center;
+        color: #grey;
+        margin-top: 20px;
+    }
+    body .activated {
+        color: #218af5;
+    }
+    .ineligible {
+        display: none;
+        font-size: 30px;
+        margin-top: 100px;
+        text-align: center;
+    }
+    .step2, .consent-item {
+        display: none;
+        text-align: center;
+    }
+    .consent-item:nth-child(2) {
+        display: block;
+    }
+    .consent-title {
+        font-size: 30px;
+        margin-top: 150px;
+        margin-bottom: 10px;
+    }
+    .consent-title, .consent-subtitle {
+        width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .consent-next {
+        padding: 10px 30px;
+        border: solid 1px #218af5;
+        width: 60px;
+        position: fixed;
+        bottom: 60px;
+        left: 50%;
+        margin-left: -60px;
+        color: #218af5;
+    }
+    a {
+        color: #218af5;
+        text-decoration: none;
+    }
 
 {% endblock %}
 
 {% block viewport %}
-    <meta name="viewport" content="width=720" />
+    <meta name="viewport" content="width=device-width" />
 {% endblock %}
 
 {% block content %}
-    <a href="/visualization/flumoji/consent">Testing webview</a>
+    <div class="step1">
+        <div class="title">Eligibility</div>
+        <div class="question-container">
+            <div class="question">Are you over 18 years of age?</div>
+            <div class="bool">
+                <div>Yes</div>
+                <div>No</div>
+            </div>
+        </div>
+        <div class="question-container">
+            <div class="question">Can you read and understand English in order to provide informed consent and follow the instructions?</div>
+            <div class="bool">
+                <div>Yes</div>
+                <div>No</div>
+            </div>
+        </div>
+        <div class="next">
+            Next Step
+        </div>
+    </div>
     
+    <div class="ineligible">
+        Unfortunately you are ineligible to join this study.
+    </div>
+    
+    <div class="step2">
+        <div class="title">Consent</div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Activities
+            </div>
+            <div class="consent-subtitle">
+                This study will ask you to perform tasks and respond to surveys.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Sensor and Health Data
+            </div>
+            <div class="consent-subtitle">
+                This study will gather sensor data from your phone.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Data Gathering
+            </div>
+            <div class="consent-subtitle">
+                Collected data may reveal patterns of how health behaviors affect your susceptibility to influenza.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Privacy
+            </div>
+            <div class="consent-subtitle">
+                Your data will be sent to a secure database, where it will be separated from your personal identity.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Utilizing Data
+            </div>
+            <div class="consent-subtitle">
+                Your coded data will be used for research and may be shared with other researchers.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Study Survey
+            </div>
+            <div class="consent-subtitle">
+                Some of the tasks in this study will ask you to answer optional survey questions about various health and lifestyle factors.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Withdrawing
+            </div>
+            <div class="consent-subtitle">
+                You may withdraw your consent and discontinue participation at any time.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Potential Benefits
+            </div>
+            <div class="consent-subtitle">
+                The information collected by this study may help you better understand and monitor your susceptibility to influenza.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Issues to Consider
+            </div>
+            <div class="consent-subtitle">
+                Some questions may make you uncomfortable. Simple do not respond.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Risks and Benefits
+            </div>
+            <div class="consent-subtitle">
+                Participating in this study may change how you feel. You may feel more tired, sad, energized, or happy.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Risks to Privacy
+            </div>
+            <div class="consent-subtitle">
+                Some of the data that you provide may be sensitive. We will de-identify your data and use secure computers, but we cannot ensure complete privacy.
+            </div>
+            <div class="consent-next">Next</div>
+        </div>
+        <div class="consent-item">
+            <div class="consent-title">
+                Agree to Consent
+            </div>
+            <div class="consent-subtitle">
+                I give my consent to take part in this research study and agree to allow my unnamed, de-identified data to be used and shared as previously described for use in the research.
+            </div>
+            <div class="consent-next"><a href="/takemeback">Agree</a></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block head-js %}
+    $(document).ready(function() {
+        $(".bool>div").click(function() {
+            $(this).closest(".bool").find("div").removeClass("activated");
+            $(this).addClass("activated");
+            if ($(".bool").length == $(".bool>div.activated").length) {
+                $(".next").addClass("activated");
+                $(".next").click(function() {
+                    $(".step1").hide();
+                    if ($(".bool").length == $(".bool>div.activated:first-child").length) {
+                        $(".step2").fadeIn()
+                    } else {
+                        $(".ineligible").fadeIn();
+                    }
+                });
+            }
+        });
+        
+        $(".consent-next").click(function() {
+            var item = $(this).closest(".consent-item");
+            item.hide();
+            item.next().show();
+        });
+
+    });
 {% endblock %}
