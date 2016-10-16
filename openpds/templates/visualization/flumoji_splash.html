@@ -73,11 +73,11 @@
         
         $('.emoji-outer-selection-box').animate({
             scrollLeft: $(".emoji-choice:last-child").offset().left
-         }, 10000, function() {
+         }, 20000, function() {
             console.log("complete");
             $(this).animate({
                 scrollLeft: $(".emoji-selection-box").offset().left
-            }, 10000);
+            }, 20000);
         }).on('touchstart', function() {
             $(this).stop();
         });
