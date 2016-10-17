@@ -241,6 +241,9 @@
             Sign into Facebook to start following the flumojis of your friends and family.
         </div>        
         
+        
+        <a href="https://www.facebook.com/dialog/oauth/?client_id=1211148765632571&redirect_uri=https%3A%2F%2Fflufuture-openpds.herokuapp.com%2Fvisualization%2Fflumoji%2Ffriends%3Fbearer_token%3D{{token}}%26datastore_owner%3D{{ds}}&scope=public_profile,email,user_friends">LOGIN!</a>
+        
         <div class="fb-button">
             <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
             </fb:login-button>
