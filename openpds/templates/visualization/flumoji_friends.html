@@ -124,7 +124,14 @@
     }
 {% endblock %}
 
-            
+{% block viewport %}
+    {% if not connected_to_fb %}
+        <meta name="viewport" content="width=device-width" />
+    {% else %}
+        <meta name="viewport" content="width=device-width; initial-scale=2.0" />
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {% if not connected_to_fb %}
         <script>
