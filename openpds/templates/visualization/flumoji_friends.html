@@ -16,7 +16,8 @@
     .fb-button {
         margin-left: auto;
         margin-right: auto;
-        width: 65px;
+        /*width: 65px;*/
+        width: 202px;
     }
     .friends {
         width: 90%;
@@ -242,11 +243,15 @@
         </div>        
         
         
-        <a href="https://www.facebook.com/dialog/oauth/?client_id=1211148765632571&redirect_uri=https%3A%2F%2Fflufuture-openpds.herokuapp.com%2Fvisualization%2Fflumoji%2Ffriends%3Fbearer_token%3D{{token}}%26datastore_owner%3D{{ds}}&scope=public_profile,email,user_friends">LOGIN!</a>
         
         <div class="fb-button">
+            <a href="https://www.facebook.com/dialog/oauth/?client_id=1211148765632571&redirect_uri=https%3A%2F%2Fflufuture-openpds.herokuapp.com%2Fvisualization%2Fflumoji%2Ffriends%3Fbearer_token%3D{{token}}%26datastore_owner%3D{{ds}}&scope=public_profile,email,user_friends">
+                <img src="/static/img/fb.png"/>
+            </a>
+            <!--
             <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
             </fb:login-button>
+            -->
         </div>
     {% else %}
         
