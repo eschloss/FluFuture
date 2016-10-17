@@ -429,7 +429,7 @@
             <script type="text/javascript">
                 $(document).ready(function() {
                    $(".friend img").on('touchstart', function() {
-                        $(".time-dialog").show().text($(this).attr("data-time")).css("top", ($(this).offset().top - 20) + "px");
+                        $(".time-dialog").show().text($(this).attr("data-time")).css("top", ($(this).offset().top - 20 - $(window).scrollTop()) + "px");
                    }).on('touchend', function() {
                         $(".time-dialog").hide();
                    }); 
