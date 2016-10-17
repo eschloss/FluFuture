@@ -201,6 +201,10 @@
           //
           // These three cases are handled in the callback function.
         
+        FB.Event.subscribe('auth.login', function(resp) {
+            window.location = 'https://flufuture-openpds.herokuapp.com/visualization/flumoji/friends?bearer_token={{ token }}&datastore_owner={{ ds }}';
+            });  
+        
           FB.getLoginStatus(function(response) {
             statusChangeCallback(response);
           });
