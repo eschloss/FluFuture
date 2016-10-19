@@ -4,7 +4,7 @@ import pdb
 from openpds.visualization.internal import getInternalDataStore
 from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType
 import facebook
-import json, datetime, time, re, math
+import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -14,9 +14,16 @@ def flumojiSplash(request):
     #return flumojiFriends(request)
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    
+    thirty_minutes_ago  = pytz.utc.localize(datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
+    latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > thirty_minutes_ago else None
+    
+    
     return render_to_response("visualization/flumoji_splash.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
+        'latestEmoji': latestEmoji,
     }, context_instance=RequestContext(request))
 
 def flumojiFriends(request):
@@ -91,7 +98,7 @@ def flumojiSendEmoji(request):
         profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
         token = request.POST['access_token']
         
-        five_minutes_ago  = datetime.datetime.now() - datetime.timedelta(seconds=300)
+        five_minutes_ago  = pytz.utc.localize(datetime.datetime.utcnow() - datetime.timedelta(seconds=300))
         Emoji.objects.filter(profile=profile, created__gt=five_minutes_ago).delete()
         new_emoji = Emoji(profile=profile, emoji=emoji)
         new_emoji.save()
