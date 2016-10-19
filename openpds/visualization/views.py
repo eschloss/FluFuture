@@ -17,11 +17,14 @@ def flumojiSplash(request):
     access_token = request.GET["bearer_token"]
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
     
-    thirty_minutes_ago  = pytz.utc.localize(datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
+    thirty_minutes_ago  = datetime.datetime.utcnow() - datetime.timedelta(minutes=30)
     try:
         latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > thirty_minutes_ago else None
     except:
-        latestEmoji = None
+        try:
+            latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > pytz.utc.localize(thirty_minutes_ago) else None
+        except:
+            latestEmoji = None
     
     
     return render_to_response("visualization/flumoji_splash.html", {
