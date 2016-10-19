@@ -227,8 +227,8 @@ def flumojiHistory(request):
                             "emojis": [None] * monthLength
                             }
             dates.append(currentMonth)
-        if not currentMonth["emojis"][date]: #this line uses only the last emoji a user chose for that day
-            currentMonth["emojis"][date] = emoji.emoji
+        if not currentMonth["emojis"][date - 1]: #this line uses only the last emoji a user chose for that day
+            currentMonth["emojis"][date - 1] = emoji.emoji
     frequencyEmoji = {}
     for emoji in emojis:
         if emoji.created.month != datetime.datetime.now().month:
