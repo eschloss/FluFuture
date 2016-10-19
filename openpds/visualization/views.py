@@ -19,7 +19,7 @@ def flumojiSplash(request):
     
     thirty_minutes_ago  = pytz.utc.localize(datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
     try:
-        latestEmoji = profile.agg_latest_emoji if pytz.utc.localize(profile.agg_latest_emoji_update) > thirty_minutes_ago else None
+        latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > thirty_minutes_ago else None
     except:
         latestEmoji = None
     
