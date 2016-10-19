@@ -73,11 +73,7 @@
         
         $('.emoji-outer-selection-box').animate({
             scrollLeft: $(".emoji-choice:last-child").offset().left
-         }, 70000, "linear", function() {
-            console.log("complete");
-            $(this).animate({
-                scrollLeft: $(".emoji-selection-box").offset().left
-            }, 70000, "linear");
+         }, 140000, "linear", function() {
         }).on('touchstart', function() {
             $(this).stop();
         });

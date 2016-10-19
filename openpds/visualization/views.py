@@ -58,10 +58,12 @@ def flumojiFacebook(request):
         profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
         
         token = request.POST['access_token']
+        print token
         graph = facebook.GraphAPI(access_token=token, version="2.2")
         
         me = graph.get_object(id='me')
-        pic = graph.get_object(id='me/picture')
+        args = {"type": "large", }
+        pic = graph.get_object(id='me/picture', **args)
         meid = me['id']
         profile.fbid = meid
         profile.fbname = me['name']
