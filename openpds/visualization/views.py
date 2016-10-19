@@ -8,6 +8,7 @@ import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from calendar import monthrange
 
 
 def flumojiSplash(request):
@@ -198,3 +199,48 @@ def flumojiChangeSharingPref(request):
         
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     
+def flumojiHistory(request):
+    #return flumojiFriends(request)
+    datastore_owner_uuid = request.GET["datastore_owner"]
+    access_token = request.GET["bearer_token"]
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    
+    dates = []
+    currentMonth = None
+    
+    emojis = Emoji.objects.filter(profile=profile).order_by("-created")
+    for emoji in emojis:
+        month = emoji.created.month
+        year = emoji.created.year
+        date = emoji.created.day
+        if not currentMonth or currentMonth["year"] != year or currentMonth["month"] != month:
+            startDay, monthLength = monthrange(year, month)
+            currentMonth = {"month": month,
+                            "year": year,
+                            "startDay": [None] * startDay,
+                            "emojis": [None] * monthLength
+                            }
+            dates.append(currentMonth)
+        if not currentMonth["emojis"][date]: #this line uses only the last emoji a user chose for that day
+            currentMonth["emojis"][date] = emoji.emoji
+    frequencyEmoji = {}
+    for emoji in emojis:
+        if emoji.created.month != datetime.datetime.now().month:
+            break
+        if emoji.emoji not in frequencyEmoji:
+            frequencyEmoji[emoji.emoji] = 1
+        else:
+            frequencyEmoji[emoji.emoji] += 1
+    mostFrequent = "h"
+    frequency = 0
+    for e, f in frequencyEmoji.iteritems():
+        if f > frequency:
+            mostFrequent = e
+            frequency = f
+    
+    return render_to_response("visualization/flumoji_history.html", {
+        'uuid': datastore_owner_uuid,
+        'access_token': access_token,
+        'dates': dates,
+        'mostFrequent': mostFrequent,
+    }, context_instance=RequestContext(request))

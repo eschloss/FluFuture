@@ -23,6 +23,7 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^hotspots$', direct_to_template, { 'template' : 'visualization/hotspots.html' }),
     
     (r'^flumoji/splash', 'flumojiSplash'),
+    (r'^flumoji/history', 'flumojiHistory'),
     (r'^flumoji/friends', 'flumojiFriends'),
     (r'^flumoji/facebook', 'flumojiFacebook'),
     (r'^flumoji/sendEmoji', 'flumojiSendEmoji'),

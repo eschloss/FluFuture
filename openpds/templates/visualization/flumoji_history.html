@@ -1,0 +1,198 @@
+{% extends "template.html" %}
+
+{% load humanize %}
+
+{% block head-css %}
+    body {
+        background-color: #ffffff;
+        background-image: none;
+    }
+    .month, .days-of-week {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .day-outer {
+        width: 14%;
+        float: left;
+        margin-top: -15px;
+    }
+    .day-outer:nth-child(1),
+    .day-outer:nth-child(2),
+    .day-outer:nth-child(3),
+    .day-outer:nth-child(4),
+    .day-outer:nth-child(5),
+    .day-outer:nth-child(6),
+    .day-outer:nth-child(7) {
+        margin-top: 0px;
+    }
+    .day {
+        width: 40px;
+        height: 64px;
+        background-repeat: no-repeat;
+        background-size: 40px 35px;
+    }
+   .u {
+        background-image: url("/static/img/emoji-flu.png");
+        background-size: 40px 64px;
+        margin-top: -15px;
+    }
+   .f {
+        background-image: url("/static/img/emoji-fever.png");
+        background-size: 40px 64px;
+        margin-top: -15px;
+    }
+   .l {
+        background-image: url("/static/img/emoji-chills.png");
+        background-size: 40px 64px;
+        margin-top: -20px;
+    }
+   .y {
+        background-image: url("/static/img/emoji-sleepy.png");
+    }
+   .s {
+        background-image: url("/static/img/emoji-sick.png");
+    }
+   .c {
+        background-image: url("/static/img/emoji-cough.png");
+    }
+   .r {
+        background-image: url("/static/img/emoji-runnynose.png");
+    }
+   .n {
+        background-image: url("/static/img/emoji-nauseous.png");
+        background-size: 40px 64px;
+        margin-top: -15px;
+    }
+   .h {
+        background-image: url("/static/img/emoji-happy.png");
+    }
+    .none {
+        background-image: url("/static/img/blank-face-light.png");
+    }
+    .days-of-week> div {
+        float: left;
+        width: 14%;
+        text-align: center;
+    }
+    .days-of-week {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        border-bottom: solid 1px #343434;
+        height: 30px;
+    }
+    .grey-line {
+        clear: left;
+        background-image: url("/static/img/grey-line.png");
+        background-repeat: repeat-x;
+        background-position: 50%;
+        min-height: 18px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .grey-line>div {
+        height: 18px;
+        background-color: white;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 5px;
+        padding-right: 5px;
+        width: 220px;
+        color: #aeaeae;
+    }
+    .mostFrequent {
+        width: 150px;
+        height: 132px;
+        background-size: 150px 132px;
+        background-repeat: no-repeat;
+        clear: left;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .mostFrequent.f, 
+    .mostFrequent.l, 
+    .mostFrequent.u, 
+    .mostFrequent.n {
+        background-size: 150px 240px;
+        height: 240px;
+        margin-top: -66px;
+    }
+    #passiveFrequency {
+        background-image: url("/static/img/grey-border.png");
+        background-repeat: repeat-x;
+        background-color: #f8f8f8;
+        height: 175px;
+    }
+    #socFreq, #actFreq {
+        width: 50%;
+        float: left;
+        padding-top: 40px;
+    }
+    #actFreq > div, #socFreq > div {
+        height: 120px;
+        text-align: center;
+        font-size: 14px;
+        color: #343434;
+        background: url("/static/img/neutral-activity.png");
+        background-repeat: no-repeat;
+        background-position: 50% 30px;
+    }
+    #actFreq > div {
+        border-left: solid 1px #b9b9b9;
+    }
+    
+ 
+{% endblock %}
+
+{% block viewport %}
+    <meta name="viewport" content="width=device-width" />
+{% endblock %}
+
+{% block content %}
+  <div class="days-of-week">
+    <div>M</div>
+    <div>T</div>
+    <div>W</div>
+    <div>T</div>
+    <div>F</div>
+    <div>S</div>
+    <div>S</div>
+  </div>
+    
+  <div id="calendar">
+    {% for d in dates %}
+        <div class="month">
+            {% for s in d.startDay %}
+                <div class="day-outer">
+                    <div class="day"></div>
+                </div>
+            {% endfor %}
+            {% for e in d.emojis %}
+                <div class="day-outer">
+                    <div class="day {% if e %}{{ e }}{% else %}none{% endif %}"></div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+  </div>
+  
+  <div class="grey-line">
+    <div id="mostly">This month, you've felt mostly</div>
+  </div>
+  
+  <div class="mostFrequent {{ mostFrequent }}"></div>
+  <div id="passiveFrequency">
+    <div id="socFreq">
+        <div>
+            Your social activity
+        </div>
+    </div>
+    <div id="actFreq">
+        <div>
+            Your physical activity
+        </div>
+    </div>
+  </div>
+  
+{% endblock %}
