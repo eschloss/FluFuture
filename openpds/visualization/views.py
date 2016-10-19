@@ -18,7 +18,7 @@ def flumojiSplash(request):
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
     
     thirty_minutes_ago  = pytz.utc.localize(datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
-    latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > thirty_minutes_ago else None
+    latestEmoji = profile.agg_latest_emoji if pytz.utc.localize(profile.agg_latest_emoji_update) > thirty_minutes_ago else None
     
     
     return render_to_response("visualization/flumoji_splash.html", {
