@@ -35,7 +35,10 @@ else:
     
 
 # Specifies where files posted to connectors will be placed while inserting into the PDS
-SERVER_UPLOAD_DIR="/Users/ericschlossberg/Dropbox/Documents/workspace/gsk/pdsEnv"
+if IS_DEV_SERVER:
+    SERVER_UPLOAD_DIR="/Users/ericschlossberg/Dropbox/Documents/workspace/gsk/pdsEnv"
+else:
+    SERVER_UPLOAD_DIR="/tmp"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
