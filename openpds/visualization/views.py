@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType
+from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken
 import facebook
 import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
@@ -259,3 +259,16 @@ def flumojiSplashRedirect(request):
         return HttpResponseRedirect(reverse(flumojiFriends) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
     else:
         return HttpResponseRedirect(reverse(flumojiHistory) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
+    def __unicode__(self):
+        return self.uuid
+    
+def setFirebaseToken(request):
+    if request.method == 'POST' and request.POST.__contains__('uuid') and request.POST.__contains__('token'):
+        token = request.POST['token']
+        uuid = request.POST['uuid']
+        profile = get_object_or_404(Profile, uuid=uuid)
+        ftoken, newly_created = FirebaseToken.get_or_create(profile=profile)
+        if ftoken.token != token:
+            ftoken.token = token
+            ftoken.save()
+    return HttpResponse()

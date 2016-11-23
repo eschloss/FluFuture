@@ -30,6 +30,13 @@ class Profile(models.Model):
     def __unicode__(self):
         return self.uuid
     
+class FirebaseToken(models.Model):
+    profile = models.ForeignKey('Profile')
+    token = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.profile.uuid
+    
 class FB_Connection(models.Model):
     profile1 = models.ForeignKey('Profile', related_name="profile1") #this must have the fbid lower than profile2
     profile1_sharing = models.BooleanField(default=True) #is profile 1 sharing with profile 2
