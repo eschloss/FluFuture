@@ -266,6 +266,8 @@ def setFirebaseToken(request):
     print "outside"
     print request.method
     print str(request.POST)
+    print str(request.POST.__contains__('token'))
+    print str(request.POST.__contains__('uuid'))
     if request.method == 'POST' and request.POST.__contains__('uuid') and request.POST.__contains__('token'):
         print "inside"
         token = request.POST['token']
