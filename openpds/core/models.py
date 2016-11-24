@@ -32,7 +32,7 @@ class Profile(models.Model):
     
 class FirebaseToken(models.Model):
     profile = models.ForeignKey('Profile')
-    token = models.CharField(max_length=255)
+    token = models.CharField(max_length=255, default="")
 
     def __unicode__(self):
         return self.profile.uuid

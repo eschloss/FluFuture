@@ -263,12 +263,19 @@ def flumojiSplashRedirect(request):
         return self.uuid
     
 def setFirebaseToken(request):
+    print "outside"
     if request.method == 'POST' and request.POST.__contains__('uuid') and request.POST.__contains__('token'):
+        print "inside"
         token = request.POST['token']
+        print token
         uuid = request.POST['uuid']
+        print uuid
         profile = get_object_or_404(Profile, uuid=uuid)
-        ftoken, newly_created = FirebaseToken.get_or_create(profile=profile)
-        if ftoken.token != token:
-            ftoken.token = token
+        ftoken = FirebaseToken.objects.filter(profile=profile)
+        if len(ftoken) == 0:
+            ftoken = FirebaseToken(profile=profile, token=token)
             ftoken.save()
+        elif ftoken[0].token != token:
+            ftoken[0].token = token
+            ftoken[0].save()
     return HttpResponse()
