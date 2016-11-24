@@ -264,6 +264,8 @@ def flumojiSplashRedirect(request):
     
 def setFirebaseToken(request):
     print "outside"
+    print request.method
+    print str(request.POST)
     if request.method == 'POST' and request.POST.__contains__('uuid') and request.POST.__contains__('token'):
         print "inside"
         token = request.POST['token']
