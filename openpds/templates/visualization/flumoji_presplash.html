@@ -1,0 +1,47 @@
+{% extends "template.html" %}
+
+{% block head-css %}
+    .top-half {
+        text-align: center;
+        color: white;
+        margin-top: 70px;
+        font-weight: 100;
+    }
+    .top-half .title {
+        font-size: 17px;
+    }
+    .top-half .title span {
+        font-weight: 500;
+    }
+    .top-half .subtitle {
+        margin-top: 30px;
+        font-size: 15px;
+        line-height: 20px;
+    }
+    .top-half .subtitle span {
+        font-size: 18px;
+        font-family: "serif";
+        font-weight: 500;
+    }
+{% endblock %}
+
+
+{% block head-js %}
+    $(document).ready( function () {
+        setTimeout(function() { window.location = "/visualization/flumoji/splash?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+    });
+{% endblock %}
+
+{% block content %}
+    <div class="top-half">
+        <div class="title">
+            Don't Spread Flu, <span>Spread Flumoji!</span>
+        </div>
+        <div class="subtitle">
+            Flumoji is your health wizard.<br/>
+            Tell <span>ji</span> how you feel and she'll magically <br/>
+            learn how to protect you from Flu <br/>
+            and other ailments.
+        </div>
+    </div>
+{% endblock %}

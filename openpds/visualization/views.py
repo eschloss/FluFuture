@@ -11,6 +11,15 @@ from django.shortcuts import get_object_or_404
 from calendar import monthrange
 
 
+def flumojiPreSplash(request):
+    datastore_owner_uuid = request.GET["datastore_owner"]
+    access_token = request.GET["bearer_token"]
+    return render_to_response("visualization/flumoji_presplash.html", {
+        'uuid': datastore_owner_uuid,
+        'access_token': access_token,
+    }, context_instance=RequestContext(request))
+    
+
 def flumojiSplash(request):
     #return flumojiFriends(request)
     datastore_owner_uuid = request.GET["datastore_owner"]
@@ -25,7 +34,6 @@ def flumojiSplash(request):
             latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > pytz.utc.localize(thirty_minutes_ago) else None
         except:
             latestEmoji = None
-    
     
     return render_to_response("visualization/flumoji_splash.html", {
         'uuid': datastore_owner_uuid,
@@ -223,7 +231,7 @@ def flumojiHistory(request):
             startDay, monthLength = monthrange(year, month)
             currentMonth = {"month": month,
                             "year": year,
-                            "startDay": [None] * startDay,
+                            "startDay": [None] * ((startDay+1)%7),
                             "emojis": [None] * monthLength
                             }
             dates.append(currentMonth)
@@ -263,17 +271,9 @@ def flumojiSplashRedirect(request):
         return self.uuid
     
 def setFirebaseToken(request):
-    print "outside"
-    print request.method
-    print str(request.POST)
-    print str(request.POST.__contains__('token'))
-    print str(request.POST.__contains__('uuid'))
     if request.method == 'POST' and request.POST.__contains__('uuid') and request.POST.__contains__('token'):
-        print "inside"
         token = request.POST['token']
-        print token
         uuid = request.POST['uuid']
-        print uuid
         profile = get_object_or_404(Profile, uuid=uuid)
         ftoken = FirebaseToken.objects.filter(profile=profile)
         if len(ftoken) == 0:

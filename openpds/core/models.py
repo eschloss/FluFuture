@@ -23,6 +23,8 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     agg_latest_emoji = models.CharField(choices=emoji_choices, max_length=1, default="h")
     agg_latest_emoji_update = models.DateTimeField(default=datetime.datetime.now)
+    lat = models.IntegerField(blank=True, null=True)
+    lng = models.IntegerField(blank=True, null=True)
 
     def getDBName(self):
         return "User_" + str(self.uuid).replace("-", "_")
@@ -33,6 +35,7 @@ class Profile(models.Model):
 class FirebaseToken(models.Model):
     profile = models.ForeignKey('Profile')
     token = models.CharField(max_length=255, default="")
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.profile.uuid
@@ -47,6 +50,8 @@ class Emoji(models.Model):
     profile = models.ForeignKey('Profile')
     emoji = models.CharField(choices=emoji_choices, max_length=1)
     created = models.DateTimeField(auto_now_add=True)
+    lat = models.IntegerField(blank=True, null=True)
+    lng = models.IntegerField(blank=True, null=True)
 
 class AuditEntry(models.Model):
     '''

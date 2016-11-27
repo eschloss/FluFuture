@@ -12,7 +12,7 @@
         color: white;
         font-size: 18px;
         position: fixed;
-        bottom: 150px;
+        bottom: 175px;
         width: 100%;
     }
     .status-face {
@@ -23,20 +23,20 @@
         height: 162px;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 100px;
+        margin-top: 70px;
         padding-bottom: 100px;
     }
     .status-face.occupied {
         background-size: 200px 162px;
-        margin-top: 100px;
+        margin-top: 70px;
     }
     .status-face.occupied-oversized {
         background-size: 200px 300px;
         padding-bottom: 170px;
-        margin-top: -50px
+        margin-top: -30px
     }
     .status-face#f {
-        margin-top: -10px;
+        margin-top: -22px;
     }
     .emoji-outer-selection-box {
         width: 100%;
@@ -93,7 +93,7 @@
             }
             $(".checkbox").show();
             if ($(this).attr("data-text") != $(".emoji-text").text()) {
-                $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(3000).fadeOut(3000);
+                $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(1500).fadeOut(4000);
             }
             if ($(this).is(".oversized")) {
                 $(".status-face").css("background-image", 'url("' + $(this).find("img").attr("src") + '")')
@@ -104,7 +104,7 @@
             }
             sendEmoji($(this).attr("id"));
             if (redirectTimeout != "TEMP") {
-                redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+                //redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
             } else {
                 redirectTimeout = undefined;
             }
@@ -144,7 +144,9 @@
         How are you feeling today?
     </div>
         
-    <div class="emoji-text"></div>
+    <div class="emoji-text">
+        <span>If you don't have flu symptoms, <br/>pick a mood.</span>
+    </div>
     <div class="checkbox"></div>
     
     <div class="status-face"></div>
