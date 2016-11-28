@@ -4,7 +4,7 @@ from bson import ObjectId
 from pymongo import Connection
 from django.conf import settings
 import time
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import json
 import pdb
 from gcm import GCM
@@ -26,13 +26,16 @@ def ensureFunfIndexes():
 
     for profile in profiles:
         dbName = profile.getDBName()
-        connection.admin.command('enablesharding', dbName)
+        try:
+            connection.admin.command('enablesharding', dbName)
+        except:
+            pass
         collection = connection[dbName]["funf"]
         collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
 
 @task()
 def deleteUnusedProfiles():
-    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
+    SIX_HOURS_AGO = datetime.now() - timedelta(hours=6)
     profiles = Profile.objects.all()
     #start = getStartTime(60, False)
 
@@ -353,14 +356,14 @@ def setProfileLocation(profile):
         lng = location["value"]["mlongitude"]
         profile.lat = int(lat*1000000.0)
         profile.lng = int(lng*1000000.0)
-        profile.location_last_set = datetime.datetime.now()
+        profile.location_last_set = datetime.now()
         profile.save()
     except:
         pass
 
 @task()
 def emojiLocations():
-    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
+    SIX_HOURS_AGO = datetime.now() - timedelta(hours=6)
     emojis = Emoji.objects.filter(lat__isnull=True).order_by('-created')
     for emoji in emojis:
         setProfileLocation(emoji.profile)
@@ -371,10 +374,23 @@ def emojiLocations():
 
 @task()
 def profileLocations():
-    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
+    SIX_HOURS_AGO = datetime.now() - timedelta(hours=6)
     profiles = Profile.objects.filter(location_last_set__lt=SIX_HOURS_AGO).order_by('location_last_set')
     for profile in profiles:
         setProfileLocation(profile)
     
-    
+@task()
+def setInfluenceScores():
+    profiles = Profile.objects.filter(referral__isnull=False).order_by('-created')
+    for profile in profiles:
+        setInfluenceScore.delay(profile.referral.pk)
+        
+@task()
+def setInfluenceScore(pk):
+    profile = Profile.objects.get(pk=pk)
+    score = 0
+    for child in profile.profile_set.all():
+        score += int(child.score * .333) + 10
+    profile.score = score
+    profile.save()
     
