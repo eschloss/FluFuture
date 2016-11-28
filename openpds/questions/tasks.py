@@ -33,15 +33,17 @@ def ensureFunfIndexes():
 @task()
 def deleteUnusedProfiles():
     profiles = Profile.objects.all()
-    start = getStartTime(60, False)
+    #start = getStartTime(60, False)
 
     for profile in profiles:
         dbName = profile.getDBName()
-        collection = connection[dbName]["funf"]
+        db = connection[dbName]#["funf"]
         
-        if collection.find({"time": { "$gte": start}}).count() == 0:
+        #if collection.find({"time": { "$gte": start}}).count() == 0:
+        if 'funf' not in db.collection_names(): 
             connection.drop_database(dbName)
-            profile.delete()
+            if Emoji.objects.filter(profile=profile).count() == 0:
+                profile.delete()
 
 @task()
 def recentProbeCounts():
@@ -339,3 +341,39 @@ def flumojiNotifications():
                 except Exception as e:
                     print "NotificationError2: Issue with sending notification to: %s, %s" % (profile.id, profile.uuid)
                     print e
+
+def setProfileLocation(profile):
+    dbName = profile.getDBName()
+    collection = connection[dbName]["funf"]
+    
+    location = collection.find_one({"key": "edu.mit.media.funf.probe.builtin.LocationProbe"})
+    try:
+        lat = location["value"]["mlatitude"]
+        lng = location["value"]["mlongitude"]
+        profile.lat = int(lat*1000000.0)
+        profile.lng = int(lng*1000000.0)
+        profile.location_last_set = datetime.datetime.now()
+        profile.save()
+    except:
+        pass
+
+@task()
+def emojiLocations():
+    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
+    emojis = Emoji.objects.filter(lat__isnull=True).order_by('-created')
+    for emoji in emojis:
+        setProfileLocation(emoji.profile)
+        if emoji.profile.lat:
+            emoji.lat = emoji.profile.lat
+            emoji.lng = emoji.profile.lng
+            emoji.save()
+
+@task()
+def profileLocations():
+    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
+    profiles = Profile.objects.filter(location_last_set__lt=SIX_HOURS_AGO).order_by('location_last_set')
+    for profile in profiles:
+        setProfileLocation(profile)
+    
+    
+    

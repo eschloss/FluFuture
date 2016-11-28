@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 import logging
 from openpds.questions.socialhealth_tasks import recentSocialHealthScores
-from openpds.questions.tasks import ensureFunfIndexes, recentProbeCounts, dumpFunfData, dumpSurveyData, flumojiNotifications
+from openpds.questions.tasks import ensureFunfIndexes, recentProbeCounts, dumpFunfData, dumpSurveyData, flumojiNotifications, emojiLocations
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
@@ -11,3 +11,6 @@ class Command(BaseCommand):
         ensureFunfIndexes.delay()
         dumpFunfData.delay()
         dumpSurveyData.delay()
+        emojiLocations.delay()
+        profileLocations.delay()
+        deleteUnusedProfiles.delay()
