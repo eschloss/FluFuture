@@ -1,0 +1,52 @@
+{% extends "template.html" %}
+
+{% block head-css %}
+    .top-half {
+        text-align: center;
+        color: white;
+        margin-top: 70px;
+        font-weight: 100;
+    }
+    .top-half .subtitle {
+        margin-top: 30px;
+        font-size: 15px;
+        line-height: 20px;
+    }
+    .top-half .subtitle span {
+        font-size: 18px;
+        font-family: "serif";
+        font-weight: 500;
+    }
+{% endblock %}
+
+
+{% block head-js %}
+    $(document).ready( function () {
+    });
+{% endblock %}
+
+{% block content %}
+    <div class="top-half">
+        <div class="subtitle">
+            Help <span>ji</span> protect you and your friends from the flu virus.
+            Outspread the flu by making <b>Flumoji go viral.</b>
+            Keep track of your <span>INFLUENCE</span><span>ZA</span> score.
+        </div>
+    </div>
+    
+    <div id="">
+        Top 5 Flumoji Promoters:
+    </div>
+    {% for i in topInfluencers %}
+        <div>
+            <img src="{{ i.fbpic }}"/>
+            {{ i.fbname }}
+        </div>
+    {% endfor %}
+    
+    
+    <div>Your score:</div>
+    <div>{{profile.score}}</div>
+    
+    <div>Your unique link to spread Flumoji:</div>
+{% endblock %}

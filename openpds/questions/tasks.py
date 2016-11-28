@@ -35,7 +35,6 @@ def ensureFunfIndexes():
 
 @task()
 def deleteUnusedProfiles():
-    SIX_HOURS_AGO = datetime.now() - timedelta(hours=6)
     profiles = Profile.objects.all()
     #start = getStartTime(60, False)
 
@@ -46,7 +45,7 @@ def deleteUnusedProfiles():
         #if collection.find({"time": { "$gte": start}}).count() == 0:
         if 'funf' not in db.collection_names(): 
             connection.drop_database(dbName)
-            if Emoji.objects.filter(profile=profile).count() == 0 and profile.created < SIX_HOURS_AGO:
+            if Emoji.objects.filter(profile=profile).count() == 0 and not profile.fbid and not profile.referral:
                 profile.delete()
 
 @task()
@@ -391,6 +390,7 @@ def setInfluenceScore(pk):
     score = 0
     for child in profile.profile_set.all():
         score += int(child.score * .333) + 10
-    profile.score = score
-    profile.save()
+    if profile.score != score:
+        profile.score = score
+        profile.save()
     
