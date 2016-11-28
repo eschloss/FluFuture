@@ -26,7 +26,7 @@ class Profile(models.Model):
     lat = models.IntegerField(blank=True, null=True)
     lng = models.IntegerField(blank=True, null=True)
     location_last_set = models.DateTimeField(default=datetime.datetime.now)
-    referral = models.ForeignKey('Profile')
+    referral = models.ForeignKey('Profile', blank=True, null=True)
     score = models.IntegerField(default=0)
 
     def getDBName(self):
