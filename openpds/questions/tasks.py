@@ -32,6 +32,7 @@ def ensureFunfIndexes():
 
 @task()
 def deleteUnusedProfiles():
+    SIX_HOURS_AGO = datetime.datetime.now() - datetime.timedelta(hours=6)
     profiles = Profile.objects.all()
     #start = getStartTime(60, False)
 
@@ -42,7 +43,7 @@ def deleteUnusedProfiles():
         #if collection.find({"time": { "$gte": start}}).count() == 0:
         if 'funf' not in db.collection_names(): 
             connection.drop_database(dbName)
-            if Emoji.objects.filter(profile=profile).count() == 0:
+            if Emoji.objects.filter(profile=profile).count() == 0 and profile.created < SIX_HOURS_AGO:
                 profile.delete()
 
 @task()
