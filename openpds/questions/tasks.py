@@ -1,5 +1,5 @@
 from celery import task
-from openpds.core.models import Profile, Notification, Device, QuestionInstance, QuestionType
+from openpds.core.models import Profile, Emoji, Notification, Device, QuestionInstance, QuestionType
 from bson import ObjectId
 from pymongo import Connection
 from django.conf import settings
