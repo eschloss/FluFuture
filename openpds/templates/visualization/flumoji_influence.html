@@ -1,52 +1,254 @@
 {% extends "template.html" %}
 
 {% block head-css %}
+    .starbar {
+        margin-left: auto;
+        margin-right: auto;
+        background-image: url("/static/img/starbar.png");
+        width: 328px;
+        height: 25px;
+        background-size: 328px 25px;
+        background-repeat: no-repeat;
+        margin-top: 30px;
+    }
     .top-half {
         text-align: center;
         color: white;
-        margin-top: 70px;
+        margin-top: 30px;
+        margin-bottom: 30px;
         font-weight: 100;
+        margin-left: 20px;
+        margin-right: 20px;
     }
     .top-half .subtitle {
         margin-top: 30px;
         font-size: 15px;
         line-height: 20px;
     }
-    .top-half .subtitle span {
-        font-size: 18px;
-        font-family: "serif";
-        font-weight: 500;
+    .ji {
+        display: inline-block;
+        width: 13px;
+        height: 21px;
+        background-image: url("/static/img/ji.png");
+        background-repeat: no-repeat;
+        background-size: 13px 17px;
+        background-position: 0px 4px;
+        margin-bottom: -4px;
+    }
+    #za {
+        text-decoration: underline;
+    }
+    #top5title {
+        margin-top: 40px;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .top5 {
+        width: 80px;
+        height: 130px;
+        float: left;
+        margin-right: 6px;
+        text-align: center;
+        color: white;
+        font-size: 10px;
+        word-wrap: break-word;
+    }
+    .top5:last-child {
+        margin-right: 0px;
+    }
+    #top5outercontainer {
+        width: 100%;
+        overflow: scroll;
+    }
+    #top5innercontainer {
+        width: 526px;
+    }
+    .top5 img {
+        height: 80px;
+        width: 80px;
+        background-color: #e9e9e9;
+        margin-bottom: 8px;
+        border: 2px solid #f8f8f8;
+        position: relative;
+        z-index: -1;
+    }
+    .top5 var {
+        display: block;
+        z-index: 2;
+        margin-top: -36px;
+        margin-bottom: 11px;
+        margin-left: 50px;
+        color: #343434;
+        background-image: url("/static/img/yellow-face.png");
+        width: 27px;
+        height: 22px;
+        background-size: 27px 22px;
+        padding-top: 3px;
+        background-repeat: no-repeat;
+    }
+    #scoretitle {
+        clear: left;
+        margin-top: 30px;
+        color: white;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    #score {
+        color: #343434;
+        background-image: url("/static/img/yellow-face.png");
+        width: 54px;
+        height: 44px;
+        background-size: 54px 44px;
+        padding-top: 8px;
+        background-repeat: no-repeat;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    #uniquetitle {
+        text-align: center;
+        color: white;
+        margin-bottom: 15px;
+    }
+    #unique {
+        background-color: inherit;
+        border: solid 2px white;
+        color: white;
+        padding: 10px 5px;
+        border-bottom-left-radius: 3px;
+        border-top-left-radius: 3px;
+        /*width: 55%;*/
+        width: 75%;
+        float: left;
+        margin-bottom: 10px;
+    }
+    #uniquecontainer {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #copy, #share {
+        float: left;
+        color: #6170f6;
+        background-color: white;
+        height: 27px;
+        padding-top: 10px;
+        text-align: center;
+        width: 20%;
+        border-bottom-right-radius: 3px;
+        border-top-right-radius: 3px;
+        margin-left: -1px;
+    }
+    #share {
+        margin-left: 10px;
+        border-radius: 3px;
+        border-radius: 3px;
+        width: 55px;
+    }
+    #social {
+        background-color: #f8f8f8;
+        position: fixed;
+        bottom: 0px;
+        display: none;
+        width: 100%;
+        height: 130px;
+        text-align: center;
+        padding-top: 20px;
+    }
+    #close {
+        background-image: url("/static/img/close.png");
+        height: 25px;
+        width: 25px;
+        background-size: 15px 15px;
+        background-position: 50%;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background-repeat: no-repeat;
+    }
+    #fb, #tw {
+        background-image: url("/static/img/fb2.png");
+        background-repeat: no-repeat;
+        width: 65px;
+        height: 65px;
+        background-size: 65px 65px;
+        position: fixed;
+        left: 20%;
+        margin-top: 15px;
+    }
+    #tw {
+        background-image: url("/static/img/tw.png");
+        right: 20%;
+        left: inherit;
     }
 {% endblock %}
 
 
 {% block head-js %}
     $(document).ready( function () {
+        $(".top5 span").each(function() {
+            var text = $(this).text();
+            $(this).text("");
+            text = text.replace(" ", "<br/>");
+            $(this).append(text);
+        });
+        
+        $("#copy").click(function() {
+            $("#unique").select();
+        });
+        $("#share").click(function() {
+            $("#social").slideDown();
+        });
+        $("#close").click(function() {
+            $("#social").slideUp();
+        });
     });
 {% endblock %}
 
 {% block content %}
+    <div class="starbar"></div>
     <div class="top-half">
         <div class="subtitle">
-            Help <span>ji</span> protect you and your friends from the flu virus.
+            Help <span class="ji"></span> protect you and your friends from the flu virus.
             Outspread the flu by making <b>Flumoji go viral.</b>
-            Keep track of your <span>INFLUENCE</span><span>ZA</span> score.
+            Keep track of your <span id="za">INFLUENCE<b>ZA</b></span> score.
         </div>
     </div>
     
-    <div id="">
-        Top 5 Flumoji Promoters:
+    {% if topInfluencers %}
+    <div id="top5title">
+        <b>Top 5</b> Flumoji Promoters:
     </div>
-    {% for i in topInfluencers %}
-        <div>
-            <img src="{{ i.fbpic }}"/>
-            {{ i.fbname }}
+    <div id="top5outercontainer">
+        <div id="top5innercontainer">
+        {% for i in topInfluencers %}
+            <div class="top5">
+                <img src="{{ i.fbpic }}"/>
+                <var>{{ i.score }}</var>
+                <span>{{ i.fbname }}</span>
+            </div>
+        {% endfor %}
         </div>
-    {% endfor %}
+    </div>
+    {% endif %}
     
     
-    <div>Your score:</div>
-    <div>{{profile.score}}</div>
+    <div id="scoretitle">Your score:</div>
+    <div id="score">{{profile.score}}</div>
     
-    <div>Your unique link to spread Flumoji:</div>
+    <div id="uniquetitle">Your unique link to spread Flumoji:</div>
+    <div id="uniquecontainer">
+        <input id="unique" type="text" readonly="readonly" value="https://flufuture-openpds.herokuapp.com/ref/{{ profile.id }}"/>
+        <div id="copy">copy</div>
+        <!--<div id="share">share</div>-->
+    </div>
+    <div id="social">
+        <div id="close"></div>
+        <div id="socialtitle">Share on:</div>
+        <div id="fb"></div>
+        <div id="tw"></div>
+    </div>
 {% endblock %}

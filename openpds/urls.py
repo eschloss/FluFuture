@@ -32,3 +32,6 @@ urlpatterns = patterns('openpds.views',
     (r'probevisualization/', direct_to_template, { 'template' : 'probevisualization.html' }),
     (r'^checkboxes/', direct_to_template, { 'template' : 'multiplecheckboxes.html' }),
 )
+urlpatterns += patterns('',
+    (r'ref/([1234567890]*)', 'openpds.visualization.views.referral'),
+)

@@ -11,8 +11,16 @@ emoji_choices = (
     ('f', 'fever'),
     ('u', 'flu'),
     ('n', 'nauseous'),
-    ('l', 'chills'),
+    ('l', 'sore throat'),
     ('r', 'runnynose'),
+    ('b', 'body ache'),
+    
+    ('a','calm'),
+    ('d','down'),
+    ('e','energized'),
+    ('m','motivated'),
+    ('t','trouble concentrating'),
+    
 )
 
 class Profile(models.Model):
@@ -34,6 +42,11 @@ class Profile(models.Model):
    
     def __unicode__(self):
         return self.uuid
+    
+class IPReferral(models.Model):
+    profile = models.ForeignKey('Profile')
+    ip = models.CharField(max_length=39)
+    created = models.DateTimeField(auto_now_add=True)
     
 class FirebaseToken(models.Model):
     profile = models.ForeignKey('Profile')

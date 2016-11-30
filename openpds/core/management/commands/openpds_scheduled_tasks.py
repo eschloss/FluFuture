@@ -15,3 +15,4 @@ class Command(BaseCommand):
         profileLocations.delay()
         deleteUnusedProfiles.delay()
         setInfluenceScores.delay()
+        cleanExpiredReferrals.delay()

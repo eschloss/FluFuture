@@ -9,11 +9,38 @@
     }
     .emoji-text {
         text-align: center;
+        color: #205fee;
+        font-size: 18px;
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+        z-index: 10;
+    }
+    .subtitle {
+        text-align: center;
         color: white;
         font-size: 18px;
         position: fixed;
-        bottom: 175px;
+        top: 350px;
         width: 100%;
+    }
+    .filter {
+        text-align: left;
+        padding-left: 5px;
+        color: white;
+        font-size: 16px;
+        line-height: 27px;
+        position: fixed;
+        bottom: 140px;
+        width: 100%;
+    }
+    .moods, .symptoms {
+        font-size: 24px;
+        float:left;
+        width: 48.5%;
+    }
+    .symptoms {
+        text-align: right;
     }
     .status-face {
         background-image: url("/static/img/blank-face2.png");
@@ -38,6 +65,18 @@
     .status-face#f {
         margin-top: -22px;
     }
+    .status-face#l {
+        background-size: 220px 300px;
+        width: 220px;
+    }
+    .status-face#a {
+        margin-top: 20px;
+    }
+    .status-face#b {
+        background-size: 230px 200px;
+        width: 230px;
+        margin-top: 50px;
+    }
     .emoji-outer-selection-box {
         width: 100%;
         overflow-x: scroll;
@@ -49,7 +88,7 @@
     }
     .emoji-selection-box {
         padding-top:15px;
-        width: 5350px;
+        width: 1870px;
         height: 50px;
     }
     .emoji-choice img {
@@ -69,6 +108,23 @@
         width: 46px;
         margin-top: -15px;
     }
+    .emoji-choice#l {
+        margin-left: 6px;
+        margin-right: 6px;
+    }
+    .emoji-choice#l img {
+        width: 54px;
+    }
+    .emoji-choice#a {
+        margin-top: 0px;
+    }
+    .emoji-choice#b {
+        margin-top: -7px;
+    }
+    .emoji-choice#b img {
+        width: 56px;
+        height: 50px;
+    }
     .checkbox {
         display: none;
         height: 30px;
@@ -79,6 +135,9 @@
         top: 10px;
         right: 10px;
     }
+    .end-scroll {
+        float: left;
+    }
 {% endblock %}
 
 
@@ -88,6 +147,7 @@
     
     $(document).ready( function () {
         $(".emoji-choice").click(function() {
+            $(".subtitle").empty();
             if (redirectTimeout != "TEMP") {
                 clearTimeout(redirectTimeout);
             }
@@ -104,7 +164,7 @@
             }
             sendEmoji($(this).attr("id"));
             if (redirectTimeout != "TEMP") {
-                //redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+                redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
             } else {
                 redirectTimeout = undefined;
             }
@@ -114,14 +174,36 @@
             $(".emoji-choice#{{ latestEmoji }}").eq(0).click();
         {% endif %}
         
-        $('.emoji-outer-selection-box').animate({
-            scrollLeft: $(".emoji-choice:last-child").offset().left
-         }, 140000, "linear", function() {
-        }).on('touchstart', function() {
+        
+        autoScroll();
+        
+        $('.emoji-outer-selection-box').on('touchstart', function() {
             clearTimeout(redirectTimeout);
             $(this).stop();
         });
+        
+        $(".moods, .symptoms").fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500)
+            .click(function() {
+                $('.emoji-outer-selection-box').stop().scrollLeft(0);
+                setTimeout(function() { autoScroll(); }, 500);
+            });
+        $(".moods").click(function() {
+            $(".emoji-choice.symptom").hide();
+            $(".emoji-choice.mood").show();
+        });
+        $(".symptoms").click(function() {
+            $(".emoji-choice.symptom").show();
+            $(".emoji-choice.mood").hide();
+        });
     });
+    
+    function autoScroll() {
+        $('.emoji-outer-selection-box').scrollLeft(0).animate({
+                scrollLeft: ($(".end-scroll").offset().left + $(".end-scroll").width())
+             }, 40000, "linear", function() {
+             autoScroll();
+        })
+    }
     
     function sendEmoji(id) {
         $.ajax({
@@ -144,8 +226,17 @@
         How are you feeling today?
     </div>
         
-    <div class="emoji-text">
+    <div class="subtitle">
         <span>If you don't have flu symptoms, <br/>pick a mood.</span>
+    </div>
+    <div class="emoji-text">
+        <span></span>
+    </div>
+    <div class="filter">
+        filter by:
+        <br/>
+        <div class="moods">MOODS</div>
+        <div class="symptoms">SYMPTOMS</div>
     </div>
     <div class="checkbox"></div>
     
@@ -153,252 +244,112 @@
     
     <div class="emoji-outer-selection-box">
         <div class="emoji-selection-box">
+            <!-- moods -->
+            <div class="emoji-choice oversized mood" data-text="calm" id="a">
+                <img src="/static/img/emoji-calm.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling down" id="d">
+                <img src="/static/img/emoji-down.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="energized" id="e">
+                <img src="/static/img/emoji-energized.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling motivated" id="m">
+                <img src="/static/img/emoji-motivated.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="having trouble concentrating" id="t">
+                <img src="/static/img/emoji-trouble-concentrating.png" alt="">
+            </div>
+
+            <!-- symptoms -->
+            
             <div class="emoji-choice" data-text="healthy" id="h">
                 <img src="/static/img/emoji-happy.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
+            <div class="emoji-choice oversized symptom" data-text="flu" id="u">
                 <img src="/static/img/emoji-flu.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
+            <div class="emoji-choice symptom" data-text="runny nose" id="r">
                 <img src="/static/img/emoji-runnynose.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
+            <div class="emoji-choice oversized symptom" data-text="sore throat" id="l">
+                <img src="/static/img/emoji-sore-throat.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
+            <div class="emoji-choice symptom" data-text="nauseous" id="s">
                 <img src="/static/img/emoji-sick.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
+            <div class="emoji-choice oversized symptom" data-text="fever" id="f">
                 <img src="/static/img/emoji-fever.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="cough" id="c">
+            <div class="emoji-choice symptom" data-text="cough" id="c">
                 <img src="/static/img/emoji-cough.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
+            <div class="emoji-choice symptom" data-text="fatigued" id="y">
                 <img src="/static/img/emoji-sleepy.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
+            <div class="emoji-choice oversized symptom" data-text="vomiting" id="n">
                 <img src="/static/img/emoji-nauseous.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="body aches" id="b">
+                <img src="/static/img/emoji-aches.png" alt="">
             </div>
             
-            <!-- REPEATED A BUNCH OF TIMES -->
+            <div class="end-scroll"></div>
             
-                        <div class="emoji-choice" data-text="healthy" id="h">
+            
+            <!-- REPEATED ONCE -->
+            
+            <!-- moods -->
+            <div class="emoji-choice oversized mood" data-text="calm" id="a">
+                <img src="/static/img/emoji-calm.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling down" id="d">
+                <img src="/static/img/emoji-down.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="energized" id="e">
+                <img src="/static/img/emoji-energized.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling motivated" id="m">
+                <img src="/static/img/emoji-motivated.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="having trouble concentrating" id="t">
+                <img src="/static/img/emoji-trouble-concentrating.png" alt="">
+            </div>
+
+            <!-- symptoms -->
+            
+            <div class="emoji-choice" data-text="healthy" id="h">
                 <img src="/static/img/emoji-happy.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
+            <div class="emoji-choice oversized symptom" data-text="flu" id="u">
                 <img src="/static/img/emoji-flu.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
+            <div class="emoji-choice symptom" data-text="runny nose" id="r">
                 <img src="/static/img/emoji-runnynose.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
+            <div class="emoji-choice oversized symptom" data-text="sore throat" id="l">
+                <img src="/static/img/emoji-sore-throat.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
+            <div class="emoji-choice symptom" data-text="nauseous" id="s">
                 <img src="/static/img/emoji-sick.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
+            <div class="emoji-choice oversized symptom" data-text="fever" id="f">
                 <img src="/static/img/emoji-fever.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="cough" id="c">
+            <div class="emoji-choice symptom" data-text="cough" id="c">
                 <img src="/static/img/emoji-cough.png" alt="">
             </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
+            <div class="emoji-choice symptom" data-text="fatigued" id="y">
                 <img src="/static/img/emoji-sleepy.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
+            <div class="emoji-choice oversized symptom" data-text="vomiting" id="n">
                 <img src="/static/img/emoji-nauseous.png" alt="">
             </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
+            <div class="emoji-choice symptom" data-text="body aches" id="b">
+                <img src="/static/img/emoji-aches.png" alt="">
             </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
-                        <div class="emoji-choice" data-text="healthy" id="h">
-                <img src="/static/img/emoji-happy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="flu" id="u">
-                <img src="/static/img/emoji-flu.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="runny nose" id="r">
-                <img src="/static/img/emoji-runnynose.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="body ache" id="l">
-                <img src="/static/img/emoji-chills.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="nauseous" id="s">
-                <img src="/static/img/emoji-sick.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="fever" id="f">
-                <img src="/static/img/emoji-fever.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="cough" id="c">
-                <img src="/static/img/emoji-cough.png" alt="">
-            </div>
-            <div class="emoji-choice" data-text="fatigued" id="y">
-                <img src="/static/img/emoji-sleepy.png" alt="">
-            </div>
-            <div class="emoji-choice oversized" data-text="vomiting" id="n">
-                <img src="/static/img/emoji-nauseous.png" alt="">
-            </div>
+            
+            
         </div>
     </div>
 {% endblock %}

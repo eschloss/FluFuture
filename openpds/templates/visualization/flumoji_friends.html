@@ -48,7 +48,7 @@
         padding-left: 5px;
         padding-right: 5px;
     }
-    .grey-line .u, .grey-line .f, .grey-line .n, .grey-line .l  {
+    .grey-line .u, .grey-line .f, .grey-line .n, .grey-line .l, .grey-line .a, .grey-line .d, .grey-line .m  {
         height: 30px;
         background-size: 15px 25px;
     }
@@ -59,7 +59,7 @@
         background-image: url("/static/img/emoji-fever.png");
     }
     .grey-line .l {
-        background-image: url("/static/img/emoji-chills.png");
+        background-image: url("/static/img/emoji-sore-throat.png");
     }
     .grey-line .y {
         background-image: url("/static/img/emoji-sleepy.png");
@@ -78,6 +78,24 @@
     }
     .grey-line .h {
         background-image: url("/static/img/emoji-happy.png");
+    }
+    .grey-line .b {
+        background-image: url("/static/img/emoji-aches.png");
+    }
+    .grey-line .a {
+        background-image: url("/static/img/emoji-calm.png");
+    }
+    .grey-line .d {
+        background-image: url("/static/img/emoji-down.png");
+    }
+    .grey-line .e {
+        background-image: url("/static/img/emoji-energized.png");
+    }
+    .grey-line .m {
+        background-image: url("/static/img/emoji-motivated.png");
+    }
+    .grey-line .t {
+        background-image: url("/static/img/emoji-trouble-concentrating.png");
     }
     
     .friend {
@@ -282,6 +300,22 @@
                 </div>
             <div class="clear"></div>
             {% endif %}
+
+            {% if friends_by_emoji.b %}
+                <div class="grey-line">
+                    <div class="b"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.b %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had body aches {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
             
     
             {% if friends_by_emoji.f %}
@@ -299,26 +333,7 @@
                 </div>
             <div class="clear"></div>
             {% endif %}
-    
-    
-            {% if friends_by_emoji.s %}
-                <div class="grey-line">
-                    <div class="s"></div>
-                </div>
-                <div>
-                {% for friend in friends_by_emoji.s %}
-                    <div class="friend">
-                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was sick {{ friend.agg_latest_emoji_update|naturaltime }}." />
-                        <br/>
-                        {{ friend.fbname }}
-                    </div>
-                {% endfor %}
-                </div>
-            <div class="clear"></div>
-            {% endif %}
-    
-    
-            
+
             {% if friends_by_emoji.c %}
                 <div class="grey-line">
                     <div class="c"></div>
@@ -343,7 +358,7 @@
                 <div>
                 {% for friend in friends_by_emoji.l %}
                     <div class="friend">
-                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had the chills {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} had a sore thoat {{ friend.agg_latest_emoji_update|naturaltime }}." />
                         <br/>
                         {{ friend.fbname }}
                     </div>
@@ -377,7 +392,7 @@
                 <div>
                 {% for friend in friends_by_emoji.y %}
                     <div class="friend">
-                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling weary {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling fatigued {{ friend.agg_latest_emoji_update|naturaltime }}." />
                         <br/>
                         {{ friend.fbname }}
                     </div>
@@ -404,6 +419,102 @@
             {% endif %}
     
     
+            {% if friends_by_emoji.s %}
+                <div class="grey-line">
+                    <div class="s"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.s %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was sick {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+
+            {% if friends_by_emoji.a %}
+                <div class="grey-line">
+                    <div class="a"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.a %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling calm {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+    
+            {% if friends_by_emoji.d %}
+                <div class="grey-line">
+                    <div class="d"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.d %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling down {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+
+            {% if friends_by_emoji.e %}
+                <div class="grey-line">
+                    <div class="e"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.e %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling energized {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+
+            {% if friends_by_emoji.m %}
+                <div class="grey-line">
+                    <div class="m"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.m %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was feeling motivated {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+
+            {% if friends_by_emoji.t %}
+                <div class="grey-line">
+                    <div class="t"></div>
+                </div>
+                <div>
+                {% for friend in friends_by_emoji.t %}
+                    <div class="friend">
+                        <img src="{{ friend.fbpic }}" data-time="{{ friend.fbname }} was having trouble concentrating {{ friend.agg_latest_emoji_update|naturaltime }}." />
+                        <br/>
+                        {{ friend.fbname }}
+                    </div>
+                {% endfor %}
+                </div>
+            <div class="clear"></div>
+            {% endif %}
+
             {% if friends_by_emoji.h %}
                 <div class="grey-line">
                     <div class="h"></div>

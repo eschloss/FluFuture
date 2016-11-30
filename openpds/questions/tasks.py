@@ -1,5 +1,5 @@
 from celery import task
-from openpds.core.models import Profile, Emoji, Notification, Device, QuestionInstance, QuestionType
+from openpds.core.models import IPReferral, Profile, Emoji, Notification, Device, QuestionInstance, QuestionType
 from bson import ObjectId
 from pymongo import Connection
 from django.conf import settings
@@ -394,3 +394,16 @@ def setInfluenceScore(pk):
         profile.score = score
         profile.save()
     
+@task()
+def cleanExpiredReferrals():
+    ONE_MONTH_AGO = datetime.now() - timedelta(days=30)
+    IPReferral.objects.filter(created__lt=ONE_MONTH_AGO).delete()
+    
+@task()
+def checkForProfileReferral(pk, ip):
+    profile = Profile.objects.get(pk=pk)
+    if not profile.referral:
+        ref = IPReferral.objects.filter(created__lt=profile.created, ip=ip).order_by('-created')
+        if len(ref) > 0:
+            profile.referral = ref[0].profile
+            profile.save()

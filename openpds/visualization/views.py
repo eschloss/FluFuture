@@ -2,13 +2,14 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken
+from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
 import facebook
 import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from calendar import monthrange
+from openpds.questions.tasks import checkForProfileReferral
 
 
 def flumojiPreSplash(request):
@@ -25,6 +26,13 @@ def flumojiSplash(request):
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    if not profile.referral:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[-1]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        checkForProfileReferral.delay(profile.pk, ip)
     
     thirty_minutes_ago  = datetime.datetime.utcnow() - datetime.timedelta(minutes=30)
     try:
@@ -295,3 +303,20 @@ def flumojiInfluence(request):
         'profile': profile,
         'topInfluencers': topInfluencers,
     }, context_instance=RequestContext(request))
+    
+def referral(request, pk):
+    try:
+        profile = Profile.objects.get(pk=pk)
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[-1]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        ref = IPReferral(profile=profile, ip=ip)
+        ref.save()
+    except:
+        pass
+    
+    return HttpResponseRedirect('http://www.google.com')
+
+    
