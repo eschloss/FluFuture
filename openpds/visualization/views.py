@@ -32,7 +32,7 @@ def flumojiSplash(request):
             ip = x_forwarded_for.split(',')[-1]
         else:
             ip = request.META.get('REMOTE_ADDR')
-        checkForProfileReferral.delay(profile.pk, ip)
+        #checkForProfileReferral.delay(profile.pk, ip)
     
     thirty_minutes_ago  = datetime.datetime.utcnow() - datetime.timedelta(minutes=30)
     try:
