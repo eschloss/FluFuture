@@ -1,9 +1,10 @@
 from pymongo import Connection
 from openpds.core.models import Profile
 from openpds import settings
+import random
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

@@ -1,7 +1,7 @@
 import ast
 import sqlite3
 import os
-import stat
+import stat, random
 import threading
 import psycopg2
 import psycopg2.extras
@@ -13,7 +13,7 @@ from openpds.accesscontrol.internal import AccessControlledInternalDataStore, ge
 from openpds import settings
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

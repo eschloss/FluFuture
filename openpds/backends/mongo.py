@@ -3,9 +3,10 @@ from openpds.core.models import Profile
 from openpds.backends.base import InternalDataStore
 from openpds import settings
 import pdb
+import random
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

@@ -8,13 +8,13 @@ from datetime import date, timedelta, datetime
 import json
 import pdb
 import math
-import cluster
+import cluster, random
 from gcm import GCM
 
 from openpds.core.models import Profile
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

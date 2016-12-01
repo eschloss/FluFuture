@@ -7,7 +7,7 @@ import time
 from datetime import date, timedelta
 import json
 import pdb
-import math
+import math, random
 import cluster
 import requests
 from gcm import GCM
@@ -18,7 +18,7 @@ from openpds import getInternalDataStore
 import sqlite3
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

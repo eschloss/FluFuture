@@ -16,7 +16,7 @@ from openpds.questions.socialhealth_tasks import getStartTime
 from openpds import getInternalDataStore
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

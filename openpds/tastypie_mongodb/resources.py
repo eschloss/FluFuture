@@ -7,12 +7,12 @@ from django.conf import settings
 
 from tastypie.bundle import Bundle
 from tastypie.resources import Resource
-import pdb
+import pdb, random
 
 from openpds.core.models import Profile
 
 db = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 

@@ -259,5 +259,5 @@ else:
     GCM_API_KEY = os.environ["GCM_API_KEY"]
 
 
-MONGODB_HOST = os.environ['MONGODB_HOST']
+MONGODB_HOST = [os.environ['MONGODB_HOST'], os.environ['MONGODB_HOST2'], os.environ['MONGODB_HOST3']]
 MONGODB_PORT = int(os.environ['MONGODB_PORT'])

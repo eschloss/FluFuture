@@ -7,7 +7,7 @@ import time
 from datetime import date, timedelta
 import datetime
 import json
-import pdb
+import pdb, random
 import math
 import cluster
 from gcm import GCM
@@ -19,7 +19,7 @@ from collections import Counter
 import sqlite3
 
 connection = Connection(
-    host=getattr(settings, "MONGODB_HOST", None),
+    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
 
