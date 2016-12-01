@@ -12,30 +12,30 @@
         color: #205fee;
         font-size: 18px;
         position: fixed;
-        bottom: 10px;
+        bottom: 80px;
         width: 100%;
         z-index: 10;
     }
     .subtitle {
         text-align: center;
         color: white;
-        font-size: 16px;
+        font-size: 18px;
         position: fixed;
-        top: 320px;
+        top: 185px;
         width: 100%;
     }
     .filter {
         text-align: left;
         padding-left: 5px;
         color: white;
-        font-size: 16px;
-        line-height: 27px;
+        font-size: 18px;
+        line-height: 29px;
         position: fixed;
-        bottom: 140px;
+        bottom: 107px;
         width: 100%;
     }
     .moods, .symptoms {
-        font-size: 24px;
+        font-size: 22px;
         float:left;
         width: 48.5%;
     }
@@ -80,11 +80,11 @@
     .emoji-outer-selection-box {
         width: 100%;
         overflow-x: scroll;
-        height: 110px;
+        height: 80px;
         position: fixed;
         bottom: 0px;
         background-color: white;
-        padding-top: 30px;
+        padding-top: 25px;
     }
     .emoji-selection-box {
         padding-top:15px;
@@ -164,7 +164,7 @@
             }
             sendEmoji($(this).attr("id"));
             if (redirectTimeout != "TEMP") {
-                redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+                //redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
             } else {
                 redirectTimeout = undefined;
             }
@@ -227,7 +227,7 @@
     </div>
         
     <div class="subtitle">
-        <span>If you don't have flu symptoms, <br/>pick a mood.</span>
+        <span>If you don't <br/>have flu symptoms, <br/>pick a mood.</span>
     </div>
     <div class="emoji-text">
         <span></span>
