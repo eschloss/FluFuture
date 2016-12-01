@@ -19,7 +19,7 @@ if IS_PRODUCTION_SERVER:
     REGISTRY_SERVER='flumoji-registry-production.herokuapp.com'
     
     # Deprecated: Used to specify the default PDS url for aggregate computation
-    DEFAULT_PDS_URL = 'flumoji-pds-production.herokuapp.com'
+    DEFAULT_PDS_URL = 'flumoji.com'
 elif IS_STAGING_SERVER:
     # Used to specify the registry server to use for authorization
     REGISTRY_SERVER='flufuture-registry.herokuapp.com'
