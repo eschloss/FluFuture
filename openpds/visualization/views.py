@@ -276,7 +276,8 @@ def flumojiSplashRedirect(request):
     elif profile.fbid:
         return HttpResponseRedirect(reverse(flumojiFriends) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
     else:
-        return HttpResponseRedirect(reverse(flumojiHistory) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
+        return HttpResponseRedirect(reverse(flumojiInfluence) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
+        #return HttpResponseRedirect(reverse(flumojiHistory) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
     def __unicode__(self):
         return self.uuid
     
