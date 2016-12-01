@@ -141,6 +141,44 @@
         text-align: center;
         text-decoration: none;
     }
+    #uniquetitle {
+        text-align: center;
+        color: black;
+        margin-bottom: 6px;
+        font-size: 9px;
+        margin-top: 40px;
+    }
+    #unique {
+        background-color: inherit;
+        border: solid 2px black;
+        color: black;
+        padding: 5px 5px;
+        border-bottom-left-radius: 3px;
+        border-top-left-radius: 3px;
+        /*width: 55%;*/
+        width: 70%;
+        float: left;
+        margin-bottom: 10px;
+        font-size: 7px;
+    }
+    #uniquecontainer {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+     #copy, #share {
+        font-size: 9px;
+        float: left;
+        color: white;
+        background-color: black;
+        height: 16px;
+        padding-top: 6px;
+        text-align: center;
+        width: 20%;
+        border-bottom-right-radius: 3px;
+        border-top-right-radius: 3px;
+        margin-left: -1px;
+    }
 {% endblock %}
 
 {% block viewport %}
@@ -149,6 +187,14 @@
     {% else %}
         <meta name="viewport" content="width=device-width; initial-scale=2.0" />
     {% endif %}
+{% endblock %}
+
+{% block head-js %}
+    $(document).ready(function() {
+        $("#copy").click(function() {
+            $("#unique").select();
+        });
+    });
 {% endblock %}
 
 {% block content %}
@@ -259,7 +305,7 @@
           the FB.login() function when clicked.
         -->
         <div class="fb-text">
-            Sign into Facebook to start following the flumojis of your friends and family.
+            See how your Friends are Feeling
         </div>        
         
         
@@ -550,4 +596,12 @@
             
         {% endif %}
     {% endif %}
+    
+    
+    <div id="uniquetitle">Your unique link to spread Flumoji:</div>
+    <div id="uniquecontainer">
+        <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
+        <div id="copy">copy</div>
+        <!--<div id="share">share</div>-->
+    </div>
 {% endblock %}

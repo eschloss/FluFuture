@@ -271,7 +271,9 @@ def flumojiSplashRedirect(request):
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
-    if profile.fbid or profile.created.day == datetime.datetime.now().day:
+    if profile.created.month == datetime.datetime.now().month:
+        return HttpResponseRedirect(reverse(flumojiInfluence) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
+    elif profile.fbid:
         return HttpResponseRedirect(reverse(flumojiFriends) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
     else:
         return HttpResponseRedirect(reverse(flumojiHistory) + "?datastore_owner=%s&bearer_token=%s" % (datastore_owner_uuid, access_token))
