@@ -12,6 +12,10 @@
         margin-right: 10px;
         clear:left;
     }
+    #calendar {
+        height: 260px;
+        overflow: scroll;
+    }
     .day-outer {
         width: 14%;
         float: left;
@@ -156,6 +160,15 @@
     
  
 {% endblock %}
+
+{% block head-js %}
+    $(document).ready(function() {
+        $("#calendar").scrollTop($('#calendar')[0].scrollHeight);
+    });
+{% endblock %}
+
+
+
 
 {% block viewport %}
     <meta name="viewport" content="width=device-width" />

@@ -108,6 +108,11 @@
         text-align: center;
         margin-bottom: 30px;
     }
+    #uniquefixed {
+        position: fixed;
+        bottom: 5px;
+        width: 100%;
+    }
     #uniquetitle {
         text-align: center;
         color: white;
@@ -134,7 +139,7 @@
         float: left;
         color: #6170f6;
         background-color: white;
-        height: 27px;
+        height: 29px;
         padding-top: 10px;
         text-align: center;
         width: 20%;
@@ -195,16 +200,20 @@
             text = text.replace(" ", "<br/>");
             $(this).append(text);
         });
+        new Clipboard('#copy');
         
+        /*
         $("#copy").click(function() {
             $("#unique").focus().select();
-        });
+        });*/
+        /*
         $("#share").click(function() {
             $("#social").slideDown();
         });
         $("#close").click(function() {
             $("#social").slideUp();
         });
+        */
     });
 {% endblock %}
 
@@ -239,11 +248,13 @@
     <div id="scoretitle">Your score:</div>
     <div id="score">{{profile.score}}</div>
     
-    <div id="uniquetitle">Your unique link to spread Flumoji:</div>
-    <div id="uniquecontainer">
-        <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
-        <div id="copy">copy</div>
-        <!--<div id="share">share</div>-->
+    <div id="uniquefixed">
+        <div id="uniquetitle">Your unique link to spread Flumoji:</div>
+        <div id="uniquecontainer">
+            <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
+            <div id="copy" data-clipboard-target="#unique">copy</div>
+            <!--<div id="share">share</div>-->
+        </div>
     </div>
     <div id="social">
         <div id="close"></div>

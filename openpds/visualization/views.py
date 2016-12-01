@@ -80,6 +80,7 @@ def flumojiFriends(request):
         'friends_by_emoji': friends_by_emoji,
         'ds': datastore_owner_uuid,
         'token': bearer_token,
+        'profile': profile,
     }, context_instance=RequestContext(request))
 
 def flumojiFacebook(request):
@@ -242,7 +243,7 @@ def flumojiHistory(request):
                             "startDay": [None] * ((startDay+1)%7),
                             "emojis": [None] * monthLength
                             }
-            dates.append(currentMonth)
+            dates.insert(0, currentMonth)
         if not currentMonth["emojis"][date - 1]: #this line uses only the last emoji a user chose for that day
             currentMonth["emojis"][date - 1] = emoji.emoji
     frequencyEmoji = {}

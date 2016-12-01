@@ -6,18 +6,19 @@
     body {
         background-color: #f8f8f8;
         background-image: none;
+        min-height: 200px;
     }
     .fb-text {
-        font-size: 20px;
+        font-size: 11px;
         text-align: center;
-        margin-bottom: 60px;
-        margin-top: 100px;
+        margin-bottom: 40px;
+        margin-top: 30px;
     }
     .fb-button {
         margin-left: auto;
         margin-right: auto;
         /*width: 65px;*/
-        width: 202px;
+        width: 101px;
     }
     .friends {
         width: 90%;
@@ -146,7 +147,11 @@
         color: black;
         margin-bottom: 6px;
         font-size: 9px;
-        margin-top: 40px;
+    }
+    #uniquefixed {
+        position: fixed;
+        bottom: 5px;
+        width: 100%;
     }
     #unique {
         background-color: inherit;
@@ -158,7 +163,6 @@
         /*width: 55%;*/
         width: 70%;
         float: left;
-        margin-bottom: 10px;
         font-size: 7px;
     }
     #uniquecontainer {
@@ -171,7 +175,7 @@
         float: left;
         color: white;
         background-color: black;
-        height: 16px;
+        height: 18px;
         padding-top: 6px;
         text-align: center;
         width: 20%;
@@ -182,11 +186,7 @@
 {% endblock %}
 
 {% block viewport %}
-    {% if not connected_to_fb %}
-        <meta name="viewport" content="width=device-width" />
-    {% else %}
-        <meta name="viewport" content="width=device-width; initial-scale=2.0" />
-    {% endif %}
+    <meta name="viewport" content="width=device-width; initial-scale=2.0" />
 {% endblock %}
 
 {% block head-js %}
@@ -305,14 +305,14 @@
           the FB.login() function when clicked.
         -->
         <div class="fb-text">
-            See how your Friends are Feeling
+            See how your<br/>Friends are Feeling
         </div>        
         
         
         
         <div class="fb-button">
             <a href="https://www.facebook.com/dialog/oauth/?client_id=1211148765632571&redirect_uri=https%3A%2F%2Fflufuture-openpds.herokuapp.com%2Fvisualization%2Fflumoji%2Ffriends%3Fbearer_token%3D{{token}}%26datastore_owner%3D{{ds}}&scope=public_profile,email,user_friends">
-                <img src="/static/img/fb.png"/>
+                <img height=23 width=101 src="/static/img/fb.png"/>
             </a>
             <!--
             <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
@@ -597,11 +597,12 @@
         {% endif %}
     {% endif %}
     
-    
-    <div id="uniquetitle">Your unique link to spread Flumoji:</div>
-    <div id="uniquecontainer">
-        <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
-        <div id="copy">copy</div>
-        <!--<div id="share">share</div>-->
+    <div id="uniquefixed">
+        <div id="uniquetitle">Your unique link to spread Flumoji:</div>
+        <div id="uniquecontainer">
+            <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
+            <div id="copy">copy</div>
+            <!--<div id="share">share</div>-->
+        </div>
     </div>
 {% endblock %}

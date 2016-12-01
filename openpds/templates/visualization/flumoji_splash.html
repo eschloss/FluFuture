@@ -88,7 +88,7 @@
     }
     .emoji-selection-box {
         padding-top:15px;
-        width: 2005px;
+        width: 3008px;
         height: 50px;
     }
     .emoji-choice img {
@@ -135,7 +135,7 @@
         top: 10px;
         right: 10px;
     }
-    .end-scroll {
+    .start-scroll, .end-scroll {
         float: left;
     }
 {% endblock %}
@@ -164,7 +164,7 @@
             }
             sendEmoji($(this).attr("id"));
             if (redirectTimeout != "TEMP") {
-                //redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+                redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
             } else {
                 redirectTimeout = undefined;
             }
@@ -180,6 +180,12 @@
         $('.emoji-outer-selection-box').on('touchstart', function() {
             clearTimeout(redirectTimeout);
             $(this).stop();
+        }).scroll(function() {
+            if($('.end-scroll').offset().left <= 0) {
+                $(this).scrollLeft($('.start-scroll').offset().left + $('.emoji-outer-selection-box').scrollLeft());
+            } else if ($('.start-scroll').offset().left >= 0) {
+                $(this).scrollLeft($('.end-scroll').offset().left + $('.emoji-outer-selection-box').scrollLeft()-1);
+            }
         });
         
         $(".moods, .symptoms").fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500)
@@ -198,11 +204,12 @@
     });
     
     function autoScroll() {
-        $('.emoji-outer-selection-box').scrollLeft(0).animate({
-                scrollLeft: ($(".end-scroll").offset().left + $(".end-scroll").width())
+        $('.emoji-outer-selection-box').scrollLeft($('.start-scroll').offset().left + $('.emoji-outer-selection-box').scrollLeft())
+            .animate({
+                scrollLeft: ($(".end-scroll").offset().left + $('.emoji-outer-selection-box').scrollLeft())
              }, 40000, "linear", function() {
              autoScroll();
-        })
+        });
     }
     
     function sendEmoji(id) {
@@ -244,6 +251,58 @@
     
     <div class="emoji-outer-selection-box">
         <div class="emoji-selection-box">
+            <!-- moods -->
+            <div class="emoji-choice oversized mood" data-text="calm" id="a">
+                <img src="/static/img/emoji-calm.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling down" id="d">
+                <img src="/static/img/emoji-down.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="energized" id="e">
+                <img src="/static/img/emoji-energized.png" alt="">
+            </div>
+            <div class="emoji-choice oversized mood" data-text="feeling motivated" id="m">
+                <img src="/static/img/emoji-motivated.png" alt="">
+            </div>
+            <div class="emoji-choice mood" data-text="having trouble concentrating" id="t">
+                <img src="/static/img/emoji-trouble-concentrating.png" alt="">
+            </div>
+
+            <!-- symptoms -->
+            
+            <div class="emoji-choice" data-text="healthy" id="h">
+                <img src="/static/img/emoji-happy.png" alt="">
+            </div>
+            <div class="emoji-choice oversized symptom" data-text="flu" id="u">
+                <img src="/static/img/emoji-flu.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="runny nose" id="r">
+                <img src="/static/img/emoji-runnynose.png" alt="">
+            </div>
+            <div class="emoji-choice oversized symptom" data-text="sore throat" id="l">
+                <img src="/static/img/emoji-sore-throat.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="nauseous" id="s">
+                <img src="/static/img/emoji-sick.png" alt="">
+            </div>
+            <div class="emoji-choice oversized symptom" data-text="fever" id="f">
+                <img src="/static/img/emoji-fever.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="cough" id="c">
+                <img src="/static/img/emoji-cough.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="fatigued" id="y">
+                <img src="/static/img/emoji-sleepy.png" alt="">
+            </div>
+            <div class="emoji-choice oversized symptom" data-text="vomiting" id="n">
+                <img src="/static/img/emoji-nauseous.png" alt="">
+            </div>
+            <div class="emoji-choice symptom" data-text="body aches" id="b">
+                <img src="/static/img/emoji-aches.png" alt="">
+            </div>
+
+            <div class="start-scroll"></div>
+
             <!-- moods -->
             <div class="emoji-choice oversized mood" data-text="calm" id="a">
                 <img src="/static/img/emoji-calm.png" alt="">
