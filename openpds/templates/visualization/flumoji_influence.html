@@ -147,6 +147,13 @@
         border-top-right-radius: 3px;
         margin-left: -1px;
     }
+    #copied {
+        color: white;
+        position: absolute;
+        left: 55%;
+        margin-top: 9px;
+        display: none;
+    }
     #share {
         margin-left: 10px;
         border-radius: 3px;
@@ -200,12 +207,12 @@
             text = text.replace(" ", "<br/>");
             $(this).append(text);
         });
-        new Clipboard('#copy');
+        var clipboard = new Clipboard('#copy');
+        clipboard.on('success', function(e) {
+            $("#copied").fadeIn(500).fadeOut(3000);
+            $("#unique").blur();
+        });
         
-        /*
-        $("#copy").click(function() {
-            $("#unique").focus().select();
-        });*/
         /*
         $("#share").click(function() {
             $("#social").slideDown();
@@ -254,6 +261,7 @@
             <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
             <div id="copy" data-clipboard-target="#unique">copy</div>
             <!--<div id="share">share</div>-->
+            <div id="copied">*copied*</div>
         </div>
     </div>
     <div id="social">

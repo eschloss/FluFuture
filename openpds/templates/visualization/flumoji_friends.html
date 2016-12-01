@@ -183,6 +183,16 @@
         border-top-right-radius: 3px;
         margin-left: -1px;
     }
+    #copied {
+        color: black;
+        position: absolute;
+        left: 40%;
+        margin-top: 6px;
+        display: none;
+        font-size: 9px;
+        background-color: #f8f8f8;
+        padding-left: 9px;
+    }
 {% endblock %}
 
 {% block viewport %}
@@ -191,8 +201,10 @@
 
 {% block head-js %}
     $(document).ready(function() {
-        $("#copy").click(function() {
-            $("#unique").select();
+        var clipboard = new Clipboard('#copy');
+        clipboard.on('success', function(e) {
+            $("#copied").fadeIn(500).fadeOut(3000);
+            $("#unique").blur();
         });
     });
 {% endblock %}
@@ -601,8 +613,9 @@
         <div id="uniquetitle">Your unique link to spread Flumoji:</div>
         <div id="uniquecontainer">
             <input id="unique" type="text" readonly="readonly" value="https://flumoji.com/ref/{{ profile.id }}"/>
-            <div id="copy">copy</div>
+            <div id="copy" data-clipboard-target="#unique">copy</div>
             <!--<div id="share">share</div>-->
+            <div id="copied">*copied*</div>
         </div>
     </div>
 {% endblock %}
