@@ -33,6 +33,7 @@ def ensureFunfIndexes():
         collection = connection[dbName]["funf"]
         collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
 
+#this might be causing a bug so i removed it from openpds_scheduled_tasts.py
 @task()
 def deleteUnusedProfiles():
     profiles = Profile.objects.all()

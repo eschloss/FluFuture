@@ -13,6 +13,6 @@ class Command(BaseCommand):
         dumpSurveyData.delay()
         emojiLocations.delay()
         profileLocations.delay()
-        deleteUnusedProfiles.delay()
+        #deleteUnusedProfiles.delay()
         setInfluenceScores.delay()
         cleanExpiredReferrals.delay()
