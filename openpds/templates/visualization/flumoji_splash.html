@@ -148,7 +148,6 @@
 
 
 {% block head-js %}
-    {% cache 14400 splash-js latestEmoji %}
     var redirectTimeout;
     
     $(document).ready( function () {
@@ -232,7 +231,6 @@
             }
         });
     }
-    {% endcache %}
 {% endblock %}
 
 {% block content %}
