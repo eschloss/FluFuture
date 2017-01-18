@@ -325,6 +325,6 @@ def referral(request, pk):
     except:
         pass
     
-    return HttpResponseRedirect('http://www.google.com')
+    return HttpResponseRedirect('https://play.google.com/store/apps/details?id=edu.mit.media.flumoji')
 
     
