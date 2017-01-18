@@ -187,6 +187,10 @@ def flumojiMedia(request):
 def flumojiConsent(request):
     return render_to_response("visualization/flumoji_consent.html", {
     }, context_instance=RequestContext(request))
+
+def flumojiPrivacy(request):
+    return render_to_response("visualization/flumoji_privacy.html", {
+    }, context_instance=RequestContext(request))
     
 def flumojiSharingPrefs(request):
     datastore_owner_uuid = request.GET["datastore_owner"]
