@@ -1,6 +1,8 @@
 {% extends "template.html" %}
+{% load cache %}
 
 {% block head-css %}
+    {% cache 3600 splash-css %}
     .splash-title {
         color: white;
         text-align: center;
@@ -141,11 +143,12 @@
     body {
         min-height: 100px;
     }
+    {% endcache %}
 {% endblock %}
 
 
 {% block head-js %}
-    
+    {% cache 14400 splash-js latestEmoji %}
     var redirectTimeout;
     
     $(document).ready( function () {
@@ -229,9 +232,11 @@
             }
         });
     }
+    {% endcache %}
 {% endblock %}
 
 {% block content %}
+    {% cache 14400 splash-body %}
     <div class="splash-title">
         How are you feeling today?
     </div>
@@ -414,4 +419,5 @@
             
         </div>
     </div>
+    {% endcache %}
 {% endblock %}

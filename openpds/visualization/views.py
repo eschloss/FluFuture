@@ -10,8 +10,9 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from calendar import monthrange
 from openpds.questions.tasks import checkForProfileReferral
+from django.views.decorators.cache import cache_page
 
-
+@cache_page(60 * 60 * 6)
 def flumojiPreSplash(request):
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
@@ -180,14 +181,17 @@ def flumojiQuestions(request):
         'weeksSinceStart': weeks,
     }, context_instance=RequestContext(request))
 
+@cache_page(60 * 60 * 6)
 def flumojiMedia(request):
     return render_to_response("visualization/flumoji_media.html", {
     }, context_instance=RequestContext(request))
 
+@cache_page(60 * 60 * 12)
 def flumojiConsent(request):
     return render_to_response("visualization/flumoji_consent.html", {
     }, context_instance=RequestContext(request))
 
+@cache_page(60 * 60 * 6)
 def flumojiPrivacy(request):
     return render_to_response("visualization/flumoji_privacy.html", {
     }, context_instance=RequestContext(request))
