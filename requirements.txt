@@ -19,3 +19,4 @@ newrelic==2.40.0.34 # only necessary if you're using the newrelic add-on
 gevent==1.1.1
 facebook-sdk==2.0.0
 whitenoise==2.0.6
+django-heroku-memcacheify==0.8
