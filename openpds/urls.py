@@ -9,7 +9,7 @@ from django.views.generic.base import RedirectView
 admin.autodiscover()
 
 urlpatterns = patterns('openpds.views',
-    (r'^$', RedirectView.as_view(url='https://github.com/HumanDynamics/openPDS/wiki')),
+    (r'^$', RedirectView.as_view(url='https://play.google.com/store/apps/details?id=edu.mit.media.flumoji')),
     (r'^home/', 'home'),
     (r'^discovery/ping/', 'ping'),
     (r'^api/', include(v1_api.urls)),
