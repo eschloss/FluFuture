@@ -410,7 +410,7 @@ def profileLocations():
         
 @task()
 def profileLocation(pk):
-    profile = Profile.object.get(pk=pk)
+    profile = Profile.objects.get(pk=pk)
     setProfileLocation(profile)
     
 @task()
