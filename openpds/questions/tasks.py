@@ -25,43 +25,60 @@ def ensureFunfIndexes():
     profiles = Profile.objects.all()
 
     for profile in profiles:
-        dbName = profile.getDBName()
-        try:
-            connection.admin.command('enablesharding', dbName)
-        except:
-            pass
-        collection = connection[dbName]["funf"]
-        collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
+        ensureFunfIndex.delay(profile.pk)
+        
+@task()
+def ensureFunfIndex(pk):
+    profile = Profile.objects.get(pk=pk)
+    dbName = profile.getDBName()
+    try:
+        connection.admin.command('enablesharding', dbName)
+    except:
+        pass
+    collection = connection[dbName]["funf"]
+    collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
+    
 
 #this might be causing a bug so i removed it from openpds_scheduled_tasts.py
 @task()
 def deleteUnusedProfiles():
     profiles = Profile.objects.all()
-    #start = getStartTime(60, False)
 
     for profile in profiles:
-        dbName = profile.getDBName()
-        db = connection[dbName]#["funf"]
-        
-        #if collection.find({"time": { "$gte": start}}).count() == 0:
-        if 'funf' not in db.collection_names(): 
-            connection.drop_database(dbName)
-            if Emoji.objects.filter(profile=profile).count() == 0 and not profile.fbid and not profile.referral:
-                profile.delete()
+        deleteUnusedProfile.delay(profile.pk)
+
+@task()
+def deleteUnusedProfile(pk):
+    #start = getStartTime(60, False)
+    profile = Profile.objects.get(pk=pk)
+    dbName = profile.getDBName()
+    db = connection[dbName]#["funf"]
+    
+    #if collection.find({"time": { "$gte": start}}).count() == 0:
+    if 'funf' not in db.collection_names(): 
+        connection.drop_database(dbName)
+        if Emoji.objects.filter(profile=profile).count() == 0 and not profile.fbid and not profile.referral:
+            profile.delete()
+    
 
 @task()
 def recentProbeCounts():
     profiles = Profile.objects.all()
-    startTime = getStartTime(1, False)
-    
     for profile in profiles:
-        ids = getInternalDataStore(profile, "", "Living Lab", "")
-        probes = ["ActivityProbe", "SimpleLocationProbe", "CallLogProbe", "SmsProbe", "WifiProbe", "BluetoothProbe"]
-        answer = {}
-        for probe in probes:
-            data = ids.getData(probe, startTime, None)
-            answer[probe] = data.count()
-        ids.saveAnswer("RecentProbeCounts", answer)
+        recentProbeCounts2.delay(profile.pk)
+        
+@task()
+def recentProbeCounts2(pk):
+    startTime = getStartTime(1, False)
+    profile = Profile.objects.get(pk=pk)
+    ids = getInternalDataStore(profile, "", "Living Lab", "")
+    probes = ["ActivityProbe", "SimpleLocationProbe", "CallLogProbe", "SmsProbe", "WifiProbe", "BluetoothProbe"]
+    answer = {}
+    for probe in probes:
+        data = ids.getData(probe, startTime, None)
+        answer[probe] = data.count()
+    ids.saveAnswer("RecentProbeCounts", answer)
+    
 
 def addNotification(profile, notificationType, title, content, uri):
     notification, created = Notification.objects.get_or_create(datastore_owner=profile, type=notificationType)
@@ -179,19 +196,25 @@ def findMusicGenres():
 @task()
 def dumpFunfData():
     profiles = Profile.objects.all()
+    for profile in profiles:
+        dumpFunfData2.delay(profile.pk)
+    
+@task()
+def dumpFunfData2(pk):
     outputConnection = sqlite3.connect("openpds/static/dump.db")
     c = outputConnection.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS funf (user_id integer, key text, time real, value text, PRIMARY KEY (user_id, key, time) on conflict ignore)")
     startTime = getStartTime(3, False)#max(1378008000, startTimeRow[0]) if startTimeRow is not None else 1378008000
-    for profile in profiles:
-        dbName = profile.getDBName()
-        try:
-            connection.admin.command('enablesharding', dbName)
-        except:
-            pass
-        funf = connection[dbName]["funf"]
-        user = int(profile.id)
-        c.executemany("INSERT INTO funf VALUES (?,?,?,?)", [(user,d["key"][d["key"].rfind(".")+1:],d["time"],"%s"%d["value"]) for d in funf.find({"time": {"$gte": startTime}}) if d["key"] is not None])
+    
+    profile = Profile.objects.get(pk=pk)
+    dbName = profile.getDBName()
+    try:
+        connection.admin.command('enablesharding', dbName)
+    except:
+        pass
+    funf = connection[dbName]["funf"]
+    user = int(profile.id)
+    c.executemany("INSERT INTO funf VALUES (?,?,?,?)", [(user,d["key"][d["key"].rfind(".")+1:],d["time"],"%s"%d["value"]) for d in funf.find({"time": {"$gte": startTime}}) if d["key"] is not None])
 
     outputConnection.commit()
     outputConnection.close()
@@ -383,7 +406,12 @@ def profileLocations():
     SIX_HOURS_AGO = datetime.now() - timedelta(hours=6)
     profiles = Profile.objects.filter(location_last_set__lt=SIX_HOURS_AGO).order_by('location_last_set')
     for profile in profiles:
-        setProfileLocation(profile)
+        profileLocation.delay(profile.pk)
+        
+@task()
+def profileLocation(pk):
+    profile = Profile.object.get(pk=pk)
+    setProfileLocation(profile)
     
 @task()
 def setInfluenceScores():
