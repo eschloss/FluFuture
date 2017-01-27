@@ -152,6 +152,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.transaction.TransactionMiddleware', # quick bug fix
     #'django.middleware.csrf.CsrfViewMiddleware',
     'openpds.django-crossdomainxhr-middleware.XsSharing',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
