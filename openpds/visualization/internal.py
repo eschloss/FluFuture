@@ -14,7 +14,8 @@ from openpds import settings
 
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
+    port=getattr(settings, "MONGODB_PORT", None),
+    readPreference='nearest'
 )
 
 INTERNAL_DATA_STORE_INSTANCES = {}

@@ -17,7 +17,8 @@ from openpds import getInternalDataStore
 
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
+    port=getattr(settings, "MONGODB_PORT", None),
+    readPreference='nearest'
 )
 
 @task()
@@ -47,6 +48,7 @@ def deleteUnusedProfiles():
     for profile in profiles:
         deleteUnusedProfile.delay(profile.pk)
 
+#deprecated - do not use this
 @task()
 def deleteUnusedProfile(pk):
     #start = getStartTime(60, False)

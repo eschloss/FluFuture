@@ -8,7 +8,8 @@ import random
 
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
+    port=getattr(settings, "MONGODB_PORT", None),
+    readPreference='nearest'
 )
 
 def dump(request): 
