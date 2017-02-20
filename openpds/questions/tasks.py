@@ -15,11 +15,13 @@ import random
 from openpds.questions.socialhealth_tasks import getStartTime
 from openpds import getInternalDataStore
 
+"""
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None),
     readPreference='nearest'
 )
+"""
 
 @task()
 def ensureFunfIndexes():
@@ -32,12 +34,20 @@ def ensureFunfIndexes():
 def ensureFunfIndex(pk):
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
+    
+    connection = Connection(
+        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+        port=getattr(settings, "MONGODB_PORT", None),
+        readPreference='nearest'
+    )
     try:
         connection.admin.command('enablesharding', dbName)
     except:
         pass
     collection = connection[dbName]["funf"]
+    
     collection.ensure_index([("time", -1), ("key", 1)], cache_for=7200, background=True, unique=True, dropDups=True)
+    connection.close()
     
 
 #this might be causing a bug so i removed it from openpds_scheduled_tasts.py
@@ -54,6 +64,12 @@ def deleteUnusedProfile(pk):
     #start = getStartTime(60, False)
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
+    
+    connection = Connection(
+        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+        port=getattr(settings, "MONGODB_PORT", None),
+        readPreference='nearest'
+    )
     db = connection[dbName]#["funf"]
     
     #if collection.find({"time": { "$gte": start}}).count() == 0:
@@ -61,7 +77,7 @@ def deleteUnusedProfile(pk):
         connection.drop_database(dbName)
         if Emoji.objects.filter(profile=profile).count() == 0 and not profile.fbid and not profile.referral:
             profile.delete()
-    
+    connection.close()
 
 @task()
 def recentProbeCounts():
@@ -168,6 +184,12 @@ def findMusicGenres():
 
     for profile in profiles:
         dbName = profile.getDBName()
+        
+        connection = Connection(
+            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+            port=getattr(settings, "MONGODB_PORT", None),
+            readPreference='nearest'
+        )
         answerListCollection = connection[dbName]["answerlist"]
         collection = connection[dbName]["funf"]
         
@@ -193,6 +215,7 @@ def findMusicGenres():
             musicGenres = musicGenres[0] if musicGenres.count() > 0 else { "key": "MusicGenres", "value": [] }
             musicGenres["value"] = [count[0] for count in counts]
             answerListCollection.save(musicGenres)
+        connection.close()
 
 
 @task()
@@ -210,16 +233,24 @@ def dumpFunfData2(pk):
     
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
+    
+    connection = Connection(
+        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+        port=getattr(settings, "MONGODB_PORT", None),
+        readPreference='nearest'
+    )
     try:
         connection.admin.command('enablesharding', dbName)
     except:
         pass
     funf = connection[dbName]["funf"]
+    
     user = int(profile.id)
     c.executemany("INSERT INTO funf VALUES (?,?,?,?)", [(user,d["key"][d["key"].rfind(".")+1:],d["time"],"%s"%d["value"]) for d in funf.find({"time": {"$gte": startTime}}) if d["key"] is not None])
 
     outputConnection.commit()
     outputConnection.close()
+    connection.close()
 
 @task()
 def dumpSurveyData():
@@ -231,6 +262,12 @@ def dumpSurveyData():
 
     for profile in profiles:
         dbName = profile.getDBName()
+        
+        connection = Connection(
+            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+            port=getattr(settings, "MONGODB_PORT", None),
+            readPreference='nearest'
+        )
         try:
             connection.admin.command('enablesharding', dbName)
         except:
@@ -247,6 +284,7 @@ def dumpSurveyData():
         for datum in answerlist.find({ "key": { "$regex": "Last15Minutes"}}):
             for answer in datum["value"]:
                 c.execute("INSERT INTO survey VALUES (?,?,?,?);", (user,datum["key"],answer["time"],"%s"%answer["value"]))
+        connection.close()
     outputConnection.commit()
     outputConnection.close()
 
@@ -379,6 +417,11 @@ def flumojiNotifications():
 
 def setProfileLocation(profile):
     dbName = profile.getDBName()
+    connection = Connection(
+        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+        port=getattr(settings, "MONGODB_PORT", None),
+        readPreference='nearest'
+    )
     collection = connection[dbName]["funf"]
     
     location = collection.find_one({"key": "edu.mit.media.funf.probe.builtin.LocationProbe"})
@@ -391,6 +434,7 @@ def setProfileLocation(profile):
         profile.save()
     except:
         pass
+    connection.close()
 
 @task()
 def emojiLocations():

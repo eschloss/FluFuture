@@ -14,11 +14,13 @@ from openpds.core.models import Profile
 from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import Counter
 
+"""
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None),
     readPreference='nearest'
 )
+"""
 
 def getDBName(profile):
     return "User_" + str(profile.uuid).replace("-", "_")

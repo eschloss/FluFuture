@@ -5,11 +5,7 @@ from openpds import settings
 import pdb
 import random
 
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
+
 
 def getInternalDataStore(profile, app_id, lab_id, token):
     return MongoInternalDataStore(profile, app_id, lab_id, token)
@@ -22,7 +18,12 @@ class MongoInternalDataStore(InternalDataStore):
         super(MongoInternalDataStore, self).__init__(profile, app_id, lab_id, token)
         # This should check the token and pull down approved scopes for it
         self.profile = profile
-        self.db = connection[profile.getDBName()]
+        self.db = Connection(
+	    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+	    port=getattr(settings, "MONGODB_PORT", None),
+	    readPreference='nearest',
+	    _connect=False
+	)[profile.getDBName()]
 
     def saveAnswer(self, key, data):
     	"""

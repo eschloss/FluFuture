@@ -12,11 +12,6 @@ from openpds.accesscontrol.models import Settings
 from openpds.accesscontrol.internal import AccessControlledInternalDataStore, getAccessControlledInternalDataStore
 from openpds import settings
 
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
 
 INTERNAL_DATA_STORE_INSTANCES = {}
 
@@ -328,7 +323,12 @@ class InternalDataStore(AccessControlledInternalDataStore):
         super(InternalDataStore, self).__oldinit__(profile, app_id, lab_id)
         # This should check the token and pull down approved scopes for it
         self.profile = profile
-        self.db = connection[profile.getDBName()]
+        self.db = Connection(
+            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+            port=getattr(settings, "MONGODB_PORT", None),
+            readPreference='nearest',
+            _connect=False
+        )[profile.getDBName()]
 
     def saveAnswer(self, key, data):
         collection = self.db["answerlist"] if isinstance(data, list) else self.db["answer"]

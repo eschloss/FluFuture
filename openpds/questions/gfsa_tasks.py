@@ -18,10 +18,12 @@ from openpds.questions.socialhealth_tasks import getStartTime
 from collections import Counter
 import sqlite3
 
+"""
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None)
 )
+"""
 
 ANSWERKEY_NAME_MAPPING = {
     "gfsa": "My Team's Status"

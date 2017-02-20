@@ -11,11 +11,6 @@ import pdb, random
 
 from openpds.core.models import Profile
 
-db = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
 
 class Document(dict):
     # dictionary-like object for mongodb documents.
@@ -38,6 +33,12 @@ class MongoDBResource(Resource):
             if (request and "datastore_owner__uuid" in request.GET):
                 profile, created = Profile.objects.get_or_create(uuid = request.GET["datastore_owner__uuid"])
                 database = profile.getDBName()
+            db = Connection(
+                host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+                port=getattr(settings, "MONGODB_PORT", None),
+                readPreference='nearest',
+                _connect=False
+            )
             return db[database][self._meta.collection] if database is not None else None
         except AttributeError:
             raise ImproperlyConfigured("Define a collection in your resource.")

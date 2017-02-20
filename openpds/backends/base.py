@@ -3,11 +3,13 @@ from openpds.core.models import Profile
 from openpds import settings
 import random
 
+"""
 connection = Connection(
     host=random.choice(getattr(settings, "MONGODB_HOST", None)),
     port=getattr(settings, "MONGODB_PORT", None),
     readPreference='nearest'
 )
+"""
 
 def getInternalDataStore(profile, app_id, lab_id, token):
     return InternalDataStore(profile, app_id, lab_id, token)
