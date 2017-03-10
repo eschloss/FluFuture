@@ -205,12 +205,13 @@ def get_client_ip_base(x_forwarded_for, remote_addr):
 
 @cache_page(60 * 60 * 12)
 def flumojiConsent(request):
-    if request.method == "POST" and request.POST.__contains__('q1') and request.POST.__contains__('q2'):
+    if request.method == "POST" and request.POST.__contains__('q1') and request.POST.__contains__('q2') and request.POST.__contains__('q3'):
         print "POST"
         ip = get_client_ip_base(request.META.get('HTTP_X_FORWARDED_FOR'), request.META.get('REMOTE_ADDR'))
         q1 = request.POST['q1'] == 'true'
         q2 = request.POST['q2'] == 'true'
-        Baseline.objects.create(ip=ip, q1=q1, q2=q2)
+        q3 = request.POST['q3'] == 'true'
+        Baseline.objects.create(ip=ip, q1=q1, q2=q2, q3=q3)
         return HttpResponseRedirect("/takemeback")
     return render_to_response("visualization/flumoji_consent.html", {
     }, context_instance=RequestContext(request))

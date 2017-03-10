@@ -164,6 +164,7 @@ class Baseline(models.Model):
     ip = models.GenericIPAddressField()
     q1 = models.BooleanField(default=False)
     q2 = models.BooleanField(default=False)
+    q3 = models.BooleanField(default=False)
 
 class QuestionInstance(models.Model):
     question_type = models.ForeignKey('QuestionType')
