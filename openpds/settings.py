@@ -48,6 +48,7 @@ MANAGERS = ADMINS
 
 # Standard Django database specification. See Django docs for further information.
 if IS_DEV_SERVER:
+    """
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3', 
@@ -58,6 +59,12 @@ if IS_DEV_SERVER:
             'PORT': '',      
         }
     }
+    """
+    import dj_database_url
+    DATABASES = {}
+    DATABASES['default'] =  dj_database_url.config()
+    DATABASES['default']['CONN_MAX_AGE'] = None
+    #PDS_BACKEND =  dj_database_url.config()
 else:
     import dj_database_url
     DATABASES = {}

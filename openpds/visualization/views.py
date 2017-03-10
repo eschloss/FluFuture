@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
+from openpds.core.models import Profile, Baseline, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
 import facebook
 import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from calendar import monthrange
 from openpds.questions.tasks import checkForProfileReferral
 from django.views.decorators.cache import cache_page
+import logging
 
 @cache_page(60 * 60 * 6)
 def flumojiPreSplash(request):
@@ -131,6 +132,15 @@ def flumojiSendEmoji(request):
         profile.agg_latest_emoji = new_emoji.emoji
         profile.agg_latest_emoji_update = new_emoji.created
         profile.save()
+        
+        if Baseline.objects.filter(profile=profile).count() == 0:
+            try:
+                ip = get_client_ip_base(request.META.get('HTTP_X_FORWARDED_FOR'), request.META.get('REMOTE_ADDR'))
+                baseline = Baseline.objects.filter(profile__isnull=True, ip=ip).order_by('-pk')[0]
+                baseline.profile = profile
+                baseline.save()
+            except:
+                pass
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     
 def flumojiQuestions(request):
@@ -186,8 +196,22 @@ def flumojiMedia(request):
     return render_to_response("visualization/flumoji_media.html", {
     }, context_instance=RequestContext(request))
 
+def get_client_ip_base(x_forwarded_for, remote_addr):
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = remote_addr
+    return ip
+
 @cache_page(60 * 60 * 12)
 def flumojiConsent(request):
+    if request.method == "POST" and request.POST.__contains__('q1') and request.POST.__contains__('q2'):
+        print "POST"
+        ip = get_client_ip_base(request.META.get('HTTP_X_FORWARDED_FOR'), request.META.get('REMOTE_ADDR'))
+        q1 = request.POST['q1'] == 'true'
+        q2 = request.POST['q2'] == 'true'
+        Baseline.objects.create(ip=ip, q1=q1, q2=q2)
+        return HttpResponseRedirect("/takemeback")
     return render_to_response("visualization/flumoji_consent.html", {
     }, context_instance=RequestContext(request))
 

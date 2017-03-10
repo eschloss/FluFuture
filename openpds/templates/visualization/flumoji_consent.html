@@ -13,11 +13,11 @@
         margin-bottom: 10px;
         padding-top: 10px;
     }
-    .bool {
+    .bool, .bool2 {
         height: 90px;
         margin-top: 5px;
     }
-    .bool > div {
+    .bool > div, .bool2 > div {
         float: left;
         width: 49%;
         height: 60px;
@@ -26,7 +26,8 @@
         padding-top: 20px;
         font-size: 30px;
     }
-    .bool > div:nth-child(1) {
+    .bool > div:nth-child(1),
+     .bool2 > div:nth-child(1) {
         border-right: solid 1px grey;
     }
     .title {
@@ -35,7 +36,7 @@
         margin-top: 20px;
         text-align: center;
     }
-    .next {
+    .next2, .next {
         font-size: 30px;
         text-align: center;
         color: #grey;
@@ -53,7 +54,7 @@
     .step2, .consent-item {
         text-align: center;
     }
-    .step2 {
+    .step2, .step3 {
         display: none;
     }
     .consent-item p {
@@ -100,6 +101,7 @@
 {% endblock %}
 
 {% block content %}
+    <form method="post">
     <div class="step1">
         <div class="title">Eligibility</div>
         <div class="question-container">
@@ -120,12 +122,35 @@
             Next Step
         </div>
     </div>
+
+    <div class="step2">
+        <div class="title"></div>
+        <div class="question-container">
+            <input type="hidden" name="q1" value=""/>
+            <div class="question">Did you get the flu last year?</div>
+            <div class="bool2">
+                <div>Yes</div>
+                <div>No</div>
+            </div>
+        </div>
+        <div class="question-container">
+            <input type="hidden" name="q2" value=""/>
+            <div class="question">Have you received a flu shot this year?</div>
+            <div class="bool2">
+                <div>Yes</div>
+                <div>No</div>
+            </div>
+        </div>
+        <div class="next2">
+            Next Step
+        </div>
+    </div>
     
     <div class="ineligible">
         Unfortunately you are ineligible to join this study.
     </div>
     
-    <div class="step2">
+    <div class="step3">
         <div class="consent-item">
             <h2>
                 Consent
@@ -193,9 +218,10 @@
             <div class="consent-subtitle">
                 I give my consent to take part in this research study and agree to allow my unnamed, de-identified data to be used and shared as previously described for use in the research.
             </div>
-            <div class="consent-finish"><a href="/takemeback">Agree</a></div>
+            <div class="consent-finish">Agree</div>
         </div>
     </div>
+    </form>
 {% endblock %}
 
 {% block head-js %}
@@ -209,15 +235,38 @@
                     $(".step1").hide();
                     if ($(".bool").length == $(".bool>div.activated:first-child").length) {
                         $(".step2").fadeIn();
-                        $("html, body").animate({ scrollTop: $(document).height() }, 7000, "linear")
-                            .on('touchstart', function() {
-                                $(this).stop();
-                            });
                     } else {
                         $(".ineligible").fadeIn();
                     }
                 });
             }
+        });
+        $(".bool2>div").click(function() {
+            $(this).closest(".bool2").find("div").removeClass("activated");
+            $(this).addClass("activated");
+            if ($(this).is(":first-child")) {
+                var x = "true";
+            } else {
+                var x = "false";
+            }
+            $(this).closest(".question-container").find("input").val(x);
+            //alert($(this).closest(".question-container").find("input").attr("name") + ":"+$(this).closest(".question-container").find("input").val());
+            if ($(".bool2").length == $(".bool2>div.activated").length) {
+                $(".next2").addClass("activated");
+                $(".next2").click(function() {
+                    $(".step2").hide();
+                    $(".step3").fadeIn();
+                    setTimeout(function() {
+                        $("html, body").animate({ scrollTop: $(document).height() }, 7000, "linear")
+                        .on('touchstart', function() {
+                            $(this).stop();
+                        });
+                    }, 1000);
+                });
+            }
+        });
+        $(".consent-finish").click(function() {
+            $(this).closest("form").submit();
         });
 
     });

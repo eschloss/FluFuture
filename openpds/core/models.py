@@ -69,6 +69,25 @@ class Emoji(models.Model):
     lat = models.IntegerField(blank=True, null=True)
     lng = models.IntegerField(blank=True, null=True)
 
+class Emoji2(models.Model):
+    profile = models.ForeignKey('Profile')
+    emoji = models.CharField(choices=emoji_choices, max_length=1)
+    created = models.DateTimeField()
+    lat = models.IntegerField(blank=True, null=True)
+    lng = models.IntegerField(blank=True, null=True)
+
+class FluQuestions(models.Model):
+    profile = models.ForeignKey('Profile')
+    fluThisSeason = models.BooleanField()
+    fluLastSeason = models.BooleanField()
+    vaccineThisSeason = models.BooleanField()
+    
+class ProfileStartEnd(models.Model):
+    profile = models.ForeignKey('Profile')
+    start = models.DateTimeField(blank=True, null=True)
+    end = models.DateTimeField(blank=True, null=True)
+    days = models.IntegerField(default=0)
+
 class AuditEntry(models.Model):
     '''
     Represents an audit of a request against the PDS
@@ -139,7 +158,12 @@ class QuestionType(models.Model):
         if len(parents) > 0:
             return parents[0]
         return None
-        
+    
+class Baseline(models.Model):
+    profile = models.OneToOneField('Profile', blank=True, null=True)
+    ip = models.GenericIPAddressField()
+    q1 = models.BooleanField(default=False)
+    q2 = models.BooleanField(default=False)
 
 class QuestionInstance(models.Model):
     question_type = models.ForeignKey('QuestionType')
