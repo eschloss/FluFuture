@@ -37,6 +37,7 @@
         width: 100%;
     }
     .moods, .symptoms {
+        color: yellow;
         font-size: 22px;
         float:left;
         width: 48.5%;
@@ -143,6 +144,9 @@
     body {
         min-height: 100px;
     }
+    #firsttime-dialog {
+        display: none;
+    }
     {% endcache %}
 {% endblock %}
 
@@ -206,6 +210,14 @@
             $(".emoji-choice.symptom").show();
             $(".emoji-choice.mood").hide();
         });
+
+        {% if dialog %}
+            $("#firsttime-dialog").dialog({ modal: true });
+            $(".ui-dialog, .ui-widget-overlay").click(function() {
+               $("#firsttime-dialog").dialog("close"); 
+            });
+            setTimeout('$("#firsttime-dialog").dialog("close"); ', 15000);
+        {% endif %}
     });
     
     function autoScroll() {
@@ -416,6 +428,10 @@
             
             
         </div>
+    </div>
+    
+    <div id="firsttime-dialog">
+        Now that you've installed the app, let's get started. <br/><Br/>Start off by telling Flumoji how you feel. You can do this by selecting the Flumoji that represents your current state.
     </div>
     {% endcache %}
 {% endblock %}

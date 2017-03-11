@@ -14,6 +14,8 @@ import sqlite3
 import random
 from openpds.questions.socialhealth_tasks import getStartTime
 from openpds import getInternalDataStore
+from django.utils import timezone
+import requests
 
 """
 connection = Connection(
@@ -488,3 +490,28 @@ def checkForProfileReferral(pk, ip):
         if len(ref) > 0:
             profile.referral = ref[0].profile
             profile.save()
+
+fcm_url = 'https://fcm.googleapis.com/fcm/send'
+
+@task()
+def howAreYouFeelingTodayAllUsers():
+    profiles = Profile.objects.all().exclude(emoji__created__gte=timezone.now()-datetime.timedelta(days=4), location_last_set__gte=timezone.now()-datetime.timedelta(days=4))
+    #use location_last_set i nthis 
+    #howAreYouFeelingToday(100)
+
+@task()
+def howAreYouFeelingToday(pk):
+    # user datetime.datetime.now() for east coast time
+    body = {  
+        "notification":{  
+          "title":"Flumoji",
+          "body":"How are you feeling today?",
+          "content_available": "true"
+        },
+         "registration_ids":["c2tns8d8y_U:APA91bFLDla_bzUn9-wzyREjcTFMSGZkBPzjJL3YRlZ8fj5rGrz1GPEuZYs89Nl9W-Tok283zLgP6z-8jInt93jFmiJljQVLRle4izEibSOh2nBAuJNZNCk_hfBGe0gz1mewPAoWwh-b",]
+     }
+    
+    
+    headers = {"Content-Type":"application/json",
+            "Authorization": "key=%s" % settings.FCM_SERVER_KEY }
+    requests.post(fcm_url, data=json.dumps(body), headers=headers)

@@ -33,7 +33,7 @@ class Profile(models.Model):
     agg_latest_emoji_update = models.DateTimeField(default=datetime.datetime.now)
     lat = models.IntegerField(blank=True, null=True)
     lng = models.IntegerField(blank=True, null=True)
-    location_last_set = models.DateTimeField(default=datetime.datetime.now)
+    location_last_set = models.DateTimeField(default=datetime.datetime.now) #repurposed. using it now for firebase
     referral = models.ForeignKey('Profile', blank=True, null=True)
     score = models.IntegerField(default=0)
 

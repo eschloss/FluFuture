@@ -158,12 +158,23 @@
         border-left: solid 1px #b9b9b9;
     }
     
+    #firsttime-dialog {
+        display: none;
+    }
  
 {% endblock %}
 
 {% block head-js %}
     $(document).ready(function() {
         $("#calendar").scrollTop($('#calendar')[0].scrollHeight);
+
+        {% if dialog %}
+            $("#firsttime-dialog").dialog({ modal: true });
+            $(".ui-dialog, .ui-widget-overlay").click(function() {
+               $("#firsttime-dialog").dialog("close"); 
+            });
+            setTimeout('$("#firsttime-dialog").dialog("close"); ', 15000);
+        {% endif %}
     });
 {% endblock %}
 
@@ -219,5 +230,12 @@
         </div>
     </div>
   </div>
+  
+  
+    <div id="firsttime-dialog">
+       Staying healthy is the best way to stave off the Flu. Physical activity and Social Interactions are important for health and wellness.
+       <br/><br/>
+    Did you know that Flumoji automatically collects information from you to let you know how active and social you are?
+    </div>
   
 {% endblock %}

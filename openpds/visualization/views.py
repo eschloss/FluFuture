@@ -12,6 +12,10 @@ from calendar import monthrange
 from openpds.questions.tasks import checkForProfileReferral
 from django.views.decorators.cache import cache_page
 import logging
+from django.utils import timezone
+
+from django.conf import settings
+import requests
 
 @cache_page(60 * 60 * 6)
 def flumojiPreSplash(request):
@@ -44,11 +48,14 @@ def flumojiSplash(request):
             latestEmoji = profile.agg_latest_emoji if profile.agg_latest_emoji_update > pytz.utc.localize(thirty_minutes_ago) else None
         except:
             latestEmoji = None
+            
+    dialog = not bool(latestEmoji) and profile.created > (timezone.now() - datetime.timedelta(hours=1))
     
     return render_to_response("visualization/flumoji_splash.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
         'latestEmoji': latestEmoji,
+        'dialog': dialog,
     }, context_instance=RequestContext(request))
 
 def flumojiFriends(request):
@@ -203,6 +210,7 @@ def get_client_ip_base(x_forwarded_for, remote_addr):
         ip = remote_addr
     return ip
 
+@cache_page(60 * 60 * 12)
 def flumojiConsent(request):
     if request.method == "POST" and request.POST.__contains__('q1') and request.POST.__contains__('q2') and request.POST.__contains__('q3'):
         ip = get_client_ip_base(request.META.get('HTTP_X_FORWARDED_FOR'), request.META.get('REMOTE_ADDR'))
@@ -253,7 +261,7 @@ def flumojiChangeSharingPref(request):
         
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     
-def flumojiHistory(request):
+def flumojifcm_urlHistory(request):
     #return flumojiFriends(request)
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
@@ -291,12 +299,15 @@ def flumojiHistory(request):
         if f > frequency:
             mostFrequent = e
             frequency = f
+
+    dialog = profile.created > (timezone.now() - datetime.timedelta(hours=2))
     
     return render_to_response("visualization/flumoji_history.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
         'dates': dates,
         'mostFrequent': mostFrequent,
+        'dialog':  dialog,
     }, context_instance=RequestContext(request))
     
 def flumojiSplashRedirect(request):
@@ -332,11 +343,14 @@ def flumojiInfluence(request):
     access_token = request.GET["bearer_token"]
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
     topInfluencers = Profile.objects.filter(fbname__isnull=False).order_by('-score')[0:5]
+
+    dialog = profile.created > (timezone.now() - datetime.timedelta(hours=2))
     return render_to_response("visualization/flumoji_influence.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
         'profile': profile,
         'topInfluencers': topInfluencers,
+        'dialog': dialog,
     }, context_instance=RequestContext(request))
     
 def referral(request, pk):

@@ -196,6 +196,15 @@
         right: 20%;
         left: inherit;
     }
+    #firsttime-dialog, #dialog2 {
+        display: none;
+    }
+    #firsttime-dialog > div {
+        display:none;
+    }
+    #firsttime-dialog > div.active {
+        display: block;
+    }
 {% endblock %}
 
 
@@ -221,6 +230,26 @@
             $("#social").slideUp();
         });
         */
+        {% if dialog %}
+            $("#firsttime-dialog").dialog({ modal: true });
+            $(".ui-dialog #firsttime-dialog, .ui-widget-overlay").click(function() {
+               if ($(".ui-dialog #firsttime-dialog").find(".active").hasClass("last-div")) {
+                    $("#firsttime-dialog").dialog("close");
+                    
+                    setTimeout(function() {
+                        $("#dialog2").dialog();
+                        $(".ui-dialog #dialog2").click(function() {
+                           $("#dialog2").dialog("close"); 
+                        });
+                        setTimeout('$("#dialog2").dialog("close"); ', 20000);
+                    }, 7000);
+               } else {
+                    $(".ui-dialog #firsttime-dialog").find(".active").removeClass("active").next().addClass("active");
+               }
+            });
+
+            
+        {% endif %}
     });
 {% endblock %}
 
@@ -271,5 +300,25 @@
         <div id="socialtitle">Share on:</div>
         <div id="fb"></div>
         <div id="tw"></div>
+    </div>
+    <div id="firsttime-dialog">
+        <div class="active">
+        Now that you've told Flumoji how you feel, we've taken you to the friend-referral page.
+        Here's how you get your friends onto Flumoji by using the page.
+        <br/><br/>We've created a special URL link for you on this page. You're the only person in the world with this link.
+        </div>
+        <div>
+        There are cool things you can do with this url link. You can send it to your friends over text message. You can post it on Facebook. You can Tweet it - or you can post it on Facebook Live.
+        <br/><br/>
+        Any time someone receives that link over an Android phone, it takes them to the google play store where they can install the app.
+        </div>
+        <div class="last-div">
+        But remember, this link is special so when they install the app from using the link, you get credit for your influence from anyone who uses the link to download the app.
+        <br/><br/>You also get credit from anyone they send their unique link to so you're getting influence points from them and any of their friends - and friends of their friends and so on and so forth.
+        </div>
+    </div>
+    <div id="dialog2">
+        Each week, when Flumoji is receiving fluctuating data on flu outbreaks , it will send you an alert. When you receive the alert, start blasting your special URL links to your friends so that you help slow the spread of Flu - and you become a leader.
+        <br/><br/>When you do this, you help us to understand how Flu spreads and how to stop it. Don't spread flu, spread flumoji. This app is all about understanding Flu by how you spread the app.
     </div>
 {% endblock %}

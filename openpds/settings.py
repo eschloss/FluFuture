@@ -273,3 +273,4 @@ else:
 #MONGODB_HOST = [os.environ['MONGODB_HOST'], os.environ['MONGODB_HOST2'], os.environ['MONGODB_HOST3']]
 MONGODB_HOST = [os.environ['MONGODB_HOST'], ]
 MONGODB_PORT = int(os.environ['MONGODB_PORT'])
+FCM_SERVER_KEY = os.environ['FCM_SERVER_KEY']
