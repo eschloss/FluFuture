@@ -135,8 +135,13 @@ STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'static'),
 )
 
-from memcacheify import memcacheify
-CACHES = memcacheify()
+#from memcacheify import memcacheify
+#CACHES = memcacheify()
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 # List of finder classes that know how to find static files in
 # various locations.
