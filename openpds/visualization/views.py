@@ -261,7 +261,7 @@ def flumojiChangeSharingPref(request):
         
     return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     
-def flumojifcm_urlHistory(request):
+def flumojiHistory(request):
     #return flumojiFriends(request)
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
