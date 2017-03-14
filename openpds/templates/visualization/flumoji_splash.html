@@ -2,7 +2,7 @@
 {% load cache %}
 
 {% block head-css %}
-    {% cache 3600 splash-css %}
+    {% cache 30 splash-css %}
     .splash-title {
         color: white;
         text-align: center;
@@ -246,7 +246,7 @@
 {% endblock %}
 
 {% block content %}
-    {% cache 14400 splash-body %}
+    {% cache 30 splash-body %}
     <div class="splash-title">
         How are you feeling today?
     </div>
