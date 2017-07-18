@@ -14,6 +14,7 @@ from django.views.decorators.cache import cache_page
 from pymongo import Connection
 import random
 from django.conf import settings
+from django.utils import timezone
 
 def dupEmojis(request):
     for e in Emoji.objects.all():
@@ -105,7 +106,8 @@ def randEmojis(request):
     totalcreated = 0
     for pse in pses:
         start = pse.start
-        new_start = datetime.datetime(2017,3,1)
+        new_start = datetime.datetime.utcnow()
+        new_start = new_start.replace(year=2017, month=3, day=1)
         if new_start > start:
             start = new_start
         end = pse.end
