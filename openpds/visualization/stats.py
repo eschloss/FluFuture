@@ -118,18 +118,21 @@ def randEmojis(request):
         count = 1
         start = start + datetime.timedelta(days=randint)
         while start < end:
-            emojinum = random.random()
-            emoji = getEmoji(emojinum) #todo Hard - should be some correlation
-            Emoji2.objects.create(profile=pse.profile, created=start, emoji=emoji)
-            totalcreated += 1
-            randint = random.randint(3,5 + count)
-            count += 1
-            start = start + datetime.timedelta(days=randint)
-            rmin = random.randint(0, 60)
-            rsec = random.randint(0, 60)
-            msec = random.randint(0, 1000000)
-            rhour = random.randint(9, 18)
-            start = start.replace(hour=rhour, minute=rmin, second=rsec, microsecond=msec)
+            try:
+                emojinum = random.random()
+                emoji = getEmoji(emojinum) #todo Hard - should be some correlation
+                Emoji2.objects.create(profile=pse.profile, created=start, emoji=emoji)
+                totalcreated += 1
+                randint = random.randint(3,5 + count)
+                count += 1
+                start = start + datetime.timedelta(days=randint)
+                rmin = random.randint(0, 60)
+                rsec = random.randint(0, 60)
+                msec = random.randint(0, 1000000)
+                rhour = random.randint(9, 18)
+                start = start.replace(hour=rhour, minute=rmin, second=rsec, microsecond=msec)
+            except:
+                pass
             
     return HttpResponse(str(totalcreated))
     
