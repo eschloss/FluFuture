@@ -149,3 +149,9 @@ def fluQuestionSet(request):
     return HttpResponse("Success")
             
             
+def csv(request):
+    response = ""
+    for e in Emoji2.objects.all():
+        response += "%s,%s,%s,%s,%s,%s<br/>" % (str(e.pk), str(e.profile.pk), e.emoji, str(e.created), "", "")
+    return HttpResponse(response)
+            

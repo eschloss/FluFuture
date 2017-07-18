@@ -13,4 +13,6 @@ urlpatterns = patterns('openpds.visualization.stats',
     (r'^getLength$', 'getLength'),
     (r'^randEmojis$', 'randEmojis'),
     (r'^fluQuestionSet$', 'fluQuestionSet'),
+    (r'^csv$', 'csv'),
+    
 )
