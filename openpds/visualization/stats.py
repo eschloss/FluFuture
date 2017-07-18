@@ -106,8 +106,9 @@ def randEmojis(request):
     totalcreated = 0
     for pse in pses:
         start = pse.start
-        new_start = datetime.datetime(2017,3,1)
-        if new_start > start.replace(tzinfo=None):
+        new_start = timezone.now()
+        new_start = new_start.replace(year=2017, month=3, day=1)
+        if new_start > start:
             start = new_start
         end = pse.end
         if start > end:
