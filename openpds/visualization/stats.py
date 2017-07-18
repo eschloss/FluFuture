@@ -126,9 +126,9 @@ def randEmojis(request):
                 randint = random.randint(3,5 + count)
                 count += 1
                 start = start + datetime.timedelta(days=randint)
-                rmin = random.randint(0, 60)
-                rsec = random.randint(0, 60)
-                msec = random.randint(0, 1000000)
+                rmin = random.randint(0, 59)
+                rsec = random.randint(0, 59)
+                msec = random.randint(0, 999999)
                 rhour = random.randint(9, 18)
                 start = start.replace(hour=rhour, minute=rmin, second=rsec, microsecond=msec)
             except:
