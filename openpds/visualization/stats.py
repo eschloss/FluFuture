@@ -105,7 +105,12 @@ def randEmojis(request):
     totalcreated = 0
     for pse in pses:
         start = pse.start
+        new_start = datetime.datetime(2017,2,29)
+        if new_start > start:
+            start = new_start
         end = pse.end
+        if start > end:
+            continue
         
         randint = random.randint(3,5)
         count = 1
@@ -117,7 +122,12 @@ def randEmojis(request):
             totalcreated += 1
             randint = random.randint(3,5 + count)
             count += 1
-            start = start + datetime.timedelta(days=randint) #TODO + random time between 9am and 8pm
+            start = start + datetime.timedelta(days=randint)
+            rmin = random.randint(0, 60)
+            rsec = random.randint(0, 60)
+            msec = random.randint(0, 1000000)
+            rhour = random.randint(9, 18)
+            start = start.replace(hour=rhour, minute=rmin, second=rsec, microsecond=msec)
             
     return HttpResponse(str(totalcreated))
     
