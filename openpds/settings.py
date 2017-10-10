@@ -16,16 +16,16 @@ TEMPLATE_DEBUG = DEBUG
 # Note: these should be stored in config variables. Leaving them here for now for clarity.
 if IS_PRODUCTION_SERVER:
     # Used to specify the registry server to use for authorization
-    REGISTRY_SERVER='flumoji-registry-production.herokuapp.com'
+    REGISTRY_SERVER='liversmart-registry.herokuapp.com'
     
     # Deprecated: Used to specify the default PDS url for aggregate computation
-    DEFAULT_PDS_URL = 'flumoji.com'
+    DEFAULT_PDS_URL = 'liversmart.herokuapp.com'
 elif IS_STAGING_SERVER:
     # Used to specify the registry server to use for authorization
-    REGISTRY_SERVER='flufuture-registry.herokuapp.com'
+    REGISTRY_SERVER='liversmart-registry.herokuapp.com'
     
     # Deprecated: Used to specify the default PDS url for aggregate computation
-    DEFAULT_PDS_URL = 'flufuture-openpds.herokuapp.com'
+    DEFAULT_PDS_URL = 'liversmart-staging.herokuapp.com'
 else:
     # Used to specify the registry server to use for authorization
     REGISTRY_SERVER='localhost:8000'
@@ -37,7 +37,7 @@ else:
 
 # Specifies where files posted to connectors will be placed while inserting into the PDS
 if IS_DEV_SERVER:
-    SERVER_UPLOAD_DIR="/Users/ericschlossberg/Dropbox/Documents/workspace/gsk/pdsEnv/"
+    SERVER_UPLOAD_DIR="/Users/ericschlossberg/Dropbox/Documents/workspace/liversmart/pdsEnv/"
 else:
     SERVER_UPLOAD_DIR="/tmp/"
 
