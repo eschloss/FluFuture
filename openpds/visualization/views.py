@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.conf import settings
 import requests
 
-@cache_page(60 * 60 * 6)
+#@cache_page(60 * 60 * 6)
 def flumojiPreSplash(request):
     return flumojiSplash(request)
     return HttpResponseRedirect(reverse(flumojiSplash) +"?bearer_token="+token+"&datastore_owner="+datastore_owner_uuid)
