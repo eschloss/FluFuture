@@ -63,12 +63,12 @@
 	}
 	#subheader1 {
 	  margin-left: auto; margin-right: auto;
-	  z-index: 10; background-color: white; width: 200px;
-	  margin-bottom: 40px;
+	  z-index: 10; background-color: white; width: 165px;
+	  margin-bottom: 40px; text-align: center; font-size: 14px;
 	}
 	#subheader2 {
 	  width: 90%; margin-left: auto; margin-right: auto;
-	  margin-bottom: -15px;
+	  margin-bottom: -10px;
 	  border-top: solid 2px black;
 	  margin-top: 20px;
 	}
@@ -79,12 +79,21 @@
 	}
 	.questionText {
 	  margin-bottom: 20px;
+	  margin-left: auto; margin-right: auto;
+	  width: 90%;
 	}
 	.greyline {
 	  width: 90%; margin-left: auto; margin-right: auto;
 	  margin-bottom: 20px;
-	  margin-top: 20px;
-	  border-top: solid 2px grey;
+	  padding-top: 20px;
+	  border-bottom: solid 2px lightgrey;
+	  clear:left;
+	}
+	.question, #question-submit {
+	  clear: left;
+	}
+	.bin-selected {
+	    background-color: green;
 	}
 {% endblock %}
 
@@ -294,6 +303,12 @@ function displayQuestionNumbers() {
 $(document).ready(function() {
       setupRanges($('.range:visible'));
       displayQuestionNumbers();
+      
+      
+      $(".bin_option").click(function() {
+	  $(this).closest(".question").find(".bin_option").removeClass("bin-selected");
+	  $(this).addClass("bin-selected");
+      });
 });
 
 </script>
