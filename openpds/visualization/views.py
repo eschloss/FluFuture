@@ -19,6 +19,8 @@ import requests
 
 @cache_page(60 * 60 * 6)
 def flumojiPreSplash(request):
+    return HttpResponseRedirect(reverse(flumojiSplash) +"?bearer_token="+token+"&datastore_owner="+datastore_owner_uuid)
+    
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
     return render_to_response("visualization/flumoji_presplash.html", {
