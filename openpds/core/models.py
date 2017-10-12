@@ -4,19 +4,20 @@ import datetime
 import json
 
 emoji_choices = (
-    ('h', 'healthy'),
-    ('s', 'sick'),
+    ('h', 'positive'),
+    ('d','unhappy'),
+    ('f', 'sick'),
+    ('s', 'happy'),
     ('y', 'sleepy'),
-    ('c', 'cough'),
-    ('f', 'fever'),
-    ('u', 'flu'),
-    ('n', 'nauseous'),
-    ('l', 'sore throat'),
-    ('r', 'runnynose'),
-    ('b', 'body ache'),
+    ('c', 'worried'),
+    ('u', 'restless'),
+    ('n', 'acutely ill'),
+    ('l', 'confused'),
+    ('b', 'in pain'),
     
+    #the rest we aren't using
+    ('r', 'runnynose'),
     ('a','calm'),
-    ('d','down'),
     ('e','energized'),
     ('m','motivated'),
     ('t','trouble concentrating'),
