@@ -22,3 +22,4 @@ facebook-sdk==2.0.0
 whitenoise==2.0.6
 pylibmc==1.2.3
 django-heroku-memcacheify==0.8
+pyfcm==1.4.2

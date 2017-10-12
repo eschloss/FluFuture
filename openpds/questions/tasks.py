@@ -16,6 +16,8 @@ from openpds.questions.socialhealth_tasks import getStartTime
 from openpds import getInternalDataStore
 from django.utils import timezone
 import requests
+from pyfcm import FCMNotification
+from openpds.settings import FCM_SERVER_KEY
 
 """
 connection = Connection(
@@ -384,11 +386,32 @@ def expireQuestions():
 @task()
 def flumojiNotifications():
     print "Starting notifications task"
-    expireQuestions()
+    #expireQuestions()
 
-    profiles = Profile.objects.all()
+    fts = FirebaseToken.objects.all()
+    """
+    for ft in fts:
+        push_service = FCMNotification(api_key=FCM_SERVER_KEY)
+         
+        registration_id = ft.token
+        message_title = "LiverSmart"
+        message_body = "How are you feeling?"
+        result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
+         
+        print result
+    """
+    push_service = FCMNotification(api_key=FCM_SERVER_KEY)
+    
+     
+    # Send to multiple devices by passing a list of ids.
+    registration_ids = fts.values_list("token", flat=True)
+    message_title = "LiverSmart"
+    message_body = "How are you feeling?"
+    result = push_service.notify_multiple_devices(registration_ids=registration_ids, message_title=message_title, message_body=message_body)
+     
+    
+    """
     for profile in profiles:
-
         if Device.objects.filter(datastore_owner = profile).count() > 0:
             gcm = GCM(settings.GCM_API_KEY)
             for device in Device.objects.filter(datastore_owner = profile):
@@ -416,6 +439,7 @@ def flumojiNotifications():
                 except Exception as e:
                     print "NotificationError2: Issue with sending notification to: %s, %s" % (profile.id, profile.uuid)
                     print e
+        """
 
 def setProfileLocation(profile):
     dbName = profile.getDBName()
