@@ -172,7 +172,7 @@
             }
             sendEmoji($(this).attr("id"));
             if (redirectTimeout != "TEMP") {
-                redirectTimeout = setTimeout(function() { /*window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}";*/ }, 6000);
+                redirectTimeout = setTimeout(function() { window.location = "/visualization/flumoji/splashRedirect?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 6000);
             } else {
                 redirectTimeout = undefined;
             }
