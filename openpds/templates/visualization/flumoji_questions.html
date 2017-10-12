@@ -54,11 +54,12 @@
 	      float: left;
 	      color: white;
 	      background-color: blue;
-	      margin-left: 30px;
-	      border-radius: 6px;
-	      -moz-border-radius: 6px;
-	      -webkit-border-radius: 6px;
-	      -khtml-border-radius: 6px;
+	      margin-left: 50px;
+	      border-radius: 25px;
+	      -moz-border-radius: 25px;
+	      -webkit-border-radius: 25px;
+	      -khtml-border-radius: 25px;
+	      padding: 10px 15px;
 	}
 	#subheader1 { text-align: center; z-index: 10; }
 	#subheader2 {
@@ -67,7 +68,11 @@
 	  top: 30px;
 	  border-top: solid 2px black;
 	}
-	
+	.yesno-center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 80%;
+	}
 {% endblock %}
 
 {% block content %}
@@ -101,14 +106,16 @@
 		  
             <div class="questionText"><span class="qNum">{{ forloop.counter }}.</span> {{ type.text }}</div>
             {% if type.ui_type == 'b' %}
-              <input type="radio" name="q_{{ qinstance.pk }}" value="1" id="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}" />
-              <label for="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}">
-                <div class="bin_option">yes</div>
-              </label>
-              <input type="radio" name="q_{{ qinstance.pk }}" value="0" id="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}"/>
-              <label for="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}">
-                <div class="bin_option">no</div>
-              </label>
+	      <div class="yesno-center">
+		<input type="radio" name="q_{{ qinstance.pk }}" value="1" id="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}" />
+		<label for="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}">
+		  <div class="bin_option">yes</div>
+		</label>
+		<input type="radio" name="q_{{ qinstance.pk }}" value="0" id="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}"/>
+		<label for="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}">
+		  <div class="bin_option">no</div>
+		</label>
+	      </div>
 	      <br/>
             {% else %}{% if type.ui_type == 's' %}
 	      {% with min=options.0.0 max=options.1.0 minlabel=options.0.1 maxlabel=options.1.1 %}
