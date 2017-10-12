@@ -61,16 +61,30 @@
 	      -khtml-border-radius: 25px;
 	      padding: 10px 15px;
 	}
-	#subheader1 { text-align: center; z-index: 10; background-color: white; padding: 5px; }
+	#subheader1 {
+	  margin-left: auto; margin-right: auto;
+	  z-index: 10; background-color: white; width: 200px;
+	  margin-bottom: 40px;
+	}
 	#subheader2 {
-	  width: 100%;
-	  margin-bottom: -14px;
+	  width: 90%; margin-left: auto; margin-right: auto;
+	  margin-bottom: -15px;
 	  border-top: solid 2px black;
+	  margin-top: 20px;
 	}
 	.yesno-center {
 	  margin-left: auto;
 	  margin-right: auto;
-	  width: 80%;
+	  width: 256px;
+	}
+	.questionText {
+	  margin-bottom: 20px;
+	}
+	.greyline {
+	  width: 90%; margin-left: auto; margin-right: auto;
+	  margin-bottom: 20px;
+	  margin-top: 20px;
+	  border-top: solid 2px grey;
 	}
 {% endblock %}
 
@@ -91,6 +105,11 @@
         {% for q in questions %}
           {% with q.0 as qinstance and q.1 as options %}
           {% with qinstance.question_type as type %}
+	    
+	  {% if not forloop.first %}
+	    <div class="greyline"></div>
+	  {% endif %}
+	    
           <div class="question {% if type.followup_question_parent %} followup_question hide{% endif %}">
           
 	    {% if type.followup_question %}
