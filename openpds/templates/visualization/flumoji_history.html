@@ -42,13 +42,13 @@
         margin-top: -15px;
     }
    .h {
-        background-image: url("/static/img/emoji-happy.png");
+        background-image: url("/static/img2/emoji-happy.png");
     }
    .s {
-        background-image: url("/static/img/emoji-happy2.png");
+        background-image: url("/static/img2/emoji-happy2.png");
     }
    .c {
-        background-image: url("/static/img/emoji-worried.png");
+        background-image: url("/static/img2/emoji-worried.png");
     }
    .u {
         background-image: url("/static/img2/emoji-restless2.png");
@@ -175,6 +175,7 @@
     $(document).ready(function() {
         $("#calendar").scrollTop($('#calendar')[0].scrollHeight);
 
+        {% comment %}
         {% if dialog %}
             $("#firsttime-dialog").dialog({ modal: true });
             $(".ui-dialog, .ui-widget-overlay").click(function() {
@@ -182,6 +183,7 @@
             });
             setTimeout('$("#firsttime-dialog").dialog("close"); ', 15000);
         {% endif %}
+        {% endcomment %}
     });
 {% endblock %}
 
