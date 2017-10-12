@@ -47,6 +47,19 @@
 		width: 400px;
 	      }
 	}
+	input[type=radio] {
+	      display: none;
+	}
+	.bin_option {
+	      float: left;
+	      color: white;
+	      background-color: blue;
+	      margin-left: 30px;
+	      border-radius: 6px;
+	      -moz-border-radius: 6px;
+	      -webkit-border-radius: 6px;
+	      -khtml-border-radius: 6px;
+	}
 {% endblock %}
 
 {% block content %}
@@ -80,11 +93,11 @@
             {% if type.ui_type == 'b' %}
               <input type="radio" name="q_{{ qinstance.pk }}" value="1" id="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}" />
               <label for="q_{{ qinstance.pk }}_biny_{{ forloop.counter }}">
-                <div class="bin_option">Yes</div>
+                <div class="bin_option">yes</div>
               </label>
               <input type="radio" name="q_{{ qinstance.pk }}" value="0" id="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}"/>
               <label for="q_{{ qinstance.pk }}_binn_{{ forloop.counter }}">
-                <div class="bin_option">No</div>
+                <div class="bin_option">no</div>
               </label>
 	      <br/>
             {% else %}{% if type.ui_type == 's' %}
