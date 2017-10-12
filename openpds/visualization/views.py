@@ -212,6 +212,7 @@ def get_client_ip_base(x_forwarded_for, remote_addr):
 
 @cache_page(60 * 60 * 12)
 def flumojiConsent(request):
+    return HttpResponseRedirect("/takemeback")
     if request.method == "POST" and request.POST.__contains__('q1') and request.POST.__contains__('q2') and request.POST.__contains__('q3'):
         ip = get_client_ip_base(request.META.get('HTTP_X_FORWARDED_FOR'), request.META.get('REMOTE_ADDR'))
         q1 = request.POST['q1'] == 'true'

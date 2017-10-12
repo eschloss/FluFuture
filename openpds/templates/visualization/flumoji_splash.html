@@ -155,8 +155,18 @@
     var redirectTimeout;
     
     $(document).ready( function () {
+        var date = new Date();
+        var hours = date.getHours();
+        if (hours > 3 && hours < 12) {
+            var hours_text = "THIS MORNING";
+        } else if (hours >= 12 && hours < 6) {
+            var hours_text = "THIS AFTERNOON";
+        } else {
+            var hours_text = "THIS EVENING";
+        }
+        $(".subtitle").append(hours_text);
+        
         $(".emoji-choice").click(function() {
-            $(".subtitle").empty();
             if (redirectTimeout != "TEMP") {
                 clearTimeout(redirectTimeout);
             }
@@ -197,6 +207,7 @@
             }
         });
         
+        {% comment %}
         $(".moods, .symptoms").fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500)
             .click(function() {
                 $('.emoji-outer-selection-box').stop().scrollLeft(0);
@@ -218,6 +229,7 @@
             });
             setTimeout('$("#firsttime-dialog").dialog("close"); ', 15000);
         {% endif %}
+        {% endcomment %}
     });
     
     function autoScroll() {
@@ -248,21 +260,22 @@
 {% block content %}
     {% cache 30 splash-body %}
     <div class="splash-title">
-        How are you feeling today?
+        How are you feeling?
     </div>
         
     <div class="subtitle">
-        <span>If you don't <br/>have flu symptoms, <br/>pick a mood.</span>
     </div>
     <div class="emoji-text">
         <span></span>
     </div>
+    {% comment %}
     <div class="filter">
         filter by:
         <br/>
         <div class="moods">Moods</div>
         <div class="symptoms">Symptoms</div>
     </div>
+    {% endcomment %}
     <div class="checkbox"></div>
     
     <div class="status-face"></div>
@@ -430,8 +443,10 @@
         </div>
     </div>
     
+    {% comment %}
     <div id="firsttime-dialog">
         Now that you've installed the app, let's get started. <br/><Br/>Start off by telling Flumoji how you feel. You can do this by selecting the Flumoji that represents your current state.
     </div>
+    {% endcomment %}
     {% endcache %}
 {% endblock %}
