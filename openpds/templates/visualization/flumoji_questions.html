@@ -17,7 +17,7 @@
       html{
       }
       html,body {
-	      background-color:#f6f6f6
+	      background-color:white;
 	      font-family: 'RobotoDraft', sans-serif;
 	}
 	core-header-panel {
@@ -51,7 +51,7 @@
 {% block content %}
 <div id="mainPage">
   <div id="subheader1">
-    <div class="date mainDate"></div>
+    <div class=""><span>NEW NOTIFICATIONS</span></div>
   </div>
     
 		<div id="questionPage">
@@ -198,6 +198,7 @@ function removeHandleOffsets() {
 }
 
 
+{% comment %}
 // date
 var d = new Date();
 var day = d.getDate();
@@ -206,6 +207,7 @@ var dayOfWeek= d.getDay();
 var months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct"," Nov","Dec"];
 	
 $(".date").text(months[month]+" "+day + " / ").append($("<span></span>", { text: "week " + {{ weeksSinceStart }}  })).find("span").css("font-weight", "400");
+{% endcomment %}
 
 //Followupquestions
 $(".followup_question").each(function() {
