@@ -167,6 +167,11 @@ class Baseline(models.Model):
     q2 = models.BooleanField(default=False)
     q3 = models.BooleanField(default=False)
 
+class IphoneDummy(models.Model):
+    email = models.EmailField()
+    visited = models.IntegerField()
+    datetime = models.DateTimeField(auto_now_add=True)
+
 class QuestionInstance(models.Model):
     question_type = models.ForeignKey('QuestionType')
     profile = models.ForeignKey('Profile')

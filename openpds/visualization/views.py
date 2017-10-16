@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import pdb
 from openpds.visualization.internal import getInternalDataStore
-from openpds.core.models import Profile, Baseline, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
+from openpds.core.models import Profile, IphoneDummy, Baseline, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
 import facebook
 import json, datetime, time, re, math, pytz
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
@@ -380,4 +380,19 @@ def referral(request, pk):
     
     return HttpResponseRedirect('https://play.google.com/store/apps/details?id=edu.mit.media.flumoji')
 
-    
+def collectVists(request):
+    if request.method == 'POST':
+        POST = request.POST
+        if POST.__contains__('email') and POST.__contains__('visits'):
+            email = request.POST['email']
+            visits = request.POST['visits']
+            iphone = IphoneDummy.objects.filter(email=email)
+            if len(iphone) == 0:
+                iphone = IphoneDummy(email=email, visits=visits)
+            else:
+                iphone = iphone[0]
+                iphone.visits = visits
+            iphone.save()
+            return HttpResponse(json.dumps({"success": True }), content_type="application/json")
+    return HttpResponse(json.dumps({"success": False }), content_type="application/json")
+            

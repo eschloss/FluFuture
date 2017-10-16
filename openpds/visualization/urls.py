@@ -37,5 +37,6 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^flumoji/changeSharingPreference$', 'flumojiChangeSharingPref'),
     (r'^flumoji/firebase$', 'setFirebaseToken'),
     (r'^flumoji/influence$', 'flumojiInfluence'),
+    (r'^collectVisits$', 'collectVists'),
     (r'^privacy$', 'flumojiPrivacy'),
 )
