@@ -169,7 +169,7 @@ class Baseline(models.Model):
 
 class IphoneDummy(models.Model):
     email = models.EmailField()
-    visited = models.IntegerField()
+    visits = models.IntegerField()
     datetime = models.DateTimeField(auto_now_add=True)
 
 class QuestionInstance(models.Model):
