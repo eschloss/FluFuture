@@ -22,11 +22,14 @@ def flumojiPreSplash(request):
     #return flumojiSplash(request)
     #return HttpResponseRedirect(reverse(flumojiSplash) +"?bearer_token="+token+"&datastore_owner="+datastore_owner_uuid)
     
+    now = datetime.datetime.utcnow()
     datastore_owner_uuid = request.GET["datastore_owner"]
     access_token = request.GET["bearer_token"]
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
     return render_to_response("visualization/flumoji_presplash.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
+        'days': (now - profile.created).days,
     }, context_instance=RequestContext(request))
     
 
