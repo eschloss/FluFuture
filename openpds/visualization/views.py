@@ -29,7 +29,7 @@ def flumojiPreSplash(request):
     return render_to_response("visualization/flumoji_presplash.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
-        'days': (now - profile.created).days,
+        'days': (now.replace(tzinfo=None) - profile.created.replace(tzinfo=None)).days,
     }, context_instance=RequestContext(request))
     
 
