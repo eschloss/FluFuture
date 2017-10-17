@@ -40,8 +40,10 @@
         <div>
             <img width="80%" src="/static/img/logo_blue_old2.png" />
         </div>
+        {% if days > 0 %}
         <div class="subtitle">
             You have been a part of the study for {{ days }} day{{ days|pluralize }}.
         </div>
+        {% endif %}
     </div>
 {% endblock %}
