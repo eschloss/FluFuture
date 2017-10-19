@@ -164,9 +164,13 @@
 
 {% block head-js %}
     $(document).ready(function() {
+        $("html, body").animate({ scrollTop: $(document).height() }, 0);
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    
+    
+        {% comment %}
         $("#calendar").scrollTop($('#calendar')[0].scrollHeight);
 
-        {% comment %}
         {% if dialog %}
             $("#firsttime-dialog").dialog({ modal: true });
             $(".ui-dialog, .ui-widget-overlay").click(function() {
