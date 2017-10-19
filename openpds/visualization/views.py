@@ -279,9 +279,10 @@ def flumojiHistory(request):
     
     emojis = Emoji.objects.filter(profile=profile).order_by("-created")
     for emoji in emojis:
-        month = emoji.created.month
-        year = emoji.created.year
-        date = emoji.created.day
+        created = emoji.created - datetime.timedelta(hours=5)
+        month = created.month
+        year = created.year
+        date = created.day
         if not currentMonth or currentMonth["year"] != year or currentMonth["month"] != month:
             startDay, monthLength = monthrange(year, month)
             currentMonth = {"month": month,
@@ -294,7 +295,8 @@ def flumojiHistory(request):
             currentMonth["emojis"][date - 1] = emoji.emoji
     frequencyEmoji = {}
     for emoji in emojis:
-        if emoji.created.month != datetime.datetime.now().month:
+        created = created - datetime.timedelta(hours=5)
+        if created.month != datetime.datetime.now().month:
             break
         if emoji.emoji not in frequencyEmoji:
             frequencyEmoji[emoji.emoji] = 1

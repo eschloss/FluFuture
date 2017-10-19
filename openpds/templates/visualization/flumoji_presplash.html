@@ -26,12 +26,15 @@
         background-image: none;
         text-align: center;
      }
+     .subtitle {
+        font-size: 22px;
+     }
 {% endblock %}
 
 
 {% block head-js %}
     $(document).ready( function () {
-        setTimeout(function() { window.location = "/visualization/flumoji/splash?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 3000);
+        setTimeout(function() { window.location = "/visualization/flumoji/splash?datastore_owner={{ uuid }}&bearer_token={{ access_token }}"; }, 8000);
     });
 {% endblock %}
 
@@ -42,7 +45,7 @@
         </div>
         {% if days > 0 %}
         <div class="subtitle">
-            You have been a part of the study for {{ days }} day{{ days|pluralize }}.
+            You have been a <br/>part of the study<br/>for {{ days }} day{{ days|pluralize }}.
         </div>
         {% endif %}
     </div>
