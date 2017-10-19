@@ -296,7 +296,7 @@ def flumojiHistory(request):
     frequencyEmoji = {}
     for emoji in emojis:
         created = created + datetime.timedelta(hours=10)
-        if created.month != datetime.datetime.now().month:
+        if created.month != datetime.datetime.now().month: 
             break
         if emoji.emoji not in frequencyEmoji:
             frequencyEmoji[emoji.emoji] = 1
