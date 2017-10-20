@@ -156,13 +156,12 @@
         $(".subtitle").append(hours_text);
         
         
-        /*
-        $(".emoji-choice").on('mousedown', function() {
+        $(".emoji-choice").on('touchstart', function() {
             if ($(this).attr("data-text") != $(".emoji-text").text()) {
                 $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(1500).fadeOut(4000);
             }
         }
-        */
+        
         
         $(".emoji-choice").click(function() {
             if (redirectTimeout != "TEMP") {
