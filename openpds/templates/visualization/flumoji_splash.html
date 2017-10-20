@@ -155,7 +155,7 @@
         }
         $(".subtitle").append(hours_text);
 
-        $(".emoji-choice").mousedown(function() {
+        $(".emoji-choice").on('mousedown', function() {
             if ($(this).attr("data-text") != $(".emoji-text").text()) {
                 $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(1500).fadeOut(4000);
             }
