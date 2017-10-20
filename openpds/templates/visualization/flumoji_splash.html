@@ -154,7 +154,8 @@
             var hours_text = "THIS EVENING";
         }
         $(".subtitle").append(hours_text);
-
+        
+        
         $(".emoji-choice").on('mousedown', function() {
             if ($(this).attr("data-text") != $(".emoji-text").text()) {
                 $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(1500).fadeOut(4000);
@@ -166,6 +167,9 @@
                 clearTimeout(redirectTimeout);
             }
             $(".checkbox").show();
+            /*if ($(this).attr("data-text") != $(".emoji-text").text()) {
+                $(".emoji-text").empty().append("<span>" + $(this).attr("data-text") + "</span>").find("span").hide().fadeIn(1500).fadeOut(4000);
+            }*/
             if ($(this).is(".oversized")) {
                 $(".status-face").css("background-image", 'url("' + $(this).find("img").attr("src") + '")')
                     .addClass("occupied-oversized").removeClass("occupied").attr("id", $(this).attr("id"));
