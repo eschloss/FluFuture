@@ -10,6 +10,12 @@ IS_STAGING_SERVER = (BUILD == 'STAGING')
 IS_DEV_SERVER = not IS_STAGING_SERVER and not IS_PRODUCTION_SERVER
 DEBUG = not IS_PRODUCTION_SERVER
 
+proxyDict = {
+              "http"  : os.environ.get('FIXIE_URL', ''),
+              "https" : os.environ.get('FIXIE_URL', '')
+            }
+    
+
 # Standard Django settings for turning on debug messages
 TEMPLATE_DEBUG = DEBUG
 

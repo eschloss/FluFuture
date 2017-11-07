@@ -370,6 +370,7 @@ def recentSocialScore():
 def recentSocialHealthScores():
     profiles = Profile.objects.all()
     data = {}
+    calculatePassiveEmojiAndSave.delay()
     
     activityScores = recentActivityScore()
     socialScores = recentSocialScore()
@@ -424,7 +425,6 @@ def recentSocialHealthScores():
     recentSocialLevels(True)
     #recentFocusLevels(True)
     
-    calculatePassiveEmojiAndSave()
     return data
         
 def getScore(profile, label):
@@ -451,7 +451,8 @@ def getScore(profile, label):
     except:
         pass
     return 50
-        
+
+@task()
 def calculatePassiveEmojiAndSave():
     profiles = Profile.objects.all()
     for profile in profiles:
