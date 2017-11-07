@@ -26,7 +26,8 @@ class ProfileAdmin(admin.ModelAdmin):
 class BaselineAdmin(admin.ModelAdmin):
     list_display = ['profile', 'ip']
     search_fields = ['profile__uuid', 'ip']
-    
+class DummyAdmin(admin.ModelAdmin):
+    list_display = ['email', 'datetime', 'visits', 'hospital']
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(FB_Connection)
@@ -41,4 +42,4 @@ admin.site.register(AuditEntry)
 admin.site.register(ProfileStartEnd, ProfileStartEndAdmin)
 admin.site.register(FluQuestions, FluQuestionsAdmin)
 admin.site.register(Baseline, BaselineAdmin)
-admin.site.register(IphoneDummy)
+admin.site.register(IphoneDummy, DummyAdmin)
