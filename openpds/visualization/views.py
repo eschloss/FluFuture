@@ -402,6 +402,13 @@ def collectVists(request):
             else:
                 iphone = iphone[0]
                 iphone.visits = visits
+            if POST.__contains__('hospital'):
+                hospital = request.POST['hospital']
+                try:
+                    if int(hospital) in [0,1,2,3,4]:
+                        iphone.hospital = hospital
+                except:
+                    pass
             iphone.save()
             return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     return HttpResponse(json.dumps({"success": False }), content_type="application/json")
