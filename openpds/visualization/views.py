@@ -13,6 +13,7 @@ from openpds.questions.tasks import checkForProfileReferral
 from django.views.decorators.cache import cache_page
 import logging
 from django.utils import timezone
+import numpy
 
 from django.conf import settings
 import requests

@@ -1,10 +1,12 @@
 from celery import task
+import numpy
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
 from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta
+import datetime
 import json
 import pdb
 import math
@@ -371,6 +373,7 @@ def recentSocialHealthScores():
     
     activityScores = recentActivityScore()
     socialScores = recentSocialScore()
+    
     focusScores = recentFocusScore()
 
     scoresList = [activityScores.values(), socialScores.values(), focusScores.values()]
@@ -418,10 +421,44 @@ def recentSocialHealthScores():
     # not ideal to compute this twice, but it gets the job done
     recentActivityLevels(True)
     # Purposely excluding social and focus scores - blanks are includede in their calculations as blank could imply actual zeroes, rather than missing data
-    #recentSocialLevels(True)
+    recentSocialLevels(True)
     #recentFocusLevels(True)
+    
+    calculatePassiveEmojiAndSave()
     return data
-
+        
+def getScore(profile, label):
+    days = 7 if profile.created < datetime.datetime.now() - datetime.timedelta(days=14) else 2
+    
+    internalDataStore = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
+    history = internalDataStore.getAnswerList(label)[0]['value']
+    this_week_scores = []
+    other_scores = []
+    for h in history:
+        time = h['end']
+        high_perc = 100 * float(h['high'])/h['total']
+        low_perc = 100 * float(h['low'])/h['total']
+        score = 50.0 + high_perc  - low_perc
+        if time > ((datetime.datetime.now() - datetime.timedelta(days=days)) - datetime.datetime(1970, 1, 1)).total_seconds():
+            this_week_scores.append(score)
+        else:
+            other_scores.append(score)
+    try:
+        if numpy.mean(this_week_scores) - numpy.std(this_week_scores)/2.0 < numpy.mean(other_scores) - numpy.std(other_scores):
+            return 25
+        elif numpy.mean(this_week_scores) + numpy.std(this_week_scores)/2.0 > numpy.mean(other_scores) + numpy.std(other_scores):
+            return 75
+    except:
+        pass
+    return 50
+        
+def calculatePassiveEmojiAndSave():
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        profile.activity_this_week = getScore(profile, "RecentActivityByHour")
+        profile.social_this_week =  getScore(profile, "RecentSocialByHour")
+        profile.save()
+        
 def getToken(profile, app_uuid):
     return ""
 

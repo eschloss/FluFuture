@@ -37,6 +37,8 @@ class Profile(models.Model):
     location_last_set = models.DateTimeField(default=datetime.datetime.now) #repurposed. using it now for firebase
     referral = models.ForeignKey('Profile', blank=True, null=True)
     score = models.IntegerField(default=0)
+    activity_this_week = models.IntegerField(default=50)
+    social_this_week = models.IntegerField(default=50)
 
     def getDBName(self):
         return "User_" + str(self.uuid).replace("-", "_")
