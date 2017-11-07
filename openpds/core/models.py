@@ -184,3 +184,65 @@ class QuestionInstance(models.Model):
 #    followup_instance = models.ForeignKey('QuestionInstance', blank=True, null=True, help_text="If this question has a followup question associated, then reference it from here")
     def __unicode__(self):
         return str(self.datetime) + ": " +self.profile.__unicode__() + " (" +str(self.question_type.pk)+ ")"
+
+GENDER_CHOICE = (
+    ('m', 'Male'),
+    ('f', 'Female'),
+)
+CENTER_CHOICE = (
+    ('b', 'BWH'),
+    ('m', 'MGH'),
+    ('o', 'other'),
+)
+ETIOLOGY_CHOICE = (
+    ('1', 'EtOH'),
+    ('2', 'HCV'),
+    ('3', 'NASH'),
+    ('4', 'PBC'),
+    ('5', 'PSC'),
+    ('6', 'AIH'),
+    ('7', 'A1AT'),
+    ('8', 'Wilson'),
+    ('9', 'Hemochromatosis'),
+    ('10', 'HBV'),
+    ('11', 'other'),
+)
+YN_CHOICE = (
+    ('0', 'No'),
+    ('1', 'Yes'),
+    ('u', 'Unknown'),
+)
+CARE_LOCATION_CHOICE = (
+    ('h', 'hospital'),
+    ('c', 'clinic'),
+    ('e', 'emergency room'),
+)
+        
+class Chart1(models.Model):
+    study_id = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=20)
+    mrn = models.CharField(max_length=9)
+    created = models.DateTimeField(auto_now_add=True)
+    dob = models.DateField()
+    doe = models.DateField()
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICE)
+    center = models.CharField(max_length=1, choices=CENTER_CHOICE)
+    etiology = models.CharField(max_length=2, choices=ETIOLOGY_CHOICE)
+    baseline_meld = models.IntegerField(blank=True, null=True)
+    baseline_meld_insufficient = models.BooleanField(default=False) 
+    baseline_child = models.IntegerField(blank=True, null=True)
+    baseline_child_insufficient = models.BooleanField(default=False)
+    transplant_candidate = models.CharField(max_length=1, choices=YN_CHOICE)
+    hcc = models.CharField(max_length=1, choices=YN_CHOICE)
+    aspirin81 = models.CharField(max_length=1, choices=YN_CHOICE)
+    aspirin325 = models.CharField(max_length=1, choices=YN_CHOICE)
+    other_antiplatelet = models.CharField(max_length=1, choices=YN_CHOICE)
+    anticoagulant = models.CharField(max_length=1, choices=YN_CHOICE)
+    d_first_liver_care = models.DateField(blank=True, null=True)
+    d_first_liver_care2 = models.CharField(max_length=100, blank=True, null=True)
+    d_last_liver_care_prior_to_study = models.DateField(blank=True, null=True)
+    d_last_liver_care_prior_to_study2 = models.CharField(max_length=100, blank=True, null=True)
+    location_last_liver_care_prior_to_study = models.CharField(max_length=1, choices=CARE_LOCATION_CHOICE)
+    
+class Chart2(models.Model):
+    pass

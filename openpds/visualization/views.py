@@ -396,12 +396,12 @@ def collectVists(request):
         if POST.__contains__('email') and POST.__contains__('visits'):
             email = request.POST['email']
             visits = request.POST['visits']
-            iphone = IphoneDummy.objects.filter(email=email).order_by('-pk')
-            if len(iphone) == 0:
-                iphone = IphoneDummy(email=email, visits=visits)
-            else:
-                iphone = iphone[0]
-                iphone.visits = visits
+            #iphone = IphoneDummy.objects.filter(email=email).order_by('-pk')
+            #if len(iphone) == 0:
+            iphone = IphoneDummy(email=email, visits=visits)
+            #else:
+            #    iphone = iphone[0]
+            #    iphone.visits = visits
             if POST.__contains__('hospital'):
                 hospital = request.POST['hospital']
                 try:
