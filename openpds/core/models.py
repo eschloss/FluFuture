@@ -171,6 +171,7 @@ class IphoneDummy(models.Model):
     email = models.EmailField()
     visits = models.IntegerField()
     datetime = models.DateTimeField(auto_now_add=True)
+    hospital = models.IntegerField(blank=True, null=True)
 
 class QuestionInstance(models.Model):
     question_type = models.ForeignKey('QuestionType')
