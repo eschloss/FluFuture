@@ -397,7 +397,7 @@ def collectVists(request):
             email = request.POST['email']
             visits = request.POST['visits']
             iphone = IphoneDummy.objects.filter(email=email).order_by('-pk')
-            if len(iphone) == 0 or iphone[0].datetime < datetime.datetime.now() - datetime.timedelta(minutes=20):
+            if len(iphone) == 0:
                 iphone = IphoneDummy(email=email, visits=visits)
             else:
                 iphone = iphone[0]
