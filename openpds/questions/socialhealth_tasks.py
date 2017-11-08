@@ -17,6 +17,8 @@ from openpds import getInternalDataStore
 #from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import Counter
 import sqlite3, random
+from django.utils import timezone
+
 
 """
 connection = Connection(
@@ -428,7 +430,7 @@ def recentSocialHealthScores():
     return data
         
 def getScore(profile, label):
-    days = 7 if profile.created < datetime.datetime.now() - datetime.timedelta(days=14) else 2
+    days = 7 if profile.created < timezone.now() - datetime.timedelta(days=14) else 2
     
     internalDataStore = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
     history = internalDataStore.getAnswerList(label)[0]['value']
