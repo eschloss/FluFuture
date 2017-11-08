@@ -437,14 +437,17 @@ def getScore(profile, label):
     this_week_scores = []
     other_scores = []
     for h in history:
-        time = h['end']
-        high_perc = 100 * float(h['high'])/h['total']
-        low_perc = 100 * float(h['low'])/h['total']
-        score = 50.0 + high_perc  - low_perc
-        if time > ((datetime.datetime.now() - datetime.timedelta(days=days)) - datetime.datetime(1970, 1, 1)).total_seconds():
-            this_week_scores.append(score)
-        else:
-            other_scores.append(score)
+        try:
+            time = h['end']
+            high_perc = 100 * float(h['high'])/h['total']
+            low_perc = 100 * float(h['low'])/h['total']
+            score = 50.0 + high_perc  - low_perc
+            if time > ((datetime.datetime.now() - datetime.timedelta(days=days)) - datetime.datetime(1970, 1, 1)).total_seconds():
+                this_week_scores.append(score)
+            else:
+                other_scores.append(score)
+        except:
+            pass
     if not this_week_scores:
         this_week_scores.append(50)
     if not other_scores:
