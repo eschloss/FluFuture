@@ -446,9 +446,9 @@ def getScore(profile, label):
         else:
             other_scores.append(score)
     try:
-        if numpy.mean(this_week_scores) - numpy.std(this_week_scores)/2.0 < numpy.mean(other_scores) - numpy.std(other_scores):
+        if numpy.mean(this_week_scores) - numpy.std(this_week_scores) < numpy.mean(other_scores) - numpy.std(other_scores):
             return 25
-        elif numpy.mean(this_week_scores) + numpy.std(this_week_scores)/2.0 > numpy.mean(other_scores) + numpy.std(other_scores):
+        elif numpy.mean(this_week_scores) + numpy.std(this_week_scores) > numpy.mean(other_scores) + numpy.std(other_scores):
             return 75
     except:
         pass

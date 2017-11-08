@@ -317,12 +317,27 @@ def flumojiHistory(request):
 
     dialog = profile.created > (timezone.now() - datetime.timedelta(hours=2))
     
+    if profile.activity_this_week >= 75:
+        activity_this_week = 'green'
+    elif profile.activity_this_week > 25:
+        activity_this_week = 'yellow'
+    else:
+        activity_this_week = 'red'
+    if profile.social_this_week >= 75:
+        social_this_week = 'green'
+    elif profile.social_this_week > 25:
+        social_this_week = 'yellow'
+    else:
+        social_this_week = 'red'
+        
     return render_to_response("visualization/flumoji_history.html", {
         'uuid': datastore_owner_uuid,
         'access_token': access_token,
         'dates': dates,
         'mostFrequent': mostFrequent,
         'dialog':  dialog,
+        'activity': activity_this_week,
+        'social': social_this_week,
     }, context_instance=RequestContext(request))
     
 def flumojiSplashRedirect(request):

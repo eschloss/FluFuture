@@ -152,6 +152,16 @@
         background-repeat: no-repeat;
         background-position: 50% 30px;
     }
+    #actFreq.pas-green > div, #socFreq.pas-green > div {
+        background: url("/static/img/high-activity.png");
+        background-repeat: no-repeat;
+        background-position: 50% 30px;
+    }
+    #actFreq.pas-red > div, #socFreq.pas-red > div {
+        background: url("/static/img/low-activity.png");
+        background-repeat: no-repeat;
+        background-position: 50% 30px;
+    }
     #actFreq > div {
         border-left: solid 1px #b9b9b9;
     }
@@ -179,6 +189,7 @@
             setTimeout('$("#firsttime-dialog").dialog("close"); ', 15000);
         {% endif %}
         {% endcomment %}
+        $(".pas-red").fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
     });
 {% endblock %}
 
@@ -223,12 +234,12 @@
   
   <div class="mostFrequent {{ mostFrequent }}"></div>
   <div id="passiveFrequency">
-    <div id="socFreq">
+    <div id="socFreq" class="pas-{{ social }}">
         <div>
             Your social activity
         </div>
     </div>
-    <div id="actFreq">
+    <div id="actFreq" class="pas-{{ activity }}">
         <div>
             Your physical activity
         </div>
