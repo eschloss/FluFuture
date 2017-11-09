@@ -367,9 +367,12 @@ def setFirebaseToken(request):
         token = request.POST['token']
         uuid = request.POST['uuid']
         profile = get_object_or_404(Profile, uuid=uuid)
-        FirebaseToken.objects.filter(profile=profile, old=False).update(old=True)
-        ftoken = FirebaseToken(profile=profile, token=token, old=False)
-        ftoken.save()
+        ftokens = FirebaseToken.objects.filter(profile=profile, old=False)
+        same_token = ftokens.filter(token=token)
+        if len(same_token) == 0:
+            ftokens.update(old=True)
+            ftoken = FirebaseToken(profile=profile, token=token, old=False)
+            ftoken.save()
     return HttpResponse()
     
 def flumojiInfluence(request):
