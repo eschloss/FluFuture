@@ -28,6 +28,9 @@ class BaselineAdmin(admin.ModelAdmin):
     search_fields = ['profile__uuid', 'ip']
 class DummyAdmin(admin.ModelAdmin):
     list_display = ['email', 'datetime', 'visits', 'hospital']
+class FTAdmin(admin.ModelAdmin):
+    list_display = ['profile', 'token', 'created', 'old']
+    list_filter = [ 'old', 'created']
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(FB_Connection)
@@ -36,7 +39,7 @@ admin.site.register(Emoji2, Emoji2Admin)
 admin.site.register(Device)
 admin.site.register(QuestionInstance)
 admin.site.register(QuestionType)
-admin.site.register(FirebaseToken)
+admin.site.register(FirebaseToken, FTAdmin)
 admin.site.register(IPReferral)
 admin.site.register(AuditEntry)
 admin.site.register(ProfileStartEnd, ProfileStartEndAdmin)

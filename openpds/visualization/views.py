@@ -367,13 +367,9 @@ def setFirebaseToken(request):
         token = request.POST['token']
         uuid = request.POST['uuid']
         profile = get_object_or_404(Profile, uuid=uuid)
-        ftoken = FirebaseToken.objects.filter(profile=profile)
-        if len(ftoken) == 0:
-            ftoken = FirebaseToken(profile=profile, token=token)
-            ftoken.save()
-        elif ftoken[0].token != token:
-            ftoken[0].token = token
-            ftoken[0].save()
+        FirebaseToken.objects.filter(profile=profile, old=False).update(old=True)
+        ftoken = FirebaseToken(profile=profile, token=token, old=False)
+        ftoken.save()
     return HttpResponse()
     
 def flumojiInfluence(request):
@@ -405,6 +401,9 @@ def referral(request, pk):
         pass
     
     return HttpResponseRedirect('https://play.google.com/store/apps/details?id=edu.mit.media.flumoji')
+
+def appDownload(request):
+    pass
 
 def collectVists(request):
     if request.method == 'POST':

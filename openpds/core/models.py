@@ -55,6 +55,7 @@ class FirebaseToken(models.Model):
     profile = models.ForeignKey('Profile')
     token = models.CharField(max_length=255, default="")
     created = models.DateTimeField(auto_now_add=True)
+    old = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.profile.uuid
