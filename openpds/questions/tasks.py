@@ -388,7 +388,7 @@ def flumojiNotifications():
     print "Starting notifications task"
     #expireQuestions()
 
-    fts = FirebaseToken.objects.all()
+    fts = FirebaseToken.objects.filter(old=False)
     """
     for ft in fts:
         push_service = FCMNotification(api_key=FCM_SERVER_KEY)
