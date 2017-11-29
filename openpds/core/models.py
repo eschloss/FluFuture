@@ -197,19 +197,6 @@ CENTER_CHOICE = (
     ('m', 'MGH'),
     ('o', 'other'),
 )
-ETIOLOGY_CHOICE = (
-    ('1', 'EtOH'),
-    ('2', 'HCV'),
-    ('3', 'NASH'),
-    ('4', 'PBC'),
-    ('5', 'PSC'),
-    ('6', 'AIH'),
-    ('7', 'A1AT'),
-    ('8', 'Wilson'),
-    ('9', 'Hemochromatosis'),
-    ('10', 'HBV'),
-    ('11', 'other'),
-)
 YN_CHOICE = (
     ('0', 'No'),
     ('1', 'Yes'),
@@ -241,7 +228,17 @@ class ChartBaseline(models.Model):
     date_of_enrollment2= models.TextField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICE)
     center = models.CharField(max_length=1, choices=CENTER_CHOICE)
-    etiology = models.CharField(max_length=2, choices=ETIOLOGY_CHOICE)
+    etiology_EtOH = models.BooleanField(default=False)
+    etiology_HCV = models.BooleanField(default=False)
+    etiology_NASH = models.BooleanField(default=False)
+    etiology_PBC = models.BooleanField(default=False)
+    etiology_PSC = models.BooleanField(default=False)
+    etiology_AIH = models.BooleanField(default=False)
+    etiology_A1AT = models.BooleanField(default=False)
+    etiology_Wilson = models.BooleanField(default=False)
+    etiology_Hemochromatosis = models.BooleanField(default=False)
+    etiology_HBV = models.BooleanField(default=False)
+    etiology_other = models.BooleanField(default=False)
     baseline_meld = models.IntegerField(blank=True, null=True)
     baseline_meld_insufficient = models.BooleanField(default=False) 
     baseline_child = models.IntegerField(blank=True, null=True)
