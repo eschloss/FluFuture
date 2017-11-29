@@ -32,6 +32,8 @@ class FTAdmin(admin.ModelAdmin):
     list_display = ['profile', 'token', 'created', 'old']
     list_filter = [ 'old', 'created']
 
+
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(FB_Connection)
 admin.site.register(Emoji, Emoji2Admin)
@@ -46,3 +48,8 @@ admin.site.register(ProfileStartEnd, ProfileStartEndAdmin)
 admin.site.register(FluQuestions, FluQuestionsAdmin)
 admin.site.register(Baseline, BaselineAdmin)
 admin.site.register(IphoneDummy, DummyAdmin)
+admin.site.register(BaselineQuestionaire)
+admin.site.register(ChartBaseline)
+admin.site.register(ChartA)
+admin.site.register(ChartB)
+admin.site.register(ChartC)
