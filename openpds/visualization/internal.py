@@ -6,7 +6,7 @@ import threading
 import psycopg2
 import psycopg2.extras
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from pymongo import Connection
+import pymongo
 from openpds.core.models import Profile
 from openpds.accesscontrol.models import Settings
 from openpds.accesscontrol.internal import AccessControlledInternalDataStore, getAccessControlledInternalDataStore
@@ -323,12 +323,9 @@ class InternalDataStore(AccessControlledInternalDataStore):
         super(InternalDataStore, self).__oldinit__(profile, app_id, lab_id)
         # This should check the token and pull down approved scopes for it
         self.profile = profile
-        self.db = Connection(
-            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-            port=getattr(settings, "MONGODB_PORT", None),
-            readPreference='nearest',
-            _connect=False
-        )[profile.getDBName()]
+        self.db = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                      ssl=True
+                                      )[profile.getDBName()]
 
     def saveAnswer(self, key, data):
         collection = self.db["answerlist"] if isinstance(data, list) else self.db["answer"]

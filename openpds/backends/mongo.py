@@ -1,4 +1,4 @@
-from pymongo import Connection
+import pymongo
 from openpds.core.models import Profile
 from openpds.backends.base import InternalDataStore
 from openpds import settings
@@ -12,23 +12,27 @@ def getInternalDataStore(profile, app_id, lab_id, token):
 
 class MongoInternalDataStore(InternalDataStore):
     def __init__(self, profile, app_id, lab_id, token):
-    	"""
-    	Initialize an InternalDataStore holding the user's data specified by profile, with authorization provided via token. 
-   	 """
+        """
+        Initialize an InternalDataStore holding the user's data specified by profile, with authorization provided via token. 
+        """
         super(MongoInternalDataStore, self).__init__(profile, app_id, lab_id, token)
         # This should check the token and pull down approved scopes for it
         self.profile = profile
+        self.db = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                       ssl=True
+                                     )[profile.getDBName()]
+        """
         self.db = Connection(
-	    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-	    port=getattr(settings, "MONGODB_PORT", None),
-	    readPreference='nearest',
-	    _connect=False
-	)[profile.getDBName()]
-
+            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
+            port=getattr(settings, "MONGODB_PORT", None),
+            readPreference='nearest',
+            _connect=False
+        )[profile.getDBName()]
+        """
     def saveAnswer(self, key, data):
-    	"""
-    	Saves the given data as an answer with the given key
-    	"""
+        """
+        Saves the given data as an answer with the given key
+        """
         collection = self.db["answerlist"] if isinstance(data, list) else self.db["answer"]
 
         answer = collection.find({ "key": key })
@@ -41,21 +45,21 @@ class MongoInternalDataStore(InternalDataStore):
         collection.save(answer)
     
     def getAnswer(self, key):
-    	"""
-    	Retrieves a dictionary representing the answer associated with a given answer key, if it exists or None if it doesn't. 
-    	"""
+        """
+        Retrieves a dictionary representing the answer associated with a given answer key, if it exists or None if it doesn't. 
+        """
         return self.db["answer"].find({ "key": key }) if key is not None else self.db["answer"].find()
 
     def getAnswerList(self, key):
-    	"""
-    	Retrieves a list representing the answer associated with a given answer key, if it exists or None if it doesn't.
-    	"""
+        """
+        Retrieves a list representing the answer associated with a given answer key, if it exists or None if it doesn't.
+        """
         return self.db["answerlist"].find({"key": key }) if key is not None else self.db["answerlist"].find()
 
     def getData(self, key, startTime, endTime):
-    	"""
-    	Gets data of a given type, denoted by key, that was recorded between startTime and endTime, or an empty list if no such data exists. 
-    	"""
+        """
+        Gets data of a given type, denoted by key, that was recorded between startTime and endTime, or an empty list if no such data exists. 
+        """
         # In this case, we're assuming the only source is Funf
         dataFilter = {"key": {"$regex": key+"$"}}
         if startTime is not None or endTime is not None:
@@ -69,8 +73,8 @@ class MongoInternalDataStore(InternalDataStore):
 
     # saves data to specified database collection
     def saveData(self, data, collectionname):
-    	"""
-    	Saves data to this InternalDataStore. Data must provide a key and time in order to be retrieved for later use. 
-    	"""
+        """
+        Saves data to this InternalDataStore. Data must provide a key and time in order to be retrieved for later use. 
+        """
         self.db[collectionname].save(data)
 

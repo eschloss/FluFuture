@@ -1,7 +1,6 @@
 from celery import task
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta
@@ -17,13 +16,6 @@ from openpds.questions.socialhealth_tasks import getStartTime
 #from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import Counter
 import sqlite3
-
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
-)
-"""
 
 ANSWERKEY_NAME_MAPPING = {
     "gfsa": "My Team's Status"

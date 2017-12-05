@@ -2,7 +2,6 @@ from celery import task
 import numpy
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta
@@ -19,14 +18,6 @@ from collections import Counter
 import sqlite3, random
 from django.utils import timezone
 
-
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
-"""
 
 ANSWERKEY_NAME_MAPPING = {
     "recentFocusByHour": "Focus",

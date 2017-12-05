@@ -1,7 +1,6 @@
 from celery import task
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta, datetime
@@ -12,13 +11,6 @@ import cluster, random
 from gcm import GCM
 
 from openpds.core.models import Profile
-
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
-)
-"""
 
 @task()
 def findRecentIncidents():

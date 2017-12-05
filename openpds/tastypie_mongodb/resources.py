@@ -1,5 +1,6 @@
 from bson import ObjectId
-from pymongo import Connection, ASCENDING, DESCENDING
+from pymongo import ASCENDING, DESCENDING
+import pymongo
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -33,12 +34,9 @@ class MongoDBResource(Resource):
             if (request and "datastore_owner__uuid" in request.GET):
                 profile, created = Profile.objects.get_or_create(uuid = request.GET["datastore_owner__uuid"])
                 database = profile.getDBName()
-            db = Connection(
-                host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-                port=getattr(settings, "MONGODB_PORT", None),
-                readPreference='nearest',
-                _connect=False
-            )
+            db = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                          ssl=True
+                                          )
             return db[database][self._meta.collection] if database is not None else None
         except AttributeError:
             raise ImproperlyConfigured("Define a collection in your resource.")

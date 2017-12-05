@@ -1,7 +1,6 @@
 from celery import task
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta
@@ -17,12 +16,6 @@ from collections import Counter
 from openpds import getInternalDataStore
 import sqlite3
 
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None)
-)
-"""
 
 def distanceBetweenLatLongs(latlong1, latlong2):  
     earthRadius = 6371 # km

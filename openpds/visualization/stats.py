@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from calendar import monthrange
 from openpds.questions.tasks import checkForProfileReferral
 from django.views.decorators.cache import cache_page
-from pymongo import Connection
+import pymongo
 import random
 from django.conf import settings
 from django.utils import timezone
@@ -22,12 +22,9 @@ def dupEmojis(request):
     return HttpResponse("success")
     
 def getLength(request):
-    
-    connection = Connection(
-        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-        port=getattr(settings, "MONGODB_PORT", None),
-        readPreference='nearest'
-    )
+    connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                  ssl=True
+                                  )
     
     for p in Profile.objects.all():
         pse = ProfileStartEnd.objects.filter(profile=p)

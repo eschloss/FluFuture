@@ -1,7 +1,6 @@
 from celery import task
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 from django.conf import settings
 import time
 from datetime import date, timedelta
@@ -13,14 +12,6 @@ from gcm import GCM
 from openpds.core.models import Profile
 from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import Counter
-
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
-"""
 
 def getDBName(profile):
     return "User_" + str(profile.uuid).replace("-", "_")

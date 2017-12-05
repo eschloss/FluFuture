@@ -1,7 +1,7 @@
 from celery import task
 from openpds.core.models import FirebaseToken, IPReferral, Profile, Emoji, Notification, Device, QuestionInstance, QuestionType
 from bson import ObjectId
-from pymongo import Connection
+import pymongo
 from django.conf import settings
 import time
 from datetime import date, timedelta, datetime
@@ -19,14 +19,6 @@ import requests
 from pyfcm import FCMNotification
 from openpds.settings import FCM_SERVER_KEY
 
-"""
-connection = Connection(
-    host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-    port=getattr(settings, "MONGODB_PORT", None),
-    readPreference='nearest'
-)
-"""
-
 @task()
 def ensureFunfIndexes():
     profiles = Profile.objects.all()
@@ -39,11 +31,9 @@ def ensureFunfIndex(pk):
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
     
-    connection = Connection(
-        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-        port=getattr(settings, "MONGODB_PORT", None),
-        readPreference='nearest'
-    )
+    connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                  ssl=True
+                                  )
     try:
         connection.admin.command('enablesharding', dbName)
     except:
@@ -69,11 +59,9 @@ def deleteUnusedProfile(pk):
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
     
-    connection = Connection(
-        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-        port=getattr(settings, "MONGODB_PORT", None),
-        readPreference='nearest'
-    )
+    connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                  ssl=True
+                                  )
     db = connection[dbName]#["funf"]
     
     #if collection.find({"time": { "$gte": start}}).count() == 0:
@@ -189,11 +177,9 @@ def findMusicGenres():
     for profile in profiles:
         dbName = profile.getDBName()
         
-        connection = Connection(
-            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-            port=getattr(settings, "MONGODB_PORT", None),
-            readPreference='nearest'
-        )
+        connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                      ssl=True
+                                      )
         answerListCollection = connection[dbName]["answerlist"]
         collection = connection[dbName]["funf"]
         
@@ -238,11 +224,9 @@ def dumpFunfData2(pk):
     profile = Profile.objects.get(pk=pk)
     dbName = profile.getDBName()
     
-    connection = Connection(
-        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-        port=getattr(settings, "MONGODB_PORT", None),
-        readPreference='nearest'
-    )
+    connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                  ssl=True
+                                  )
     try:
         connection.admin.command('enablesharding', dbName)
     except:
@@ -267,11 +251,9 @@ def dumpSurveyData():
     for profile in profiles:
         dbName = profile.getDBName()
         
-        connection = Connection(
-            host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-            port=getattr(settings, "MONGODB_PORT", None),
-            readPreference='nearest'
-        )
+        connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                      ssl=True
+                                      )
         try:
             connection.admin.command('enablesharding', dbName)
         except:
@@ -443,11 +425,9 @@ def flumojiNotifications():
 
 def setProfileLocation(profile):
     dbName = profile.getDBName()
-    connection = Connection(
-        host=random.choice(getattr(settings, "MONGODB_HOST", None)),
-        port=getattr(settings, "MONGODB_PORT", None),
-        readPreference='nearest'
-    )
+    connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                  ssl=True
+                                  )
     collection = connection[dbName]["funf"]
     
     location = collection.find_one({"key": "edu.mit.media.funf.probe.builtin.LocationProbe"})
