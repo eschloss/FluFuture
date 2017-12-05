@@ -41,7 +41,7 @@ class Profile(models.Model):
     social_this_week = models.IntegerField(default=50)
 
     def getDBName(self):
-        return "User_" + str(self.uuid).replace("-", "_")
+        return "U_" + str(self.uuid).replace("-", "_")
    
     def __unicode__(self):
         return self.uuid
