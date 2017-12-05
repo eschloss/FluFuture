@@ -1,7 +1,6 @@
 from celery import task
 from openpds.core.models import Profile, Notification, Device
 from bson import ObjectId
-from pymongo import Connection
 import time
 from datetime import date, timedelta
 import json
