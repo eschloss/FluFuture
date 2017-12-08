@@ -220,7 +220,7 @@ VISIT_TYPE_CHOICE = (
 class ChartBaseline(models.Model):
     study_id = models.CharField(max_length=15)
     last_name = models.CharField(max_length=20)
-    mrn = models.CharField(max_length=9)
+    mrn = models.CharField(max_length=11)
     created = models.DateTimeField(auto_now_add=True)
     dob = models.DateField(blank=True,null=True)
     dob2=  models.TextField(blank=True, null=True)
