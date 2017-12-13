@@ -254,6 +254,7 @@ class ChartBaseline(models.Model):
     date_last_liver_care_prior_to_study = models.DateField(blank=True, null=True)
     date_last_liver_care_prior_to_study2 = models.TextField(blank=True, null=True)
     location_last_liver_care_prior_to_study = models.CharField(max_length=1, choices=CARE_LOCATION_CHOICE)
+    comments = models.TextField(blank=True, null=True)
     
     def __unicode__(self):
         return self.study_id + " : " + self.last_name
@@ -287,6 +288,7 @@ class ChartA(models.Model):
     if_hospital_q3_discharge_meld_insufficient = models.BooleanField(default=False)
     if_hospital_q4_disposition = models.CharField(max_length=1, choices=DISPOSITION_CHOICE)
     created = models.DateTimeField(auto_now_add=True)
+    comments = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         if self.date_of_liver_encounter:
@@ -303,6 +305,7 @@ class ChartB(models.Model):
     reason= models.TextField(blank=True, null=True)
     outcome = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+    comments = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         if self.date_of_telephone_encounter:
@@ -320,6 +323,7 @@ class ChartC(models.Model):
     date_deceased = models.DateField(blank=True, null=True)
     date_deceased2 =  models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+    comments = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.baseline.__unicode__()
@@ -552,6 +556,7 @@ class BaselineQuestionaire(models.Model):
     preferred_communication_email =models.BooleanField(default=False)
     preferred_communication_other =models.BooleanField(default=False)
     preferred_communication_other2 =models.TextField(blank=True,null=True)
+    comments = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.study_id + " : " + self.last_name
