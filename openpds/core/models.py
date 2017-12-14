@@ -401,6 +401,13 @@ FREQ_CHOICE4 = (
     ('5', 'unsure'),
     ('6', 'left blank'),
 )
+FREQ_CHOICE5 = (
+    ('1', 'never'),
+    ('2', 'daily'),
+    ('3', 'weekly'),
+    ('4', 'monthly'),
+    ('6', 'left blank'),
+)
 DRINK_CHOICE = (
     ('1', 'none'),
     ('2', '0-1 /month'),
@@ -537,7 +544,7 @@ class BaselineQuestionaire(models.Model):
     cell_tasks_riding_public_transportation = models.BooleanField(default=False)
     cell_tasks_eating_at_home_or_restaurant = models.BooleanField(default=False)
     cell_tasks_driving_a_car = models.BooleanField(default=False)
-    health_app_on_cell_phone_frequency = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    health_app_on_cell_phone_frequency = models.CharField(max_length=1, choices=FREQ_CHOICE5)
     physical_activity= models.IntegerField(blank=True,null=True)
     dietary_habits = models.IntegerField(blank=True,null=True)
     amount_and_quantity_sleep = models.IntegerField(blank=True,null=True)
