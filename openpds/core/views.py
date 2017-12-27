@@ -23,7 +23,7 @@ def dump(request):
                                   )
     
     for profile in profiles:
-        db = connection["User_" + str(profile.id)]
+        db = connection["U_" + str(profile.id)]
         funf = db["funf"]
         data[profile.uuid] = funf.find()
         

@@ -14,7 +14,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import Counter
 
 def getDBName(profile):
-    return "User_" + str(profile.uuid).replace("-", "_")
+    return "U_" + str(profile.uuid).replace("-", "_")
 
 def getTopAccessPointsForTimeRange(collection, start, end):
     accessPoints = collection.find({ "key": { "$regex" : "WifiProbe$" }, "time": { "$gte" : start, "$lt":end }})

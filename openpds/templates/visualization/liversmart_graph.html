@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+
+{% load humanize %}
+
+{% block head-css %}
+    body {
+        background-color: #ffffff;
+        background-image: none;
+    }
+{% endblock %}
+
+{% block head-js %}
+    $(document).ready(function() {
+    });
+{% endblock %}
+
+
+
+
+{% block viewport %}
+    <meta name="viewport" content="width=device-width" />
+{% endblock %}
+
+{% block content %}
+    {{ interval }} - {{ profile.uuid }}
+    <br/>
+    {{rabj}}
+{% endblock %}

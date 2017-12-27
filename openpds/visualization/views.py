@@ -430,3 +430,24 @@ def collectVists(request):
             iphone.save()
             return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     return HttpResponse(json.dumps({"success": False }), content_type="application/json")
+    
+def liversmart_graph(request, interval, datastore_owner_uuid):
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+    if interval == "daily":
+        pass
+    else:
+        pass
+    ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
+    rabh = internalDataStore.getAnswerList("RecentActivityByHour")[0]['value']
+    print rabh
+    rsbh = internalDataStore.getAnswerList("RecentActivityByHour")[0]['value']
+    print rsbh
+    
+    return render_to_response("visualization/liversmart_graph.html", {
+        'uuid': datastore_owner_uuid,
+        'interval': interval,
+        'profile': profile,
+        'ids': ids,
+        'rabh': rabh,
+        'rsbh': rsbh,
+    }, context_instance=RequestContext(request))
