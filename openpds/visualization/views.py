@@ -438,9 +438,9 @@ def liversmart_graph(request, interval, datastore_owner_uuid):
     else:
         pass
     ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
-    rabh = internalDataStore.getAnswerList("RecentActivityByHour")[0]['value']
+    rabh = ids.getAnswerList("RecentActivityByHour")[0]['value']
     print rabh
-    rsbh = internalDataStore.getAnswerList("RecentActivityByHour")[0]['value']
+    rsbh = ids.getAnswerList("RecentSocialByHour")[0]['value']
     print rsbh
     
     return render_to_response("visualization/liversmart_graph.html", {

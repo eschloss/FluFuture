@@ -18,6 +18,7 @@ from collections import Counter
 import sqlite3, random
 from django.utils import timezone
 
+BEGINNING_OF_STUDY = 1504300000 #september 1st
 
 ANSWERKEY_NAME_MAPPING = {
     "recentFocusByHour": "Focus",
@@ -284,8 +285,9 @@ def aggregateForUser(internalDataStore, answerKey, timeRanges, aggregator, inclu
     return aggregates
 
 def getStartTime(daysAgo, startAtMidnight):
-    currentTime = time.time()
-    return time.mktime((date.fromtimestamp(currentTime) - timedelta(days=daysAgo)).timetuple()) if startAtMidnight else currentTime - daysAgo * 24 * 3600
+    return BEGINNING_OF_STUDY
+    #currentTime = time.time()
+    #return time.mktime((date.fromtimestamp(currentTime) - timedelta(days=daysAgo)).timetuple()) if startAtMidnight else currentTime - daysAgo * 24 * 3600
 
 def recentActivityLevels(includeBlanks = False):
     startTime = getStartTime(6, True)
@@ -326,7 +328,7 @@ def recentSocialLevels2(internalDataStore, includeBlanks = False):
 def recentActivityScore():
     #data = recentActivityLevels(False)
     currentTime = time.time()
-    data = aggregateForAllUsers(None, [(currentTime - 3600 * 24 * 7, currentTime)], activityForTimeRange, "Activity", False)
+    data = aggregateForAllUsers(None, [(BEGINNING_OF_STUDY, currentTime)], activityForTimeRange, "Activity", False)
     score = {}
    
     for uuid, activityList in data.iteritems():
