@@ -9,8 +9,128 @@
     }
 {% endblock %}
 
+{% block head-extra %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" ></script>
+{% endblock %}
+
 {% block head-js %}
+    var timeFormat = 'MM/DD/YYYY HH:mm';
+    var color = Chart.helpers.color;
+    var emoji_h = new Image(20, 20);
+    emoji_h.src ='/static/img2/emoji-happy.png';
+    var emoji_d = new Image(20, 35);
+    emoji_d.src ='/static/img2/emoji-down.png';
+    var emoji_f = new Image(20, 35);
+    emoji_f.src ='/static/img2/emoji-fever.png';
+    var emoji_s = new Image(20, 20);
+    emoji_s.src ='/static/img2/emoji-happy2.png';
+    var emoji_y = new Image(20, 20);
+    emoji_y.src ='/static/img2/emoji-sleepy.png';
+    var emoji_c = new Image(20, 20);
+    emoji_c.src ='/static/img2/emoji-worried.png';
+    var emoji_u = new Image(20, 35);
+    emoji_u.src ='/static/img2/emoji-restless2.png';
+    var emoji_n = new Image(20, 35);
+    emoji_n.src ='/static/img2/emoji-acutelyill.png';
+    var emoji_l = new Image(20, 35);
+    emoji_l.src ='/static/img2/emoji-confused.png';
+    var emoji_b = new Image(20, 35);
+    emoji_b.src ='/static/img2/emoji-inpain.png';
+
     $(document).ready(function() {
+        data = {
+        
+            labels: [],
+            datasets: [
+                {% if rabh %}
+                {
+                    label: "Activity Level",
+                    //backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    borderColor: "blue",
+                    borderDash: [5, 5],
+                    pointRadius: 10,
+                    pointStyle: [
+                            {% for e in emojis %}
+                                {% if not e %}""{% else %}emoji_{{ e.emoji }}{% endif %}{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        ],
+                    fill: false,
+                    data: [
+                        {% for obj in rabh %}
+                        {
+                            x: new Date({{obj.start }}000),
+                            y: ({{ obj.high }}*90  + {{ obj.low }} * 10 + ({{ obj.total }} - {{ obj.low }} - {{ obj.high }})*50)/{{obj.total}} } {% if not forloop.last %},{% endif %}   
+                        {% endfor %}
+                    ]
+                }
+                {% else %}
+                {
+                    label: "Social Level",
+                    //backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    borderColor: "green",
+                    borderDash: [5, 5],
+                    pointRadius: 10,
+                    fill: false,
+                    pointStyle: [
+                            {% for e in emojis %}
+                                {% if not e %}""{% else %}emoji_{{ e.emoji }}{% endif %}{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        ],
+                    data: [
+                        {% for obj in rsbh %}
+                        {
+                            x: new Date({{obj.start }}000),
+                            y: {{obj.social}}*10 } {% if not forloop.last %},{% endif %}   
+                        {% endfor %}
+                    ]
+                }
+                {% endif %}
+            ]
+        };
+        
+        options = {
+            title:{
+                text: "Chart.js Time Scale"
+            },
+            scales: {
+                    xAxes: [{
+                            type: "time",
+                            time: {
+                                    format: timeFormat,
+                                    // round: 'day'
+                                    tooltipFormat: 'll HH:mm',
+                                    displayFormats: {
+                                        hour: 'MMM D',
+                                        minute: 'MMM D'
+                                    }
+                            },
+                            scaleLabel: {
+                                    display: true,
+                                    labelString: 'Date'
+                            }
+                    }, ],
+                    yAxes: [{
+                            scaleLabel: {
+                                    display: true,
+                                    labelString: 'value'
+                            }
+                    }]
+            },
+            elements: {
+                point: {
+                    pointStyle: "triangle"
+                }
+            }
+        };
+    
+        var ctx = document.getElementById("myChart").getContext('2d');
+        config = {
+            type: 'line',
+            data: data,
+            options: options
+        };
+        var myLineChart = new Chart(ctx, config);
     });
 {% endblock %}
 
@@ -18,11 +138,14 @@
 
 
 {% block viewport %}
-    <meta name="viewport" content="width=device-width" />
 {% endblock %}
 
 {% block content %}
-    {{ interval }} - {{ profile.uuid }}
+    
+    {% comment %}{{ interval }} - {{ profile.uuid }}
     <br/>
-    {{rabh}}
+    {% endcomment %}
+    
+    <canvas id="myChart" width="300" height="150"></canvas>
+
 {% endblock %}

@@ -431,18 +431,50 @@ def collectVists(request):
             return HttpResponse(json.dumps({"success": True }), content_type="application/json")
     return HttpResponse(json.dumps({"success": False }), content_type="application/json")
     
+def timestampToStart(ts):
+    return datetime.datetime.combine(datetime.datetime.fromtimestamp(ts), datetime.time.min)
+def timestampToEnd(ts):
+    return datetime.datetime.combine(datetime.datetime.fromtimestamp(ts), datetime.time.max)
+    
 def liversmart_graph(request, interval, datastore_owner_uuid):
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
-    if interval == "daily":
-        pass
+
+    ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
+    
+    rabh = None
+    rsbh = None
+
+    chart_emojis = []
+    emojis = Emoji.objects.filter(profile__uuid=datastore_owner_uuid)
+
+    if interval == "social":
+        rsbh2 = ids.getAnswerList("RecentSocialByHour")[0]['value']
+        rsbh = []
+        for r in rsbh2:
+            ts = timestampToStart(r['start'])
+            if ts > profile.created.replace(tzinfo=None):
+                rsbh.append(r)
+                e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
+    elif interval == "activity":
+        rabh = ids.getAnswerList("RecentActivityByHour")[0]['value']
+        for r in rabh:
+            ts = timestampToStart(r['start'])
+            e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
+            if e.count() > 0:
+                chart_emojis.append(e[0])
+            else:
+                chart_emojis.append("")
+    elif interval == "activity2":
+        for r in rabh:
+            chart_emojis.append("")
     else:
         pass
-    ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
-    rabh = ids.getAnswerList("RecentActivityByHour")[0]['value']
-    print rabh
-    rsbh = ids.getAnswerList("RecentSocialByHour")[0]['value']
-    print rsbh
     
+            
     return render_to_response("visualization/liversmart_graph.html", {
         'uuid': datastore_owner_uuid,
         'interval': interval,
@@ -450,4 +482,5 @@ def liversmart_graph(request, interval, datastore_owner_uuid):
         'ids': ids,
         'rabh': rabh,
         'rsbh': rsbh,
+        'emojis': chart_emojis,
     }, context_instance=RequestContext(request))

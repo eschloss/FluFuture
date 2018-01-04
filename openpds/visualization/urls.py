@@ -22,7 +22,7 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^mitfit/recos$', direct_to_template, { 'template' : 'visualization/mitfit_recos.html' }),
     (r'^hotspots$', direct_to_template, { 'template' : 'visualization/hotspots.html' }),
     
-    (r'^liversmart/graph/(daily|weekly|monthly)/([^/]*)$', 'liversmart_graph'),
+    (r'^liversmart/graph/([^/]*)/([^/]*)$', 'liversmart_graph'),
     (r'^flumoji/presplash$', 'flumojiPreSplash'),
     (r'^flumoji/splash$', 'flumojiSplash'),
     (r'^flumoji/splashRedirect$', 'flumojiSplashRedirect'),
