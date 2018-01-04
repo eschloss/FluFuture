@@ -227,10 +227,10 @@ def dumpFunfData2(pk):
     connection = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
                                   ssl=True
                                   )
-    try:
-        connection.admin.command('enablesharding', dbName)
-    except:
-        pass
+    #try:
+    #    connection.admin.command('enablesharding', dbName)
+    #except:
+    #    pass
     funf = connection[dbName]["funf"]
     
     user = int(profile.id)
