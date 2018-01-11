@@ -82,7 +82,7 @@ def recentProbeCounts2(pk):
     startTime = getStartTime(1, False)
     profile = Profile.objects.get(pk=pk)
     ids = getInternalDataStore(profile, "", "Living Lab", "")
-    probes = ["ActivityProbe", "SimpleLocationProbe", "CallLogProbe", "SmsProbe", "WifiProbe", "BluetoothProbe"]
+    probes = ["ActivityProbe", "LocationProbe", "CallLogProbe", "SmsProbe", "WifiProbe", "BluetoothProbe"]
     answer = {}
     for probe in probes:
         data = ids.getData(probe, startTime, None)
