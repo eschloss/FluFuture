@@ -23,6 +23,7 @@ urlpatterns = patterns('openpds.visualization.views',
     (r'^hotspots$', direct_to_template, { 'template' : 'visualization/hotspots.html' }),
     
     (r'^liversmart/graph/([^/]*)/([^/]*)$', 'liversmart_graph'),
+    (r'^liversmart/sync/$', 'liversmart_sync'),
     (r'^flumoji/presplash$', 'flumojiPreSplash'),
     (r'^flumoji/splash$', 'flumojiSplash'),
     (r'^flumoji/splashRedirect$', 'flumojiSplashRedirect'),

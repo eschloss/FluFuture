@@ -362,10 +362,11 @@ def recentSocialScore():
     return score
 
 @task()
-def recentSocialHealthScores():
+def recentSocialHealthScores(isTask=True):
     profiles = Profile.objects.all()
     data = {}
-    calculatePassiveEmojiAndSave.delay()
+    if isTask:
+        calculatePassiveEmojiAndSave.delay()
     
     activityScores = recentActivityScore()
     socialScores = recentSocialScore()

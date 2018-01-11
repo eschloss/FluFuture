@@ -4,7 +4,9 @@ gunicorn==17.5
 django==1.4.13
 dj-database-url==0.2.2
 django-tastypie==0.9.11
-django-celery-with-mongodb==3.0
+celery==3.1.17
+django-celery==3.1.17
+#django-celery-with-mongodb==3.0
 #pymongo==2.7.2
 pymongo==3.5.1
 requests==2.3.0

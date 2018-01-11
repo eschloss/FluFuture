@@ -484,3 +484,8 @@ def liversmart_graph(request, interval, datastore_owner_uuid):
         'rsbh': rsbh,
         'emojis': chart_emojis,
     }, context_instance=RequestContext(request))
+
+def liversmart_sync(request):
+    from openpds.questions.socialhealth_tasks import recentSocialHealthScores
+    recentSocialHealthScores(isTask=False)
+    return HttpResponse("success")
