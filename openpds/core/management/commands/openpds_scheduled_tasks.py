@@ -6,7 +6,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         #flumojiNotifications.delay()
         recentProbeCounts.apply_async(countdown=10)
-        recentSocialHealthScoes.delay()
 
         ensureFunfIndexes.apply_async(countdown=300)
         dumpFunfData.apply_async(countdown=0)
