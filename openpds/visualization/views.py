@@ -435,11 +435,20 @@ def timestampToStart(ts):
     return datetime.datetime.combine(datetime.datetime.fromtimestamp(ts), datetime.time.min)
 def timestampToEnd(ts):
     return datetime.datetime.combine(datetime.datetime.fromtimestamp(ts), datetime.time.max)
-    
+
 def liversmart_graph(request, interval, datastore_owner_uuid):
+    return liversmart_graph2(request, interval, None, None, datastore_owner_uuid)
+    
+def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_uuid):
     profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
 
     ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
+    
+    if start_date and end_date:
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        print start_date
+        print end_date
     
     rabh = None
     rsbh = None
@@ -452,7 +461,7 @@ def liversmart_graph(request, interval, datastore_owner_uuid):
         rsbh = []
         for r in rsbh2:
             ts = timestampToStart(r['start'])
-            if ts > profile.created.replace(tzinfo=None):
+            if ts > profile.created.replace(tzinfo=None) and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
                 rsbh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
@@ -460,14 +469,17 @@ def liversmart_graph(request, interval, datastore_owner_uuid):
                 else:
                     chart_emojis.append("")
     elif interval == "activity":
-        rabh = ids.getAnswerList("RecentActivityByHour")[0]['value']
-        for r in rabh:
+        rabh2 = ids.getAnswerList("RecentActivityByHour")[0]['value']
+        rabh = []
+        for r in rabh2:
             ts = timestampToStart(r['start'])
-            e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
-            if e.count() > 0:
-                chart_emojis.append(e[0])
-            else:
-                chart_emojis.append("")
+            if (not start_date or not end_date) or (ts > start_date and ts < end_date):
+                rabh.append(r)
+                e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
     elif interval == "activity2":
         for r in rabh:
             chart_emojis.append("")
