@@ -132,6 +132,10 @@
         };
         var myLineChart = new Chart(ctx, config);
     });
+
+    {% for obj in rabh %}
+        console.log("high:" +{{ obj.high }}+ "  low:"+{{ obj.low }}+"   total:"+{{ obj.total }});
+    {% endfor %}
 {% endblock %}
 
 

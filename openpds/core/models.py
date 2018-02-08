@@ -423,7 +423,7 @@ CELL_CHOICE1 = (
     ('5','left blank'),
 )
 CELL_CHOICE2 = (
-    ('1','less than every 1 minutes'),
+    ('1','less than every 10 minutes'),
     ('2','every 10 minutes'),
     ('3','every 30 minutes'),
     ('4','once an hour'),
@@ -444,6 +444,14 @@ EDUCATION_CHOICE = (
     ('3','college degree'),
     ('4','graduate degree'),
     ('5','left blank'),
+)
+SATISFACTION_CHOICE = (
+    ('1', 'Very Satisfied'),
+    ('2', 'Satisfied'),
+    ('3', 'Indifferent'),
+    ('4', 'Unsatisfied'),
+    ('5', 'Very Unsatisfied'),
+    ('6','left blank'),
 )
     
 class BaselineQuestionaire(models.Model):
@@ -567,3 +575,69 @@ class BaselineQuestionaire(models.Model):
 
     def __unicode__(self):
         return self.study_id + " : " + self.last_name
+
+class FollowupQuestionaire(models.Model):
+    study_id = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=20)
+    date = models.DateField(blank=True, null=True)
+    date2 =  models.TextField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    marital_status =  models.CharField(max_length=100, blank=True, null=True)
+    who_do_you_live_with =  models.CharField(max_length=100, blank=True, null=True)
+    occupation =  models.CharField(max_length=100, blank=True, null=True)
+    work_days =  models.BooleanField(default=False)
+    work_evenings =  models.BooleanField(default=False)
+    work_nights =  models.BooleanField(default=False)
+    work_other =  models.BooleanField(default=False)
+    work_other =  models.TextField(blank=True, null=True)
+    how_often_liver_medications = models.CharField(max_length=1, choices=FREQ_CHOICE0)
+    check_weight = models.CharField(max_length=1, choices=YN_BLANK)
+    check_fluid = models.CharField(max_length=1, choices=YN_BLANK)
+    check_bowel_movements = models.CharField(max_length=1, choices=YN_BLANK)
+    adjust_medications = models.CharField(max_length=1, choices=YN_BLANK)
+    check_bleeding_bruises = models.CharField(max_length=1, choices=YN_BLANK)
+    contact_md = models.CharField(max_length=1, choices=YN_BLANK)
+    alcohol = models.CharField(max_length=1, choices=YN_BLANK)
+    average_drinks = models.CharField(max_length=1, choices=DRINK_CHOICE)
+    exercise = models.TextField(blank=True, null=True)
+    average_sleep_weeknight = models.IntegerField(blank=True,null=True)
+    average_sleep_weekend = models.IntegerField(blank=True,null=True)
+    naps_weekdays = models.CharField(max_length=1, choices=YN_BLANK)
+    naps_weekends = models.CharField(max_length=1, choices=YN_BLANK)
+    sleep_trouble = models.CharField(max_length=1, choices=YN_BLANK)
+    sleep_pill = models.CharField(max_length=1, choices=YN_BLANK)
+    cpap = models.CharField(max_length=1, choices=YN_BLANK)
+    fall_asleep_day = models.CharField(max_length=1, choices=YN_BLANK)
+    little_interest = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    feeling_down = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    trouble_sleeping = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    tired_energy = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    irritated = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    poor_appetite = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    trouble_concentrating = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    speaking_moving_slow = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    trouble_words_misplacing = models.CharField(max_length=1, choices=FREQ_CHOICE)
+    cell_phone_use = models.CharField(max_length=1, choices=CELL_CHOICE1)
+    cell_phone_check = models.CharField(max_length=1, choices=CELL_CHOICE2)
+    cell_phone_sleep = models.CharField(max_length=1, choices=CELL_CHOICE3)
+    cell_tasks_watching_tv_or_movie = models.BooleanField(default=False)
+    cell_tasks_attending_a_social_event = models.BooleanField(default=False)
+    cell_tasks_riding_public_transportation = models.BooleanField(default=False)
+    cell_tasks_eating_at_home_or_restaurant = models.BooleanField(default=False)
+    cell_tasks_driving_a_car = models.BooleanField(default=False)
+    smartphone_daily_entry = models.IntegerField(blank=True,null=True)
+    cell_phone_talk_text_daily = models.IntegerField(blank=True,null=True)
+    people_interact_daily = models.IntegerField(blank=True,null=True)
+    health_app_on_cell_phone_frequency = models.CharField(max_length=1, choices=FREQ_CHOICE5)
+    satisfied = models.CharField(max_length=1, choices=SATISFACTION_CHOICE)
+    what_did_you_like = models.TextField(blank=True, null=True)
+    improvements = models.TextField(blank=True, null=True)
+    how_has_liversmart_helped = models.TextField(blank=True, null=True)
+    would_you_use_livermart = models.TextField(blank=True, null=True)
+    
+    comments = models.TextField(blank=True, null=True)
+    
+
+    def __unicode__(self):
+        return self.study_id + " : " + self.last_name
+            

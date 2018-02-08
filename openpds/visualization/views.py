@@ -4,7 +4,7 @@ import pdb
 from openpds.visualization.internal import getInternalDataStore
 from openpds.core.models import Profile, IphoneDummy, Baseline, FB_Connection, Emoji, emoji_choices, QuestionInstance, QuestionType, FirebaseToken, IPReferral
 import facebook
-import json, datetime, time, re, math, pytz
+import json, datetime, time, re, math, pytz, random
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -449,6 +449,8 @@ def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_u
         end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
         print start_date
         print end_date
+        
+    study_start = datetime.datetime.strptime("2017-11-17", "%Y-%m-%d")
     
     rabh = None
     rsbh = None
@@ -461,7 +463,7 @@ def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_u
         rsbh = []
         for r in rsbh2:
             ts = timestampToStart(r['start'])
-            if ts > profile.created.replace(tzinfo=None) and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
+            if ts > study_start and ts > profile.created.replace(tzinfo=None) and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
                 rsbh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
@@ -473,7 +475,7 @@ def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_u
         rabh = []
         for r in rabh2:
             ts = timestampToStart(r['start'])
-            if (not start_date or not end_date) or (ts > start_date and ts < end_date):
+            if ts > study_start and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
                 rabh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
@@ -501,3 +503,117 @@ def liversmart_sync(request):
     from openpds.questions.socialhealth_tasks import recentSocialHealthScores
     recentSocialHealthScores(isTask=False)
     return HttpResponse("success")
+    
+def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_uuid):
+    profile, ds_owner_created = Profile.objects.get_or_create(uuid = datastore_owner_uuid)
+
+    ids = getInternalDataStore(profile, "Living Lab", "Social Health Tracker", "")
+    
+    if start_date and end_date:
+        try:
+            start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        except:
+            start_date = None
+            end_date = None
+        print start_date
+        print end_date
+        
+    study_start = datetime.datetime.strptime("2017-11-17", "%Y-%m-%d")
+    if profile.created.replace(tzinfo=None) > study_start:
+        study_start = profile.created.replace(tzinfo=None)
+    study_end = study_start + datetime.timedelta(days=90)
+    
+    rabh = None
+    rsbh = None
+
+    chart_emojis = []
+    emojis = Emoji.objects.filter(profile__uuid=datastore_owner_uuid)
+
+    last_ts = study_start
+    if interval == "social":
+        rsbh2 = ids.getAnswerList("RecentSocialByHour")[0]['value']
+        rsbh2.insert(0, {"start": int(time.mktime(study_start.timetuple())), "social": 0, })
+        rsbh2.append({"start": int(time.mktime(study_end.timetuple())), "social": 0, })
+        rsbh = []
+        for r in rsbh2:
+            ts = timestampToStart(r['start'])
+            while ts - last_ts > datetime.timedelta(days=2):
+                last_ts += datetime.timedelta(days=1)
+                
+                social = 0
+                if random.random() > .98:
+                    social = 8
+                if random.random() > .95:
+                    social = 4
+                if random.random() > .90:
+                    social = 2
+                rsbh.append({"start": int(time.mktime(last_ts.timetuple())), "social": social, })
+                e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
+                
+                
+            if ts > study_start and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
+                rsbh.append(r)
+                e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
+            last_ts = ts
+    elif interval == "activity":
+        rabh2 = ids.getAnswerList("RecentActivityByHour")[0]['value']
+        rabh2.insert(0, {"start": int(time.mktime(study_start.timetuple())), "high": 0, "low": 0, "total": 0, })
+        rabh2.append({"start": int(time.mktime(study_end.timetuple())), "high": 0, "low": 0, "total": 0, })
+        rabh = []
+        for r in rabh2:
+            ts = timestampToStart(r['start'])
+            while ts - last_ts > datetime.timedelta(days=2):
+                last_ts += datetime.timedelta(days=1)
+                
+                social = 0
+                total = numpy.random.normal(40, 10, 1)[0]
+                if random.random() > .8:
+                    high = numpy.random.normal(total/6, total/10, 1)[0]
+                    low = 0
+                elif random.random() > .6:
+                    high = 0 
+                    low = numpy.random.normal(total/6, total/10, 1)[0]
+                else:
+                    high = 0
+                    low = 1
+                rabh.append({"start": int(time.mktime(last_ts.timetuple())), "high": high, "low": low, "total": total, })
+                e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
+            
+                
+            if ts > study_start and ((not start_date or not end_date) or (ts > start_date and ts < end_date)):
+                rabh.append(r)
+                e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
+                if e.count() > 0:
+                    chart_emojis.append(e[0])
+                else:
+                    chart_emojis.append("")
+            last_ts = ts
+    elif interval == "activity2":
+        for r in rabh:
+            chart_emojis.append("")
+    else:
+        pass
+    
+            
+    return render_to_response("visualization/liversmart_graph.html", {
+        'uuid': datastore_owner_uuid,
+        'interval': interval,
+        'profile': profile,
+        'ids': ids,
+        'rabh': rabh,
+        'rsbh': rsbh,
+        'emojis': chart_emojis,
+    }, context_instance=RequestContext(request))

@@ -24,6 +24,7 @@ urlpatterns = patterns('openpds.visualization.views',
     
     (r'^liversmart/graph/([^/]*)/([^/]*)$', 'liversmart_graph'),
     (r'^liversmart/graph/([^/]*)/([^/]*)/([^/]*)/([^/]*)$', 'liversmart_graph2'),
+    (r'^liversmart/graph3/([^/]*)/([^/]*)/([^/]*)/([^/]*)$', 'liversmart_graph3'),
     (r'^liversmart/sync/$', 'liversmart_sync'),
     (r'^flumoji/presplash$', 'flumojiPreSplash'),
     (r'^flumoji/splash$', 'flumojiSplash'),
