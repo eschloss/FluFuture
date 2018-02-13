@@ -202,6 +202,10 @@ YN_CHOICE = (
     ('1', 'Yes'),
     ('u', 'Unknown'),
 )
+YN_NOBLANK = (
+    ('0', 'No'),
+    ('1', 'Yes'),
+)
 YN_BLANK = (
     ('0', 'No'),
     ('1', 'Yes'),
@@ -374,11 +378,22 @@ FREQ_CHOICE0 = (
     ('5', 'unsure'),
     ('6', 'left blank'),
 )
+FREQ_CHOICE0_NOBLANK = (
+    ('1', 'always'),
+    ('2', 'usually'),
+    ('3', 'rarely'),
+    ('4', 'never'),
+)
 FREQ_CHOICE = (
     ('1', 'never'),
     ('2', 'several days'),
     ('3', 'everyday'),
     ('6', 'left blank'),
+)
+FREQ_CHOICE_NOBLANK = (
+    ('1', 'never'),
+    ('2', 'several days'),
+    ('3', 'everyday'),
 )
 FREQ_CHOICE2 = (
     ('1', 'at least once a week'),
@@ -407,6 +422,12 @@ FREQ_CHOICE5 = (
     ('3', 'weekly'),
     ('4', 'monthly'),
     ('6', 'left blank'),
+)
+FREQ_CHOICE5_NOBLANK = (
+    ('1', 'never'),
+    ('2', 'daily'),
+    ('3', 'weekly'),
+    ('4', 'monthly'),
 )
 DRINK_CHOICE = (
     ('1', 'none'),
@@ -438,6 +459,26 @@ CELL_CHOICE3 = (
     ('4','other location'),
     ('5','left blank'),
 )
+CELL_CHOICE1_NOBLANK = (
+    ('1','less than 60 minutes a day'),
+    ('2','between 1 and 3 hours a day'),
+    ('3','between 3 and 5 hours a day'),
+    ('4','morethan 5 hours a day'),
+)
+CELL_CHOICE2_NOBLANK = (
+    ('1','less than every 10 minutes'),
+    ('2','every 10 minutes'),
+    ('3','every 30 minutes'),
+    ('4','once an hour'),
+    ('5','once a few times a day'),
+    ('6','once a day orless'),
+)
+CELL_CHOICE3_NOBLANK = (
+    ('1','in the bedroom'),
+    ('2','next to my bed'),
+    ('3','in a different room from where I sleep'),
+    ('4','other location'),
+)
 EDUCATION_CHOICE = (
     ('1','less than high school'),
     ('2','high school diploma'),
@@ -451,7 +492,6 @@ SATISFACTION_CHOICE = (
     ('3', 'Indifferent'),
     ('4', 'Unsatisfied'),
     ('5', 'Very Unsatisfied'),
-    ('6','left blank'),
 )
     
 class BaselineQuestionaire(models.Model):
@@ -580,7 +620,6 @@ class FollowupQuestionaire(models.Model):
     study_id = models.CharField(max_length=15)
     last_name = models.CharField(max_length=20)
     date = models.DateField(blank=True, null=True)
-    date2 =  models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     marital_status =  models.CharField(max_length=100, blank=True, null=True)
     who_do_you_live_with =  models.CharField(max_length=100, blank=True, null=True)
@@ -590,36 +629,36 @@ class FollowupQuestionaire(models.Model):
     work_nights =  models.BooleanField(default=False)
     work_other =  models.BooleanField(default=False)
     work_other =  models.TextField(blank=True, null=True)
-    how_often_liver_medications = models.CharField(max_length=1, choices=FREQ_CHOICE0)
-    check_weight = models.CharField(max_length=1, choices=YN_BLANK)
-    check_fluid = models.CharField(max_length=1, choices=YN_BLANK)
-    check_bowel_movements = models.CharField(max_length=1, choices=YN_BLANK)
-    adjust_medications = models.CharField(max_length=1, choices=YN_BLANK)
-    check_bleeding_bruises = models.CharField(max_length=1, choices=YN_BLANK)
-    contact_md = models.CharField(max_length=1, choices=YN_BLANK)
-    alcohol = models.CharField(max_length=1, choices=YN_BLANK)
+    how_often_liver_medications = models.CharField(max_length=1, choices=FREQ_CHOICE0_NOBLANK)
+    check_weight = models.CharField(max_length=1, choices=YN_NOBLANK)
+    check_fluid = models.CharField(max_length=1, choices=YN_NOBLANK)
+    check_bowel_movements = models.CharField(max_length=1, choices=YN_NOBLANK)
+    adjust_medications = models.CharField(max_length=1, choices=YN_NOBLANK)
+    check_bleeding_bruises = models.CharField(max_length=1, choices=YN_NOBLANK)
+    contact_md = models.CharField(max_length=1, choices=YN_NOBLANK)
+    alcohol_3_month = models.CharField(max_length=1, choices=YN_NOBLANK)
     average_drinks = models.CharField(max_length=1, choices=DRINK_CHOICE)
-    exercise = models.TextField(blank=True, null=True)
+    exercise_list_3 = models.TextField(blank=True, null=True)
     average_sleep_weeknight = models.IntegerField(blank=True,null=True)
-    average_sleep_weekend = models.IntegerField(blank=True,null=True)
-    naps_weekdays = models.CharField(max_length=1, choices=YN_BLANK)
-    naps_weekends = models.CharField(max_length=1, choices=YN_BLANK)
-    sleep_trouble = models.CharField(max_length=1, choices=YN_BLANK)
-    sleep_pill = models.CharField(max_length=1, choices=YN_BLANK)
-    cpap = models.CharField(max_length=1, choices=YN_BLANK)
-    fall_asleep_day = models.CharField(max_length=1, choices=YN_BLANK)
-    little_interest = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    feeling_down = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    trouble_sleeping = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    tired_energy = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    irritated = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    poor_appetite = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    trouble_concentrating = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    speaking_moving_slow = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    trouble_words_misplacing = models.CharField(max_length=1, choices=FREQ_CHOICE)
-    cell_phone_use = models.CharField(max_length=1, choices=CELL_CHOICE1)
-    cell_phone_check = models.CharField(max_length=1, choices=CELL_CHOICE2)
-    cell_phone_sleep = models.CharField(max_length=1, choices=CELL_CHOICE3)
+    average_sleep_weekend_night = models.IntegerField(blank=True,null=True)
+    naps_weekdays = models.CharField(max_length=1, choices=YN_NOBLANK)
+    naps_weekends = models.CharField(max_length=1, choices=YN_NOBLANK)
+    sleep_trouble = models.CharField(max_length=1, choices=YN_NOBLANK)
+    sleep_pill = models.CharField(max_length=1, choices=YN_NOBLANK)
+    cpap = models.CharField(max_length=1, choices=YN_NOBLANK)
+    fall_asleep_day = models.CharField(max_length=1, choices=YN_NOBLANK)
+    little_interest = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    feeling_down = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    trouble_sleeping = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    tired_energy = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    irritated = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    poor_appetite = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    trouble_concentrating = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    speaking_moving_slow = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    trouble_words_misplacing = models.CharField(max_length=1, choices=FREQ_CHOICE_NOBLANK)
+    cell_phone_use = models.CharField(max_length=1, choices=CELL_CHOICE1_NOBLANK)
+    cell_phone_check = models.CharField(max_length=1, choices=CELL_CHOICE2_NOBLANK)
+    cell_phone_sleep = models.CharField(max_length=1, choices=CELL_CHOICE3_NOBLANK)
     cell_tasks_watching_tv_or_movie = models.BooleanField(default=False)
     cell_tasks_attending_a_social_event = models.BooleanField(default=False)
     cell_tasks_riding_public_transportation = models.BooleanField(default=False)
@@ -628,7 +667,7 @@ class FollowupQuestionaire(models.Model):
     smartphone_daily_entry = models.IntegerField(blank=True,null=True)
     cell_phone_talk_text_daily = models.IntegerField(blank=True,null=True)
     people_interact_daily = models.IntegerField(blank=True,null=True)
-    health_app_on_cell_phone_frequency = models.CharField(max_length=1, choices=FREQ_CHOICE5)
+    health_app_on_cell_phone_frequency = models.CharField(max_length=1, choices=FREQ_CHOICE5_NOBLANK)
     satisfied = models.CharField(max_length=1, choices=SATISFACTION_CHOICE)
     what_did_you_like = models.TextField(blank=True, null=True)
     improvements = models.TextField(blank=True, null=True)
