@@ -278,7 +278,7 @@ class ChartA(models.Model):
     if_clinic_q2_meld = models.IntegerField(blank=True, null=True)
     if_clinic_q2_meld_insufficient = models.BooleanField(default=False)
     if_emergency_room_q1_reason = models.TextField(blank=True, null=True)
-    if_emergency_room_q1_disposition = models.CharField(max_length=1, choices=DISPOSITION_CHOICE)
+    if_emergency_room_q1_disposition = models.CharField(blank=True, null=True, max_length=1, choices=DISPOSITION_CHOICE)
     if_hospital_q1_admission_meld = models.IntegerField(blank=True, null=True)
     if_hospital_q1_admission_meld_insufficient = models.BooleanField(default=False)
     if_hospital_q2_admission_reason_Hepatic_Encephalopathy = models.BooleanField(default=False)
@@ -290,7 +290,7 @@ class ChartA(models.Model):
     if_hospital_q2_admission_reason_Fluid_overload = models.BooleanField(default=False)
     if_hospital_q3_discharge_meld = models.IntegerField(blank=True, null=True)
     if_hospital_q3_discharge_meld_insufficient = models.BooleanField(default=False)
-    if_hospital_q4_disposition = models.CharField(max_length=1, choices=DISPOSITION_CHOICE)
+    if_hospital_q4_disposition = models.CharField(blank=True, null=True, max_length=1, choices=DISPOSITION_CHOICE)
     created = models.DateTimeField(auto_now_add=True)
     comments = models.TextField(blank=True, null=True)
 
