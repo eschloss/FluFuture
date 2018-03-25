@@ -4,6 +4,7 @@ from openpds.questions.tasks import ensureFunfIndexes, recentProbeCounts, dumpFu
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        logging.info("@@---- Starting Scheduled Tasks Command ----@@")
         #flumojiNotifications.delay()
         recentProbeCounts.apply_async(countdown=10)
 
