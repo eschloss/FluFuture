@@ -211,6 +211,7 @@ INSTALLED_APPS = (
 
 #import celery_settings
 
+
 """
 CELERY_IMPORTS = celery_settings.CELERY_IMPORTS
 BROKER_URL = celery_settings.BROKER_URL
