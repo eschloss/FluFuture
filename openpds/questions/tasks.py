@@ -18,6 +18,7 @@ from django.utils import timezone
 import requests
 from pyfcm import FCMNotification
 from openpds.settings import FCM_SERVER_KEY
+import logging
 
 @task()
 def ensureFunfIndexes():
