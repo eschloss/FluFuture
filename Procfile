@@ -1,2 +1,2 @@
 web: bin/start-nginx bin/start-pgbouncer-stunnel newrelic-admin run-program uwsgi uwsgi.ini
-worker: bin/start-pgbouncer-stunnel newrelic-admin run-program python manage.py celery worker -l info --without-gossip --autoscale=5,1
+worker: bin/start-pgbouncer-stunnel newrelic-admin run-program python manage.py celery worker -l info --without-gossip --autoscale=3,1
