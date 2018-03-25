@@ -159,7 +159,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'r6ce2%&xce!o!t9$i(#2rxr)=49a_u8@pwiye^ug6f82#5qa!!'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -226,6 +226,7 @@ BROKER_POOL_LIMIT = 3
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = None
 
 if not IS_DEV_SERVER:
     BROKER_URL = os.environ['RABBITMQ_BIGWIG_TX_URL']
