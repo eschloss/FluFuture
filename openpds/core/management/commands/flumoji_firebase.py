@@ -9,6 +9,7 @@ class Command(BaseCommand):
         #howAreYouFeelingTodayAllUsers.delay()
         flumojiNotifications.delay()
         
+        
         #temp bug fix
         with connection.cursor() as cursor:
             cursor.execute("truncate table celery_taskmeta")
