@@ -21,6 +21,7 @@ from openpds.settings import FCM_SERVER_KEY
 
 @task()
 def ensureFunfIndexes():
+    logging.info("@@---- Ensure Funf Indexes")
     profiles = Profile.objects.all()
 
     for profile in profiles:
@@ -210,12 +211,14 @@ def findMusicGenres():
 
 @task()
 def dumpFunfData():
+    logging.info("@@---- Dump Funf Data")
     profiles = Profile.objects.all()
     for profile in profiles:
         dumpFunfData2.delay(profile.pk)
     
 @task()
 def dumpFunfData2(pk):
+    logging.info("@@---- Dump Funf Data2 ----@@")
     outputConnection = sqlite3.connect("openpds/static/dump.db")
     c = outputConnection.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS funf (user_id integer, key text, time real, value text, PRIMARY KEY (user_id, key, time) on conflict ignore)")

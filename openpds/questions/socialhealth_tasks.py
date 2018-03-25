@@ -17,6 +17,7 @@ from openpds import getInternalDataStore
 from collections import Counter
 import sqlite3, random
 from django.utils import timezone
+import logging
 
 BEGINNING_OF_STUDY = 1504300000 #september 1st
 
@@ -363,6 +364,7 @@ def recentSocialScore():
 
 @task()
 def recentSocialHealthScores(isTask=True):
+    logging.info("@@---- Recent Social Health Scores")
     profiles = Profile.objects.all()
     data = {}
     if isTask:
@@ -457,6 +459,7 @@ def getScore(profile, label):
 
 @task()
 def calculatePassiveEmojiAndSave():
+    logging.info("@@---- Calculate Passive Emojis")
     profiles = Profile.objects.all()
     for profile in profiles:
         profile.activity_this_week = getScore(profile, "RecentActivityByHour")
