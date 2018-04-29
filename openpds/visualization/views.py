@@ -467,7 +467,8 @@ def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_u
                 rsbh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    #chart_emojis.append(e[0])
+                    chart_emojis.append("")
                 else:
                     chart_emojis.append("")
     elif interval == "activity":
@@ -479,7 +480,8 @@ def liversmart_graph2(request, interval, start_date, end_date, datastore_owner_u
                 rabh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    #chart_emojis.append(e[0])
+                    chart_emojis.append("")
                 else:
                     chart_emojis.append("")
     elif interval == "activity2":
@@ -549,9 +551,11 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 if random.random() > .90:
                     social = 2
                 rsbh.append({"start": int(time.mktime(last_ts.timetuple())), "social": social, })
+                
                 e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    chart_emojis.append("")
+                    #chart_emojis.append(e[0])
                 else:
                     chart_emojis.append("")
                 
@@ -560,7 +564,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 rsbh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    #chart_emojis.append(e[0])
+                    chart_emojis.append("")
                 else:
                     chart_emojis.append("")
             last_ts = ts
@@ -588,7 +593,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 rabh.append({"start": int(time.mktime(last_ts.timetuple())), "high": high, "low": low, "total": total, })
                 e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    #chart_emojis.append(e[0])
+                    chart_emojis.append("")
                 else:
                     chart_emojis.append("")
             
@@ -597,7 +603,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 rabh.append(r)
                 e = emojis.filter(created__day=ts.day, created__month=ts.month, created__year=ts.year)
                 if e.count() > 0:
-                    chart_emojis.append(e[0])
+                    #chart_emojis.append(e[0])
+                    chart_emojis.append("")
                 else:
                     chart_emojis.append("")
             last_ts = ts
