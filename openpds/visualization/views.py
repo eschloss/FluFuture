@@ -587,6 +587,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         rabh2.insert(0, {"start": int(time.mktime(study_start.timetuple())), "high": 0, "low": 0, "total": 0, })
         rabh2.append({"start": int(time.mktime(study_end.timetuple())), "high": 0, "low": 0, "total": 0, })
         rabh = []
+        high = 0
+        low = 1
         for r in rabh2:
             ts = timestampToStart(r['start'])
             while ts - last_ts > datetime.timedelta(hours=24.0*2*gap):
@@ -600,7 +602,7 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 elif random.random() > .6:
                     high = 0 
                     low = numpy.random.normal(total/6, total/10, 1)[0]
-                else:
+                elif random.random() > .2:
                     high = 0
                     low = 1
                 rabh.append({"start": int(time.mktime(last_ts.timetuple())), "high": high, "low": low, "total": total, })
