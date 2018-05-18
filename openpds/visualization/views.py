@@ -530,6 +530,11 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
             study_start = profile.created.replace(tzinfo=None)
         study_end = study_start + datetime.timedelta(days=90)
     
+    width = study_end - study_start
+    gap = width.days / float(90)
+    print gap
+    print gap
+    
     rabh = None
     rsbh = None
 
@@ -544,8 +549,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         rsbh = []
         for r in rsbh2:
             ts = timestampToStart(r['start'])
-            while ts - last_ts > datetime.timedelta(days=2):
-                last_ts += datetime.timedelta(days=1)
+            while ts - last_ts > datetime.timedelta(hours=24.0*2*gap):
+                last_ts += datetime.timedelta(hours=24.0*1*gap)
                 
                 social = 0
                 if random.random() > .98:
@@ -580,8 +585,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         rabh = []
         for r in rabh2:
             ts = timestampToStart(r['start'])
-            while ts - last_ts > datetime.timedelta(days=2):
-                last_ts += datetime.timedelta(days=1)
+            while ts - last_ts > datetime.timedelta(hours=24.0*2*gap):
+                last_ts += datetime.timedelta(hours=24.0*gap)
                 
                 social = 0
                 total = numpy.random.normal(40, 10, 1)[0]
