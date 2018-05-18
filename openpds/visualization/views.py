@@ -521,10 +521,14 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         print start_date
         print end_date
         
-    study_start = datetime.datetime.strptime("2017-11-17", "%Y-%m-%d")
-    if profile.created.replace(tzinfo=None) > study_start:
-        study_start = profile.created.replace(tzinfo=None)
-    study_end = study_start + datetime.timedelta(days=90)
+    if start_date and end_date:
+        study_start = start_date
+        study_end = end_date
+    else:
+        study_start = datetime.datetime.strptime("2017-11-17", "%Y-%m-%d")
+        if profile.created.replace(tzinfo=None) > study_start:
+            study_start = profile.created.replace(tzinfo=None)
+        study_end = study_start + datetime.timedelta(days=90)
     
     rabh = None
     rsbh = None
@@ -624,3 +628,57 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         'rsbh': rsbh,
         'emojis': chart_emojis,
     }, context_instance=RequestContext(request))
+
+    
+def getScreenProbes(db, start, end):
+    funf = db['funf']
+    probes = funf.find({"key": "edu.mit.media.funf.probe.builtin.ScreenProbe", 'time': {'$gte': start, '$lt': end}})
+    return probes.count()
+
+def getAllScreenProbes(uuid):
+    import pymongo
+    from openpds import settings
+    from openpds.core.models import Profile
+    import random
+    import datetime
+    profile = Profile.objects.get(uuid=uuid)
+    db = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                          ssl=True
+                                          )[profile.getDBName()]
+    funf = db['funf']
+    probes = funf.find({"key": "edu.mit.media.funf.probe.builtin.ScreenProbe"})
+    print probes.count()
+    if probes.count() > 0:
+        print probes[0]
+    
+def sdpvs1(uuid, year1, month1, date1, year2, month2, date2, fullday=False, fullperiod=False):
+    import pymongo
+    from openpds import settings
+    from openpds.core.models import Profile
+    import random
+    import datetime
+    profile = Profile.objects.get(uuid=uuid)
+    period_start = datetime.datetime(year1, month1, date1, 1)
+    period_end = datetime.datetime(year2, month2, date2)
+    
+    db = pymongo.MongoClient(random.choice(getattr(settings, "MONGODB_HOST", None)),
+                                          ssl=True
+                                          )[profile.getDBName()]
+    
+    days_range = (period_end-period_start).days
+    total = 0
+    if fullperiod:
+        count = getScreenProbes(db, period_start, period_end)
+        print count
+    else:
+        for x in range(days_range):
+            start = period_start + datetime.timedelta(days=x)
+            if fullday:
+                end = start + datetime.timedelta(days=1)
+            else:
+                end = start + datetime.timedelta(hours=4)
+            count = getScreenProbes(db, start, end)
+            total += count
+            print count
+    print "avg: %s" % (total/float(days_range))
+    
