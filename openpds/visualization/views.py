@@ -549,8 +549,8 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
         rsbh = []
         for r in rsbh2:
             ts = timestampToStart(r['start'])
-            while ts - last_ts > datetime.timedelta(hours=24.0*2*gap):
-                last_ts += datetime.timedelta(hours=24.0*1*gap)
+            while ts - last_ts > datetime.timedelta(hours=48):
+                last_ts += datetime.timedelta(hours=24)
                 
                 social = 0
                 if random.random() > .98:
