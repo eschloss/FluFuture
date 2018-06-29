@@ -563,6 +563,12 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                     social = 2
                 if random.random() > .70:
                     social = 1
+                
+                """    
+                social = 0
+                if last_ts.day == 9 or last_ts.day == 10:
+                    social = 2
+                """
                 rsbh.append({"start": int(time.mktime(last_ts.timetuple())), "social": social, })
                 
                 e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
@@ -605,6 +611,14 @@ def liversmart_graph3(request, interval, start_date, end_date, datastore_owner_u
                 elif random.random() > .2:
                     high = 0
                     low = 1
+
+                if last_ts.day == 24:
+                    high = numpy.random.normal(total/6, total/10, 1)[0]
+                    low = 0
+                if last_ts.day == 23 or last_ts.day == 28:
+                    high = 0
+                    low = numpy.random.normal(total/6, total/10, 1)[0]
+                
                 rabh.append({"start": int(time.mktime(last_ts.timetuple())), "high": high, "low": low, "total": total, })
                 e = emojis.filter(created__day=last_ts.day, created__month=last_ts.month, created__year=last_ts.year)
                 if e.count() > 0:
