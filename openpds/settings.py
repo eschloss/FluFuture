@@ -231,7 +231,10 @@ CELERY_RESULT_BACKEND = None
 
 
 if not IS_DEV_SERVER:
-    BROKER_URL = os.environ['RABBITMQ_BIGWIG_TX_URL']
+    try:
+        BROKER_URL = os.environ['CLOUDAMQP_URL']
+    except:
+        BROKER_URL = os.environ['RABBITMQ_BIGWIG_TX_URL']
 
 
 # A sample logging configuration. The only tangible logging
